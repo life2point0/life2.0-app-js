@@ -1,20 +1,32 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import * as React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import IntroSlides from './components/IntroSlides';
+import Signup from './components/Signup';
+import Login from './components/Login';
+import { Provider as PaperProvider } from 'react-native-paper';
+import theme from './themes/default.theme';
+import { UpdateProfile } from './components/UpdateProfile';
+import { AuthProvider } from './contexts/AuthContext';
 
-export default function App() {
+const Stack = createNativeStackNavigator();
+
+
+const App= ()=> {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <AuthProvider>
+      <PaperProvider theme={theme}>
+        <NavigationContainer>
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="IntroSlides" component={IntroSlides} />
+            <Stack.Screen name="Signup" component={Signup} />
+            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </PaperProvider>
+    </AuthProvider>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;

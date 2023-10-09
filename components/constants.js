@@ -1,0 +1,5 @@
+export const KEYCLOAK_URL = "http://192.168.1.10:8080"
+export const KEYCLOAK_CLIENT_ID = "life2.0_app"
+export const KEYCLOAK_REALM = "Life2Point0"
+export const COMETCHAT_BASE_URL = "https://2462255fff8ef8e0.api-in.cometchat.io/v3"
+export const USER_SERVICE_BASE_URL = "http://192.168.1.10:8000"
