@@ -1,3 +1,5 @@
 import {Text} from 'react-native';
 
-export const UpdateProfile = () => <Text>Subhanallah</Text>;
+const UpdateProfile = () => <Text>Subhanallah</Text>;
+
+export default UpdateProfile;

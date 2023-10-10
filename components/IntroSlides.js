@@ -134,7 +134,7 @@ const IntroSlides = ({ navigation }) => {
         navigation.navigate('Login');
         break;
       case 'signup':
-        navigation.navigate('Signup');
+        navigation.navigate('Main', { screen: 'Home' });
         break;
       default:
         break;

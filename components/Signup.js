@@ -5,7 +5,7 @@ import { View, Text, StyleSheet, Image, TouchableOpacity, KeyboardAvoidingView, 
 // External Libraries
 import axios from 'axios';
 import * as Yup from 'yup';
-import { TextInput as PaperTextInput, Button, Checkbox as PaperCheckbox } from 'react-native-paper';
+import { TextInput as PaperTextInput, Button, Checkbox as PaperCheckbox, IconButton } from 'react-native-paper';
 
 // Local modules
 import YourImage from './assets/Group85.png';  // Adjust the path as needed
@@ -13,6 +13,8 @@ import Checkbox from './checkbox';
 import { USER_SERVICE_BASE_URL } from './constants';
 import * as _ from 'lodash';
 import { useAuth } from '../contexts/AuthContext';
+import { PrimaryButton } from './PrimaryButton';
+import { useNavigation } from '@react-navigation/native';
 
 const validationSchema = Yup.object().shape({
   firstName: Yup.string().required('First Name is required'),
@@ -23,7 +25,7 @@ const validationSchema = Yup.object().shape({
   terms: Yup.bool().oneOf([true], 'Accept Terms & Conditions is required')
 });
 
-const Signup =  ({ navigation }) => {
+const Signup =  () => {
   const [form, setForm] = useState({
     firstName: '',
     lastName: '',
@@ -32,7 +34,9 @@ const Signup =  ({ navigation }) => {
     confirmPassword: '',
     terms: false,
   });
-const [errors, setErrors] = useState({});
+
+  const navigation = useNavigation();
+  const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
   const [isSubmitting, setSubmitting] = useState(false);
   const { login } = useAuth();
@@ -58,34 +62,31 @@ const [errors, setErrors] = useState({});
       }
       setErrors(newErrors);
       console.log({newErrors})
-    } finally {
-      // Validation failed
     }
-    return hasError;
+    return !hasError;
   };
 
   const handleSubmit = async () => {
-    validateForm()
-    if (Object.keys(errors).length === 0 && errors.constructor === Object) {
-      try {
-        setSubmitting(true)
-        const response = await axios.post(`${USER_SERVICE_BASE_URL}/users/signup`, _.omit(form, ['confirmPassword', 'terms']));
-        console.log(navigation);
-        await login(form.email, form.password);
-        navigation.navigate('UpdateProfile');
-      } catch (e) {
-        console.log('Signup error:', e);
-      } finally {
-        setSubmitting(false)
-      }
+    if (!validateForm()) {
+      return;
+    }
+    try {
+      setSubmitting(true)
+      const response = await axios.post(`${USER_SERVICE_BASE_URL}/users/signup`, _.omit(form, ['confirmPassword', 'terms']));
+      console.log(navigation);
+      await login(form.email, form.password);
+      navigation.navigate('UpdateProfile');
+    } catch (e) {
+      console.log('Signup error:', e);
+    } finally {
+      setSubmitting(false)
     }
   };
 
   return (
             
     <KeyboardAvoidingView style={styles.container} behavior="hieght" >
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-      <View style={styles.container}>
+      <View>
         <Text style={styles.title}>Sign Up</Text>
         <Text style={styles.description}>
           Create a profile in minutes and you will then
@@ -96,6 +97,9 @@ const [errors, setErrors] = useState({});
         <View style={styles.imageContainer}>
           <Image source={YourImage} style={styles.image} />
         </View>
+      </View>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <View style={styles.container}>
 
         <View style={styles.inputContainer}>
           <Text>First Name</Text>
@@ -117,7 +121,7 @@ const [errors, setErrors] = useState({});
             onChangeText={(value) => setForm({ ...form, lastName: value })}
             onBlur={() => handleBlur('lastName')}
           />
-          {touched.lastName && <Text style={styles.errorText}>{errors.lastName}</Text>}
+          {touched.lastName && errors.lastName && <Text style={styles.errorText}>{errors.lastName}</Text>}
         </View>
         <View style={styles.inputContainer}>
           <Text>Email</Text>
@@ -128,7 +132,7 @@ const [errors, setErrors] = useState({});
             onChangeText={(value) => setForm({ ...form, email: value })}
             onBlur={() => handleBlur('email')}
           />
-          {touched.email && <Text style={styles.errorText}>{errors.email}</Text>}
+          {touched.email && errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
         </View>
         <View style={styles.inputContainer}>
           <Text>Password</Text>
@@ -140,7 +144,7 @@ const [errors, setErrors] = useState({});
             onBlur={() => handleBlur('password')}
             secureTextEntry
           />
-          {touched.password && <Text style={styles.errorText}>{errors.password}</Text>}
+          {touched.password && errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
         </View>
         <View style={styles.inputContainer}>
           <Text>Confirm Password</Text>
@@ -152,7 +156,7 @@ const [errors, setErrors] = useState({});
             onBlur={() => handleBlur('confirmPassword')}
             secureTextEntry
           />
-          {touched.confirmPassword && <Text style={styles.errorText}>{errors.confirmPassword}</Text>}
+          {touched.confirmPassword && errors.confirmPassword && <Text style={styles.errorText}>{errors.confirmPassword}</Text>}
         </View>
         <View>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -162,12 +166,12 @@ const [errors, setErrors] = useState({});
             />
             <Text>I agree to Terms and Conditions</Text>
           </View>
-          {touched.terms && <Text>{errors.terms}</Text>}
+          {touched.terms && errors.terms && <Text>{errors.terms}</Text>}
         </View>
         <View>
-          <Button mode="contained" onPress={handleSubmit} loading={isSubmitting}>
+          <PrimaryButton mode="contained" onPress={handleSubmit} loading={isSubmitting}>
             Sign Up
-          </Button>
+          </PrimaryButton>
         </View>
 
         <View style={styles.loginLinkContainer}>
@@ -177,13 +181,6 @@ const [errors, setErrors] = useState({});
           </TouchableOpacity>
         </View>
 
-        {/* Back button */}
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Text style={styles.backButtonText}>Back</Text>
-        </TouchableOpacity>
       </View>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -315,12 +312,5 @@ const styles = StyleSheet.create({
   }
 });
 
-const inputFields = [
-  { label: 'First Name', placeholder: 'First Name', keyboardType: 'default', secureTextEntry: false },
-  { label: 'Last Name', placeholder: 'Last Name', keyboardType: 'default', secureTextEntry: false },
-  { label: 'Email / Username', placeholder: 'Email / Username', keyboardType: 'email-address', secureTextEntry: false },
-  { label: 'Password', placeholder: 'Password', keyboardType: 'default', secureTextEntry: true },
-  { label: 'Confirm Password', placeholder: 'Confirm Password', keyboardType: 'default', secureTextEntry: true },
-];
 
 export default Signup;

@@ -64,10 +64,10 @@ export const AuthProvider = ({ children }) => {
         }
       });
       const { access_token, refresh_token } = response.data;
+      console.log(response.data)
       setAccessToken(access_token);
       setRefreshToken(refresh_token);
-      await AsyncStorage.setItem('refreshToken', refreshToken);
-      setIsAuthenticated(true);
+      await AsyncStorage.setItem('refreshToken', refresh_token);
     } catch (e) {
       await AsyncStorage.removeItem('refreshToken');
       setIsAuthenticated(false);
