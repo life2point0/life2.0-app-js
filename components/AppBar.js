@@ -3,15 +3,25 @@ import { Appbar, Avatar } from 'react-native-paper';
 import logo from './assets/LIFE2.0.png';
 import { Image } from 'react-native';
 
+// Import your custom menu icon image
+import menuIcon from './assets/menu-slider-icon.png';
+
 const AppBar = ({ title }) => {
   return (
     <Appbar.Header style={{ backgroundColor: '#FFC003' }}>
-        <Appbar.Action icon="menu" onPress={() => { /* Implement navigation logic here */ }} />
-        <Appbar.Content 
-            title={title || <Image source={logo}/>} 
-            style={{ alignItems: 'center' }}
-        />
-      <Appbar.Action icon={() => <Avatar.Icon size={24} icon="account" />} onPress={() => { /* Implement profile logic here */ }} />
+      <Appbar.Action
+        icon={() => <Image source={menuIcon} style={{ width: 24, height: 24 }} />}
+        onPress={() => {
+          /* Implement navigation logic here */
+        }}
+      />
+      <Appbar.Content title={title || <Image source={logo} />} style={{ alignItems: 'center' }} />
+      <Appbar.Action
+        icon={() => <Avatar.Icon size={30} icon="account" />}
+        onPress={() => {
+          /* Implement profile logic here */
+        }}
+      />
     </Appbar.Header>
   );
 };
