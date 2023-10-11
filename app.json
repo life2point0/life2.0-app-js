@@ -21,7 +21,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./components/assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "co.life2point0.android"
     },
     "web": {
       "favicon": "./components/assets/favicon.png"
