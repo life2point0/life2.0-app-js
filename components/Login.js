@@ -2,15 +2,23 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, Image, TouchableOpacity, KeyboardAvoidingView, ScrollView, Button } from 'react-native';
 import YourImage from './assets/Group85.png'; // Adjust the path as needed
 import Checkbox from './checkbox'; // Import your Checkbox component
+import { useAuth } from '../contexts/AuthContext';
+import { Banner, IconButton, Snackbar } from 'react-native-paper';
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isChecked, setIsChecked] = useState(false); // For the checkbox
+  const { login } = useAuth();
+  const [errorText, setErrorText] = useState('');
 
-  const handleLogin = () => {
-    // Implement your login logic here
-    // You can check email and password, make API calls, etc.
+  const handleLogin = async () => {
+    try {
+      await login(email, password);
+      navigation.navigate('Main', { screen: 'Home' })
+    } catch (e) {
+      setErrorText(e?.response?.data?.error_description || 'Unknown Error');
+    }
   };
 
   return (
@@ -27,9 +35,19 @@ const Login = ({ navigation }) => {
               <View style={styles.imageContainer}>
                 <Image source={YourImage} style={styles.image} />
               </View>
+              {errorText && (
+                <View style={{alignItems: 'center', justifyContent: 'center', flexDirection: 'row'}}>
+                  <IconButton
+                    icon="alert-circle"
+                    iconColor='darkred'
+                    size={20}
+                  />
+                  <Text style={{color: 'darkred'}}>{errorText}</Text>
+                </View>
+                )}
                 <View style={styles.formContainer}>
                   <View style={styles.fieldBox}>
-                    <Text style={styles.fieldLabel}>Email:</Text>
+                    <Text style={styles.fieldLabel}>Email</Text>
                       <TextInput
                         style={styles.fieldValue}
                         placeholder="Email"
@@ -40,7 +58,7 @@ const Login = ({ navigation }) => {
                       />
                   </View>
                   <View style={styles.fieldBox}>
-                    <Text style={styles.fieldLabel}>Password:</Text>
+                    <Text style={styles.fieldLabel}>Password</Text>
                       <TextInput
                         style={styles.fieldValue}
                         placeholder="Password"
@@ -122,16 +140,15 @@ const styles = StyleSheet.create({
   fieldLabel: {
     fontWeight: 'bold',
     color: 'black',
+    marginBottom: 8
   },
   fieldValue: {
-    backgroundColor: '#FFF',
-    borderColor: '#D1D1D1',
+    paddingTop: '8px',
     borderWidth: 1,
-    borderRadius: 5,
-    color: '#888',
-    fontSize: 12,
-    fontStyle: 'normal',
-    fontWeight: '400',
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    backgroundColor: '#fff',
+    height: 40
   },
   // Checkbox styles
   forgotPasswordLink: {

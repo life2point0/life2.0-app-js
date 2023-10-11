@@ -14,9 +14,7 @@ import { View } from 'react-native';
 import ComingSoonScreen from './components/ComingSoonScreen';
 import Signup from './components/Signup';
 import ChatScreen from './components/ChatScreen';
-// import ChatScreen from './components/ChatScreen';
-// import NotificationScreen from './components/NotificationScreen';
-// import ProfileScreen from './components/ProfileScreen';
+
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();

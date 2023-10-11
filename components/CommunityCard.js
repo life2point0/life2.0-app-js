@@ -14,7 +14,7 @@ const CommunityCard = ({ communityName, users }) => {
             navigate('Signup');
             return;
         }
-        if (!isAuthenticated) {
+        if (!isProfileCreated) {
             navigate('UpdateProfile');
         }
     }

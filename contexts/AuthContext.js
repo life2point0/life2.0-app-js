@@ -3,6 +3,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { KEYCLOAK_CLIENT_ID, KEYCLOAK_REALM, KEYCLOAK_URL, USER_SERVICE_BASE_URL } from '../components/constants';
 import axios from 'axios';
 import qs from 'qs';
+import { CometChat } from '@cometchat-pro/react-native-chat';
+
 
 
 const AuthContext = createContext();
@@ -30,7 +32,9 @@ export const AuthProvider = ({ children }) => {
         }
       });
       const { access_token } = response.data;
-      setAccessToken(access_token)
+      setAccessToken(access_token);
+      setIsAuthenticated(true);
+      console.log({access_token})
       return access_token; 
     } catch (error) {
       throw error;
@@ -60,13 +64,28 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
+  const loginToCometchat = async () => {
+    CometChat.login('UID', 'API_KEY').then(
+      (user) => {
+        console.log('Login Successful:', user);
+      },
+      (error) => {
+        console.log('Login failed with exception:', error);
+      }
+    );
+  }
+
   useEffect(() => {
-    getProfile();
+    if (accessToken) {
+      getProfile();
+      loginToCometchat();
+    }
   }, [accessToken]);
 
   useEffect(() => {
     (async () => {
       const storedRefreshToken = await AsyncStorage.getItem('refreshToken');
+      console.log({storedRefreshToken});
       if (storedRefreshToken) {
         setRefreshToken(storedRefreshToken);
         try {
@@ -97,6 +116,7 @@ export const AuthProvider = ({ children }) => {
       setAccessToken(access_token);
       setRefreshToken(refresh_token);
       await AsyncStorage.setItem('refreshToken', refresh_token);
+      setIsAuthenticated(true);
     } catch (e) {
       await AsyncStorage.removeItem('refreshToken');
       setIsAuthenticated(false);

@@ -176,7 +176,7 @@ const Signup =  () => {
 
         <View style={styles.loginLinkContainer}>
           <Text style={styles.loginLinkText}>Already have an account?</Text>
-          <TouchableOpacity onPress={() => props.navigation.navigate('Login')}>
+          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
             <Text style={styles.loginLink}>Login</Text>
           </TouchableOpacity>
         </View>

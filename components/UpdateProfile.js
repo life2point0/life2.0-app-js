@@ -44,6 +44,7 @@ export default function App() {
           validationSchema={ProfileSchema}
           onSubmit={async (values) => {
             await authCall({
+                method: 'PUT',
                 url: `${USER_SERVICE_BASE_URL}/users/me`,
                 data: { description: values.description }
             });

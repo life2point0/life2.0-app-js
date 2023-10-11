@@ -7,6 +7,17 @@ import eventImage from './assets/events.png';
 import axios from 'axios';
 import { USER_SERVICE_BASE_URL } from './constants';
 import { useAuth } from '../contexts/AuthContext';
+import { CometChat } from '@cometchat-pro/react-native-chat';
+
+const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion('REGION').build();
+CometChat.init('APP_ID', appSetting).then(
+  () => {
+    console.log('Initialization completed successfully');
+  },
+  (error) => {
+    console.log('Initialization failed with error:', error);
+  }
+);
 
 const HomeScreen = () => {
   const [greeting, setGreeting] = useState('');
@@ -31,7 +42,7 @@ const HomeScreen = () => {
         setCommunities(res.data);
     } catch (e) {
         setCommunities([]);
-        throw e;
+        console.log(e)
     }
   }
 
