@@ -40,7 +40,7 @@ const Signup =  () => {
   const [touched, setTouched] = useState({});
   const [isSubmitting, setSubmitting] = useState(false);
   const { login } = useAuth();
-
+  const [errorText, setErrorText] = useState('');
   const handleBlur = (field) => {
     setTouched({ ...touched, [field]: true });
     validateForm();
@@ -82,6 +82,16 @@ const Signup =  () => {
       setSubmitting(false)
     }
   };
+  const handleSignup = async () => {
+    try {
+      await Signup(firstName, lastName,email, password);
+      navigation.navigate('Main', { screen: 'Home' })
+    } catch (e) {
+      setErrorText(e?.response?.data?.error_description || 'Unknown Error');
+    }
+  };
+  
+
 
   return (
             
@@ -97,6 +107,16 @@ const Signup =  () => {
         <View style={styles.imageContainer}>
           <Image source={YourImage} style={styles.image} />
         </View>
+        {errorText && (
+          <View style={{alignItems: 'center', justifyContent: 'center', flexDirection: 'row'}}>
+            <IconButton
+              icon="alert-circle"
+              iconColor='darkred'
+              size={20}
+            />
+            <Text style={{color: 'darkred'}}>{errorText}</Text>
+          </View>
+        )}
       </View>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.container}>
@@ -173,7 +193,10 @@ const Signup =  () => {
             Sign Up
           </PrimaryButton>
         </View>
-
+        <TouchableOpacity
+            style={styles.SignupButton}
+            onPress={handleSignup}>
+        </TouchableOpacity>
         <View style={styles.loginLinkContainer}>
           <Text style={styles.loginLinkText}>Already have an account?</Text>
           <TouchableOpacity onPress={() => navigation.navigate('Login')}>

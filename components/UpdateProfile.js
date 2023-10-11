@@ -19,6 +19,7 @@ export default function App() {
   const [descriptionCharCount, setDescriptionCharCount] = useState(0);
   const { authCall, getProfile } = useAuth();
   const { navigate } = useNavigation();
+  const [errorText, setErrorText] = useState('');
 
   useEffect(() => {
     getProfile().then(profile => setProfile(profile)).catch(() => null)
@@ -29,10 +30,28 @@ export default function App() {
     'Artist', 'Nurse', 'Tutor', 'Teacher', 'Chef', 'Baker', 'Engineer', 'Hairdresser',
     'Masseuse', 'Banker', 'Bartender', 'Handyman', 'Technician'
   ];
+  const handleUpdateProfile = async () => {
+    try {
+      await UpdateProfile(firstName, lastName, description);
+      navigation.navigate('Main', { screen: 'Home' })
+    } catch (e) {
+      setErrorText(e?.response?.data?.error_description || 'Unknown Error');
+    }
+  };
 
   return (
     <View style={styles.container}>
       <Text style={{fontSize: 24, fontWeight: 'bold', padding: 20, textAlign: 'center'}}>Complete Profile</Text>
+      {errorText && (
+        <View style={{alignItems: 'center', justifyContent: 'center', flexDirection: 'row'}}>
+          <IconButton
+            icon="alert-circle"
+            iconColor='darkred'
+            size={20}
+          />
+          <Text style={{color: 'darkred'}}>{errorText}</Text>
+        </View>
+      )}
       {profile ? (
         <Formik
           initialValues={{
@@ -118,6 +137,11 @@ export default function App() {
                 />
                 <Text style={styles.charCount}>{600 - descriptionCharCount} chars left</Text>
             </View>
+            <TouchableOpacity
+              style={styles.onSubmitButton}
+              onPress={handleSubmit}>
+              <Text style={styles.onSubmitButton}>Submit</Text>
+            </TouchableOpacity>
 
             <Button mode="contained" onPress={handleSubmit}>
               Submit
