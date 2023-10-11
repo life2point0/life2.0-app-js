@@ -13,6 +13,7 @@ import { IconButton } from 'react-native-paper';
 import { View } from 'react-native';
 import ComingSoonScreen from './components/ComingSoonScreen';
 import Signup from './components/Signup';
+import ChatScreen from './components/ChatScreen';
 // import ChatScreen from './components/ChatScreen';
 // import NotificationScreen from './components/NotificationScreen';
 // import ProfileScreen from './components/ProfileScreen';
@@ -50,7 +51,7 @@ function SharedTabs() {
       />
       <Tab.Screen 
         name="Conversations" 
-        component={ComingSoonScreen} 
+        component={ChatScreen} 
         options={getTabOptions('chat')}
       />
       <Tab.Screen 

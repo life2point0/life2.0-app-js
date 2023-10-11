@@ -2,6 +2,7 @@ import React, { Fragment, useState } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { PrimaryButton } from './PrimaryButton';
 import { Button, IconButton } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
 
 const slides = [
   {
@@ -21,7 +22,7 @@ const slides = [
     logo: require('./assets/LIFE2.0.png'),
     buttons: [
       { label: 'Next', action: 'next', type: 'primary' },
-      { label: 'Back', action: 'back' },
+      { label: 'Skip', action: 'skip' },
     ],
   },
   {
@@ -30,8 +31,7 @@ const slides = [
     image: require('./assets/Group81.png'),
     logo: require('./assets/LIFE2.0.png'),
     buttons: [
-      { label: 'Sign Up', action: 'signup', type: 'primary' },
-      { label: 'Login', action: 'login' },
+      { label: 'Start Exploring', action: 'home', type: 'primary' },
     ],
   },
 ];
@@ -112,8 +112,9 @@ const styles = StyleSheet.create({
 });
 
 
-const IntroSlides = ({ navigation }) => {
+const IntroSlides = () => {
   const [currentScreen, setCurrentScreen] = useState(0);
+  const navigation = useNavigation();
 
   const handleButtonPress = (action) => {
     switch (action) {
@@ -133,7 +134,7 @@ const IntroSlides = ({ navigation }) => {
       case 'login':
         navigation.navigate('Login');
         break;
-      case 'signup':
+      case 'home':
         navigation.navigate('Main', { screen: 'Home' });
         break;
       default:

@@ -6,11 +6,13 @@ import EventCard from './EventCard';
 import eventImage from './assets/events.png';
 import axios from 'axios';
 import { USER_SERVICE_BASE_URL } from './constants';
+import { useAuth } from '../contexts/AuthContext';
 
 const HomeScreen = () => {
   const [greeting, setGreeting] = useState('');
   const [currentDate, setCurrentDate] = useState('');
   const [communities, setCommunities] = useState([]);
+  const { profile } = useAuth();
 
   const getTimeGreeting = () => {
     const currentHour = new Date().getHours();
@@ -59,7 +61,7 @@ const HomeScreen = () => {
       <AppBar />
       <View style={styles.container}>
         <Text style={styles.date}>{currentDate}</Text>
-        <Text style={styles.greeting}>{greeting}</Text>
+        <Text style={styles.greeting}>{greeting}{profile?.firstName && `, ${profile?.firstName}`}</Text>
         <View style={styles.searchBar}>
           <TextInput
             style={styles.searchInput}
