@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState, useMemo } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { KEYCLOAK_CLIENT_ID, KEYCLOAK_REALM, KEYCLOAK_URL } from '../components/constants';
+import { KEYCLOAK_CLIENT_ID, KEYCLOAK_REALM, KEYCLOAK_URL, USER_SERVICE_BASE_URL } from '../components/constants';
 import axios from 'axios';
 import qs from 'qs';
 
@@ -12,6 +12,8 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [refreshToken, setRefreshToken] = useState();
   const [accessToken, setAccessToken] = useState();
+  const [profile, setProfile] = useState();
+  const isProfileCreated = profile?.description;
 
   const getNewToken = async (refreshToken) => {
   
@@ -34,6 +36,33 @@ export const AuthProvider = ({ children }) => {
       throw error;
     }
   }
+
+  const authCall = (config) => { // Write axios interceptor instead
+    return axios({
+      ...config, 
+      headers: {
+        ...config.headers,
+        'Authorization': `Bearer ${accessToken}`
+      }
+    })
+  }
+
+  const getProfile = async () => {
+    try {
+      const profile = (await authCall({
+        method: 'GET',
+        url: `${USER_SERVICE_BASE_URL}/users/me`
+      }))?.data;
+      setProfile(profile);
+      return profile;
+    } catch (e) {
+      logout();
+    }
+  }
+
+  useEffect(() => {
+    getProfile();
+  }, [accessToken]);
 
   useEffect(() => {
     (async () => {
@@ -99,7 +128,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ login, logout, refreshToken, isLoggedIn, isAuthenticated }}>
+    <AuthContext.Provider value={{ login, logout, refreshToken, isLoggedIn, isAuthenticated, authCall, isProfileCreated }}>
       {children}
     </AuthContext.Provider>
   );

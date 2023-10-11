@@ -3,10 +3,14 @@ import AppBar from './AppBar';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, TextInput, Image } from 'react-native';
 import CommunityCard from './CommunityCard';
 import EventCard from './EventCard';
+import eventImage from './assets/events.png';
+import axios from 'axios';
+import { USER_SERVICE_BASE_URL } from './constants';
 
 const HomeScreen = () => {
   const [greeting, setGreeting] = useState('');
   const [currentDate, setCurrentDate] = useState('');
+  const [communities, setCommunities] = useState([]);
 
   const getTimeGreeting = () => {
     const currentHour = new Date().getHours();
@@ -19,69 +23,22 @@ const HomeScreen = () => {
     }
   };
 
+  const getCommunities = async () => {
+    try {
+        const res = (await axios.get(`${USER_SERVICE_BASE_URL}/communities`)).data;
+        setCommunities(res.data);
+    } catch (e) {
+        setCommunities([]);
+        throw e;
+    }
+  }
+
   useEffect(() => {
     const now = new Date();
     setGreeting(getTimeGreeting());
     setCurrentDate(now.toDateString());
+    getCommunities();
   }, []);
-
-  const communities = [
-    {
-      name: 'Tech Enthusiasts',
-      users: [
-        { name: 'John Smith', position: 'CEO, Life 2.0', avatar: 'https://www.gravatar.com/avatar/1' }
-      ]
-    },
-    {
-      name: 'Tech Enthusiasts',
-      users: [
-        { name: 'John Smith', position: 'CEO, Life 2.0', avatar: 'https://www.gravatar.com/avatar/1' }
-      ]
-    },
-    {
-      name: 'Tech Enthusiasts',
-      users: [
-        { name: 'John Smith', position: 'CEO, Life 2.0', avatar: 'https://www.gravatar.com/avatar/1' }
-      ]
-    },
-    {
-      name: 'Tech Enthusiasts',
-      users: [
-        { name: 'John Smith', position: 'CEO, Life 2.0', avatar: 'https://www.gravatar.com/avatar/1' }
-      ]
-    },
-    {
-      name: 'Tech Enthusiasts',
-      users: [
-        { name: 'John Smith', position: 'CEO, Life 2.0', avatar: 'https://www.gravatar.com/avatar/1' }
-      ]
-    },
-    {
-      name: 'Tech Enthusiasts',
-      users: [
-        { name: 'John Smith', position: 'CEO, Life 2.0', avatar: 'https://www.gravatar.com/avatar/1' }
-      ]
-    },
-    {
-      name: 'Tech Enthusiasts',
-      users: [
-        { name: 'John Smith', position: 'CEO, Life 2.0', avatar: 'https://www.gravatar.com/avatar/1' }
-      ]
-    },
-    {
-      name: 'Tech Enthusiasts',
-      users: [
-        { name: 'John Smith', position: 'CEO, Life 2.0', avatar: 'https://www.gravatar.com/avatar/1' }
-      ]
-    },
-    {
-      name: 'Tech Enthusiasts',
-      users: [
-        { name: 'John Smith', position: 'CEO, Life 2.0', avatar: 'https://www.gravatar.com/avatar/1' }
-      ]
-    },
-    // Add more communities here
-  ];
 
   const events = [
     {
@@ -98,7 +55,7 @@ const HomeScreen = () => {
   ];
 
   return (
-    <View>
+    <View style={{backgroundColor: '#fff'}}>
       <AppBar />
       <View style={styles.container}>
         <Text style={styles.date}>{currentDate}</Text>
@@ -109,7 +66,7 @@ const HomeScreen = () => {
             placeholder="Search communities"
             placeholderTextColor="#888"
           />
-          <TouchableOpacity onPress={() => handleSearch()}>
+          <TouchableOpacity onPress={() => undefined}>
             <Image
               source={require('./assets/icons/searchicon.png')} // Replace with your custom search icon path
               style={styles.searchIcon}
@@ -118,31 +75,24 @@ const HomeScreen = () => {
         </View>
         <View style={styles.subHeader}>
           <Text style={styles.communities}>Communities for you</Text>
-          <TouchableOpacity>
-            <Text style={styles.viewAll}>View all >></Text>
-          </TouchableOpacity>
+          {/* <TouchableOpacity disabled>
+            <Text style={styles.viewAll}>View all &gt; &nbsp;</Text>
+          </TouchableOpacity> */}
         </View>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {communities.map((community, index) => (
-            <CommunityCard key={index} communityName={community.name} users={community.users} />
+          {communities.map((community) => (
+            <CommunityCard key={community.guid} communityName={community.name} users={community.users || []} />
           ))}
         </ScrollView>
         <View style={styles.subHeader}>
           <Text style={styles.events}>Events for You</Text>
-          <TouchableOpacity>
-            <Text style={styles.viewAll}>View all >></Text>
-          </TouchableOpacity>
+          {/* <TouchableOpacity disabled>
+            <Text style={styles.viewAll}>View all &gt; &nbsp;</Text>
+          </TouchableOpacity> */}
         </View>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {events.map((event, index) => (
-            <EventCard
-              key={index}
-              eventName={event.eventName}
-              date={event.date}
-              eventImage={event.eventImage}
-            />
-          ))}
-        </ScrollView>
+        <View>
+            <Image source={eventImage} style={{maxWidth: '100%', maxHeight: 250, aspectRatio: 6/4}} />
+        </View>
       </View>
     </View>
   );
@@ -182,6 +132,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    marginTop: 10,
+    marginBottom: 5
   },
   communities: {
     fontSize: 18,

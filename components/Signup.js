@@ -169,7 +169,7 @@ const Signup =  () => {
           {touched.terms && errors.terms && <Text>{errors.terms}</Text>}
         </View>
         <View>
-          <PrimaryButton mode="contained" onPress={handleSubmit} loading={isSubmitting}>
+          <PrimaryButton mode="contained" onPress={handleSubmit} loading={isSubmitting} disabled={isSubmitting}>
             Sign Up
           </PrimaryButton>
         </View>
