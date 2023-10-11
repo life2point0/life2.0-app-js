@@ -7,23 +7,14 @@ import eventImage from './assets/events.png';
 import axios from 'axios';
 import { USER_SERVICE_BASE_URL } from './constants';
 import { useAuth } from '../contexts/AuthContext';
-import { CometChat } from '@cometchat-pro/react-native-chat';
-
-const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion('REGION').build();
-CometChat.init('APP_ID', appSetting).then(
-  () => {
-    console.log('Initialization completed successfully');
-  },
-  (error) => {
-    console.log('Initialization failed with error:', error);
-  }
-);
+import { useNavigation } from '@react-navigation/native';
 
 const HomeScreen = () => {
   const [greeting, setGreeting] = useState('');
   const [currentDate, setCurrentDate] = useState('');
   const [communities, setCommunities] = useState([]);
   const { profile } = useAuth();
+  const navigation = useNavigation();
 
   const getTimeGreeting = () => {
     const currentHour = new Date().getHours();
@@ -88,9 +79,9 @@ const HomeScreen = () => {
         </View>
         <View style={styles.subHeader}>
           <Text style={styles.communities}>Communities for you</Text>
-          {/* <TouchableOpacity disabled>
+          <TouchableOpacity disabled onPress={() => navigation.push('Main', {screen: 'Chats'})}>
             <Text style={styles.viewAll}>View all &gt; &nbsp;</Text>
-          </TouchableOpacity> */}
+          </TouchableOpacity>
         </View>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {communities.map((community) => (
