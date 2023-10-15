@@ -78,11 +78,6 @@ const Login = ({ navigation }) => {
                   </View>
 
             {/* Checkbox for "Terms and Conditions" */}
-              <Checkbox
-              label="I agree with the Terms of Use of Life 2.0 and accept the privacy policy"
-              isChecked={isChecked}
-              onToggle={() => setIsChecked(!isChecked)}
-              />
             </View>
 
             <TouchableOpacity
@@ -122,85 +117,86 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: '5%', // 5% instead of 20px
   },
   image: {
-    width: 300,
-    height: 300,
+    width: '80%', // 80% instead of 300px
+    height: '80%', // 80% instead of 300px
     resizeMode: 'contain',
   },
   formContainer: {
     flex: 1,
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   fieldBox: {
     backgroundColor: 'white',
-    marginBottom: '10%',
+    marginBottom: '5%', // 5% instead of 10px
   },
   fieldLabel: {
     fontWeight: 'bold',
     color: 'black',
-    marginBottom: 8
+    marginBottom: '2%', // 2% instead of 8px
   },
   fieldValue: {
-    paddingTop: '8px',
+    paddingTop: '2%', // 2% instead of 8px
     borderWidth: 1,
-    borderRadius: 10,
-    paddingHorizontal: 12,
+    borderRadius: '5%', // 5% instead of 10px
+    paddingHorizontal: '5%', // 5% instead of 12px
     backgroundColor: '#fff',
-    height: 40
+    height: '10%', // 10% instead of 40px
   },
   // Checkbox styles
   forgotPasswordLink: {
     alignItems: 'flex-end',
-    marginTop: 10,
+    marginTop: '5%', // 5% instead of 10px
   },
   forgotPasswordText: {
     color: '#717171',
-    fontSize: 12,
+    fontSize: '3%', // 3% instead of 12px
     fontWeight: 'bold',
   },
   signupLinkContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: 80,
+    marginTop: '10%', // 10% instead of 80px
   },
   signupLinkText: {
     color: '#717171',
-    fontSize: 12,
+    fontSize: '3%', // 3% instead of 12px
     fontWeight: 'bold',
-    marginLeft: '-15%',
-    marginTop: '-30%'
+    marginLeft: '-15%', // -15% instead of -30px
+    marginTop: '-30%', // -30% instead of -30px
   },
   signupLink: {
     color: 'black',
-    fontSize: 12,
+    fontSize: '3%', // 3% instead of 12px
     fontWeight: 'bold',
-    marginLeft: '58%',
-    marginTop: '-30%'
+    marginLeft: '58%', // 58% instead of 58px
+    marginTop: '-30%', // -30% instead of -30px
   },
   backButton: {
     position: 'absolute',
-    top: '5%',
-    left: '5%',
+    top: '5%', // 5% instead of 20px
+    left: '5%', // 5% instead of 20px
     zIndex: 1,
   },
   backButtonText: {
     color: 'black',
-    fontSize: 16,
+    fontSize: '4%', // 4% instead of 16px
   },
   loginButton: {
     backgroundColor: 'black',
-    paddingVertical: 10,
-    borderRadius: 5,
-    marginBottom: 20,
+    paddingVertical: '5%', // 5% instead of 10px
+    borderRadius: '1%', // 1% instead of 5px
+    marginBottom: '5%', // 5% instead of 20px
   },
   loginButtonText: {
     color: '#FFC003', // Change the text color to your desired color
     textAlign: 'center',
-    fontSize: 16,
+    fontSize: '4%', // 4% instead of 16px
     fontWeight: 'bold',
   },
-});
+  });
+
 
 export default Login;

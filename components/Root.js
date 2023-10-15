@@ -24,7 +24,7 @@ const Root = ({ navigation }) => {
     }, [])
 
     useEffect(() => {
-        if (isInitialized && hasViewedIntro) {
+        if (isInitialized && hasViewedIntro  && false) {
             navigation.replace('Main', { screen: 'Home' });
         }
     }, [isInitialized, hasViewedIntro]);
@@ -33,7 +33,7 @@ const Root = ({ navigation }) => {
         return <SplashScreen />;
     }
 
-    if (!hasViewedIntro) {
+    if (!hasViewedIntro || true) {
         AsyncStorage.setItem('hasViewedIntro', 'true');
         return <IntroSlides />;
     }

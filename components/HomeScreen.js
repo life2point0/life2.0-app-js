@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import AppBar from './AppBar';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, TextInput, Image } from 'react-native';
 import CommunityCard from './CommunityCard';
-import EventCard from './EventCard';
 import eventImage from './assets/events.png';
 import axios from 'axios';
 import { USER_SERVICE_BASE_URL } from './constants';
@@ -20,21 +19,9 @@ CometChat.init('APP_ID', appSetting).then(
 );
 
 const HomeScreen = () => {
-  const [greeting, setGreeting] = useState('');
-  const [currentDate, setCurrentDate] = useState('');
   const [communities, setCommunities] = useState([]);
   const { profile } = useAuth();
 
-  const getTimeGreeting = () => {
-    const currentHour = new Date().getHours();
-    if (currentHour >= 5 && currentHour < 12) {
-      return 'Good morning';
-    } else if (currentHour >= 12 && currentHour < 18) {
-      return 'Good afternoon';
-    } else {
-      return 'Good evening';
-    }
-  };
 
   const getCommunities = async () => {
     try {
@@ -47,32 +34,14 @@ const HomeScreen = () => {
   }
 
   useEffect(() => {
-    const now = new Date();
-    setGreeting(getTimeGreeting());
-    setCurrentDate(now.toDateString());
     getCommunities();
   }, []);
 
-  const events = [
-    {
-      eventImage: require('./assets/events.png'),
-      eventName: 'Tech Meetup',
-      date: 'October 15, 2023',
-    },
-    {
-      eventImage: require('./assets/events.png'),
-      eventName: 'Design Workshop',
-      date: 'November 5, 2023',
-    },
-    // Add more events here
-  ];
-
   return (
     <View style={{backgroundColor: '#fff'}}>
-      <AppBar />
+      <AppBar/>
       <View style={styles.container}>
-        <Text style={styles.date}>{currentDate}</Text>
-        <Text style={styles.greeting}>{greeting}{profile?.firstName && `, ${profile?.firstName}`}</Text>
+        <Text style={styles.Welcome }>Welcome to Dubai</Text>
         <View style={styles.searchBar}>
           <TextInput
             style={styles.searchInput}
@@ -88,20 +57,14 @@ const HomeScreen = () => {
         </View>
         <View style={styles.subHeader}>
           <Text style={styles.communities}>Communities for you</Text>
-          {/* <TouchableOpacity disabled>
-            <Text style={styles.viewAll}>View all &gt; &nbsp;</Text>
-          </TouchableOpacity> */}
         </View>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {communities.map((community) => (
-            <CommunityCard key={community.guid} communityName={community.name} users={community.users || []} />
+            <CommunityCard key={community.guid} communityName={community.name} users={community.users || []} description={community.description} icon={community.icon}/>
           ))}
         </ScrollView>
         <View style={styles.subHeader}>
           <Text style={styles.events}>Events for You</Text>
-          {/* <TouchableOpacity disabled>
-            <Text style={styles.viewAll}>View all &gt; &nbsp;</Text>
-          </TouchableOpacity> */}
         </View>
         <View>
             <Image source={eventImage} style={{maxWidth: '100%', maxHeight: 250, aspectRatio: 6/4}} />
@@ -115,12 +78,8 @@ const styles = StyleSheet.create({
   container: {
     padding: 16,
   },
-  date: {
-    fontSize: 14,
-    fontWeight: '400',
-  },
-  greeting: {
-    fontSize: 24,
+  Welcome: {
+    fontSize: 30,
     fontWeight: 'bold',
   },
   searchBar: {
@@ -155,10 +114,6 @@ const styles = StyleSheet.create({
   events: {
     fontSize: 18,
     fontWeight: "500",
-  },
-  viewAll: {
-    fontSize: 16,
-    fontWeight: '600',
   }
 });
 

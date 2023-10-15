@@ -320,12 +320,11 @@ const styles = StyleSheet.create({
     resizeMode: 'contain', // Adjust resizeMode as needed
   },
   textInput: {
-    paddingTop: '8px',
+    paddingVertical: '1%',
     borderWidth: 1,
-    borderRadius: 10,
-    paddingHorizontal: 12,
-    backgroundColor: '#fff',
-    height: 40
+    borderRadius: '4%', 
+    paddingHorizontal: '3%', 
+    height: '8%'
   },
   errorText: {
     color: 'red'
