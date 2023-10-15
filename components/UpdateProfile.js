@@ -25,6 +25,8 @@ export default function App() {
     getProfile().then(profile => setProfile(profile)).catch(() => null)
   }, []);
 
+  const maxCharCount = 600;
+  
   const occupations = [
     'Tourist', 'Student', 'Entrepreneur', 'C-suite', 'Doctor', 'Lawyer', 'Entertainer',
     'Artist', 'Nurse', 'Tutor', 'Teacher', 'Chef', 'Baker', 'Engineer', 'Hairdresser',
@@ -128,14 +130,14 @@ export default function App() {
                 style={styles.inputMultiline}
                 placeholder="Anything about you"
                 multiline={true}
-                maxLength={600}
+                maxLength={maxCharCount}
                 onChangeText={text => {
                     handleChange('description')(text);
                     setDescriptionCharCount(text.length);
                 }}
                 value={profile.description}
                 />
-                <Text style={styles.charCount}>{600 - descriptionCharCount} chars left</Text>
+                <Text style={styles.charCount}>{maxCharCount - descriptionCharCount} chars left</Text>
             </View>
             <TouchableOpacity
               style={styles.onSubmitButton}

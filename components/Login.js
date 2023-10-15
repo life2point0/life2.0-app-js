@@ -117,11 +117,11 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     alignItems: 'center',
-    marginBottom: '5%', // 5% instead of 20px
+    marginBottom: '5%',
   },
   image: {
-    width: '80%', // 80% instead of 300px
-    height: '80%', // 80% instead of 300px
+    width: '80%', 
+    height: '80%', 
     resizeMode: 'contain',
   },
   formContainer: {
@@ -130,70 +130,70 @@ const styles = StyleSheet.create({
   },
   fieldBox: {
     backgroundColor: 'white',
-    marginBottom: '5%', // 5% instead of 10px
+    marginBottom: '5%', 
   },
   fieldLabel: {
     fontWeight: 'bold',
     color: 'black',
-    marginBottom: '2%', // 2% instead of 8px
+    marginBottom: '2%', 
   },
   fieldValue: {
-    paddingTop: '2%', // 2% instead of 8px
+    paddingTop: '8px', 
     borderWidth: 1,
-    borderRadius: '5%', // 5% instead of 10px
-    paddingHorizontal: '5%', // 5% instead of 12px
+    borderRadius: 10,
+    paddingHorizontal: 12, 
     backgroundColor: '#fff',
-    height: '10%', // 10% instead of 40px
+    height: '10%',
   },
   // Checkbox styles
   forgotPasswordLink: {
     alignItems: 'flex-end',
-    marginTop: '5%', // 5% instead of 10px
+    marginTop: '5%', 
   },
   forgotPasswordText: {
     color: '#717171',
-    fontSize: '3%', // 3% instead of 12px
+    fontSize: 12,
     fontWeight: 'bold',
   },
   signupLinkContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: '10%', // 10% instead of 80px
+    marginTop: '10%',
   },
   signupLinkText: {
     color: '#717171',
-    fontSize: '3%', // 3% instead of 12px
+    fontSize: 12, 
     fontWeight: 'bold',
-    marginLeft: '-15%', // -15% instead of -30px
-    marginTop: '-30%', // -30% instead of -30px
+    marginLeft: '-15%', 
+    marginTop: '-30%', 
   },
   signupLink: {
     color: 'black',
-    fontSize: '3%', // 3% instead of 12px
+    fontSize: 12,
     fontWeight: 'bold',
-    marginLeft: '58%', // 58% instead of 58px
-    marginTop: '-30%', // -30% instead of -30px
+    marginLeft: '58%', 
+    marginTop: '-30%', 
   },
   backButton: {
     position: 'absolute',
-    top: '5%', // 5% instead of 20px
-    left: '5%', // 5% instead of 20px
+    top: '5%', 
+    left: '5%',
     zIndex: 1,
   },
   backButtonText: {
     color: 'black',
-    fontSize: '4%', // 4% instead of 16px
+    fontSize: 16, 
   },
   loginButton: {
     backgroundColor: 'black',
-    paddingVertical: '5%', // 5% instead of 10px
-    borderRadius: '1%', // 1% instead of 5px
-    marginBottom: '5%', // 5% instead of 20px
+    paddingVertical: 10,
+    borderRadius: 5,
+    marginBottom: 20,
   },
   loginButtonText: {
-    color: '#FFC003', // Change the text color to your desired color
+    color: '#FFC003', 
     textAlign: 'center',
-    fontSize: '4%', // 4% instead of 16px
+    fontSize: 16,
     fontWeight: 'bold',
   },
   });

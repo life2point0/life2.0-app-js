@@ -24,9 +24,8 @@ const CommunityCard = ({ communityName, users, description, icon }) => {
             <Card.Title title={<Text style={{fontSize: 20}}>{communityName}</Text>} />
             <Card.Content>
             <View style={{ flexDirection: 'row', alignItems:'stretch', width:"100%"}}>
-                <Avatar.Image size={70} source={{ uri: users[0]?.icon}} />
                 <View style={{ marginLeft: 8, alignItems: 'center' , justifyContent:'center'} }>
-                {/* <Text style={{fontSize: 20}}>{icon}</Text> */}
+                <Avatar.Image style={{fontSize: 20}}>{icon}</Avatar.Image>
                 <Text style={{fontSize: 16 , overflow:"hidden"}} numberOfLines={3} ellipsizeMode='tail'>{description }</Text>
 
                 </View>

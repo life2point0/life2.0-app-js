@@ -25,7 +25,7 @@ const validationSchema = Yup.object().shape({
   terms: Yup.bool().oneOf([true], 'Accept Terms & Conditions is required')
 });
 
-const Signup =  () => {
+const signUp =  () => {
   const [form, setForm] = useState({
     firstName: '',
     lastName: '',
@@ -77,17 +77,17 @@ const Signup =  () => {
       await login(form.email, form.password);
       navigation.navigate('UpdateProfile');
     } catch (e) {
-      console.log('Signup error:', e);
+      console.log('signUp error:', e);
     } finally {
       setSubmitting(false)
     }
   };
-  const handleSignup = async () => {
+  const handleSignUp = async () => {
     try {
-      await Signup(firstName, lastName,email, password);
+      await signUp(firstName, lastName,email, password);
       navigation.navigate('Main', { screen: 'Home' })
     } catch (e) {
-      setErrorText(e?.response?.data?.error_description || 'Unknown Error');
+      setErrorText(e?.response?.data?.error_description);
     }
   };
   
@@ -194,8 +194,8 @@ const Signup =  () => {
           </PrimaryButton>
         </View>
         <TouchableOpacity
-            style={styles.SignupButton}
-            onPress={handleSignup}>
+            style={styles.signUpButton}
+            onPress={handleSignUp}>
         </TouchableOpacity>
         <View style={styles.loginLinkContainer}>
           <Text style={styles.loginLinkText}>Already have an account?</Text>
@@ -270,13 +270,13 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: '400',
   },
-  signupButton: {
+  signUpButton: {
     backgroundColor: 'black',
     paddingVertical: '2%',
     borderRadius: 2,
     marginBottom: '10%',
   },
-  signupButtonText: {
+  signUpButtonText: {
     color: '#FFC003',
     textAlign: 'center',
     fontSize: 16,
@@ -311,13 +311,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   imageContainer: {
-    alignItems: 'center', // Adjust alignment as needed
-    marginBottom: 20, // Adjust margin as needed
+    alignItems: 'center', 
+    marginBottom: 20, 
   },
   image: {
-    width: 200, // Set the desired width
-    height: 200, // Set the desired height
-    resizeMode: 'contain', // Adjust resizeMode as needed
+    width: 200, 
+    height: 200, 
+    resizeMode: 'contain', 
   },
   textInput: {
     paddingVertical: '1%',

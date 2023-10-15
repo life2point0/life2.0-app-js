@@ -11,8 +11,8 @@ export const TextField = ({ field, form, ...props }) => {
         style={{
             paddingTop: '2%',
             borderWidth: 1,
-            borderRadius: '5%',
-            paddingHorizontal: '5%',
+            borderRadius: 10,
+            paddingHorizontal: 12,
             backgroundColor: '#fff',
             height: '10%'
         }}
