@@ -12,10 +12,10 @@ const CommunityCard = ({ communityName, users, description, icon }) => {
     const joinOrSignup = () => {
         if (!isAuthenticated) {
             navigate('Signup');
-            return;
-        }
-        if (!isProfileCreated) {
+        } else if (!isProfileCreated) {
             navigate('UpdateProfile');
+        } else {
+            navigate('Main', {screen: 'Chats'});
         }
     }
 

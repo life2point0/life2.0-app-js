@@ -14,6 +14,19 @@ import { View } from 'react-native';
 import ComingSoonScreen from './components/ComingSoonScreen';
 import Signup from './components/Signup';
 import ChatScreen from './components/ChatScreen';
+import { CometChat } from '@cometchat-pro/react-native-chat';
+import { COMET_CHAT_APP_ID } from './components/constants';
+import Conversations from './components/Conversations';
+
+const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion('in').build();
+CometChat.init(COMET_CHAT_APP_ID, appSetting).then(
+  () => {
+    console.log('Cometchat Initialization completed successfully');
+  },
+  (error) => {
+    console.log('Cometchat Initialization failed with error:', error);
+  }
+);
 
 
 const Stack = createNativeStackNavigator();
@@ -48,7 +61,7 @@ function SharedTabs() {
         options={getTabOptions('home')}
       />
       <Tab.Screen 
-        name="Conversations" 
+        name="Chats" 
         component={ChatScreen} 
         options={getTabOptions('chat')}
       />
@@ -77,6 +90,7 @@ const App = () => {
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Signup" component={Signup} />
             <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
+            <Stack.Screen name="Conversations" component={Conversations} />
           </Stack.Navigator>
         </NavigationContainer>
       </PaperProvider>
