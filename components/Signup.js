@@ -25,7 +25,7 @@ const validationSchema = Yup.object().shape({
   terms: Yup.bool().oneOf([true], 'Accept Terms & Conditions is required')
 });
 
-const signUp =  () => {
+const Signup =  () => {
   const [form, setForm] = useState({
     firstName: '',
     lastName: '',
@@ -77,14 +77,15 @@ const signUp =  () => {
       await login(form.email, form.password);
       navigation.navigate('UpdateProfile');
     } catch (e) {
-      console.log('signUp error:', e);
+      console.log('signup error:', e);
+
     } finally {
       setSubmitting(false)
     }
   };
   const handleSignUp = async () => {
     try {
-      await signUp(firstName, lastName,email, password);
+      await Signup(firstName, lastName,email, password);
       navigation.navigate('Main', { screen: 'Home' })
     } catch (e) {
       setErrorText(e?.response?.data?.error_description);
@@ -193,10 +194,6 @@ const signUp =  () => {
             Sign Up
           </PrimaryButton>
         </View>
-        <TouchableOpacity
-            style={styles.signUpButton}
-            onPress={handleSignUp}>
-        </TouchableOpacity>
         <View style={styles.loginLinkContainer}>
           <Text style={styles.loginLinkText}>Already have an account?</Text>
           <TouchableOpacity onPress={() => navigation.navigate('Login')}>
@@ -322,9 +319,9 @@ const styles = StyleSheet.create({
   textInput: {
     paddingVertical: '1%',
     borderWidth: 1,
-    borderRadius: '4%', 
+    borderRadius: 10, 
     paddingHorizontal: '3%', 
-    height: '8%'
+    height: 40
   },
   errorText: {
     color: 'red'

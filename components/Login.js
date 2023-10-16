@@ -106,8 +106,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFF',
-    paddingHorizontal: '5%',
-    paddingTop: '10%',
+    paddingHorizontal: 12,
+    paddingTop: 12,
   },
   title: {
     color: 'black',
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     alignItems: 'center',
-    marginBottom: '5%',
+    marginBottom: 10,
   },
   image: {
     width: '80%', 
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingHorizontal: 12, 
     backgroundColor: '#fff',
-    height: '10%',
+    height: 40,
   },
   // Checkbox styles
   forgotPasswordLink: {
@@ -200,3 +200,4 @@ const styles = StyleSheet.create({
 
 
 export default Login;
+

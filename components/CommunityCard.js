@@ -5,6 +5,7 @@ import { PrimaryButton } from './PrimaryButton';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../contexts/AuthContext';
 
+
 const CommunityCard = ({ communityName, users, description, icon }) => {
     const { navigate } = useNavigation();
     const { isAuthenticated, isProfileCreated } = useAuth();
@@ -23,20 +24,34 @@ const CommunityCard = ({ communityName, users, description, icon }) => {
         <Card style={{ margin: 8, width: 250 }}>
             <Card.Title title={<Text style={{fontSize: 20}}>{communityName}</Text>} />
             <Card.Content>
-            <View style={{ flexDirection: 'row', alignItems:'stretch', width:"100%"}}>
-                <View style={{ marginLeft: 8, alignItems: 'center' , justifyContent:'center'} }>
-                <Avatar.Image style={{fontSize: 20}}>{icon}</Avatar.Image>
-                <Text style={{fontSize: 16 , overflow:"hidden"}} numberOfLines={3} ellipsizeMode='tail'>{description }</Text>
-
+            <View style={{ flexDirection: 'row', alignItems: 'stretch', width: "100%" }}>
+                <Avatar.Image style={{ width: 45, height: 45 }}>{icon}</Avatar.Image>
+                <View style={{ marginLeft: 8, alignItems: 'center', justifyContent: 'center' }}>
+                <Text style={{ fontSize: 16, overflow: "hidden" }} numberOfLines={3} ellipsizeMode='tail'>{description}</Text>
                 </View>
             </View>
-            </Card.Content>
-            <Card.Actions>
             
-            <Avatar.Icon size={24} icon="account-multiple" />
-            <Text>+{(users?.length || 24) - 1}</Text>
-            <PrimaryButton onPress={joinOrSignup} style={{ marginLeft: 'auto' }}>Join Now</PrimaryButton>
+            
+            </Card.Content>
+            <View style={{ backgroundColor: '#FFFCF2' }}>
+                <Card.Actions>
+                
+            <View style={{ marginHorizontal: -18 }}>
+                <Avatar.Icon size={24} icon="account-multiple" />
+            </View>
+            <View style={{ marginHorizontal: -18 }}>
+                <Avatar.Icon size={24} icon="account-multiple" />
+            </View>
+            <View style={{ marginHorizontal: -18 }}>
+                <Avatar.Icon size={24} icon="account-multiple" />
+            </View>
+            <View style={{ marginHorizontal: -18 }}>
+                <Avatar.Icon size={24} icon="account-multiple" />
+            </View>
+            <Text style={{ marginLeft: 20 }}>+{(users?.length || 24) - 1}</Text>
+             <PrimaryButton onPress={joinOrSignup} style={{ marginLeft: 'auto' }}>Join Now</PrimaryButton>
             </Card.Actions>
+            </View>
         </Card>
     );
 }
