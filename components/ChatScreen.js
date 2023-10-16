@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 
 
 export default function ChatScreen() {
-  const { profile, isAuthenticated, isProfileCreated } = useAuth();
+  const { profile, isAuthenticated , isProfileCreated} = useAuth();
   const navigation = useNavigation();
 
   useEffect(() => {

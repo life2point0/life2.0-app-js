@@ -11,13 +11,7 @@ const CommunityCard = ({ communityName, users, description, icon }) => {
     const { isAuthenticated, isProfileCreated } = useAuth();
 
     const joinOrSignup = () => {
-        if (!isAuthenticated) {
-            navigate('Signup');
-        } else if (!isProfileCreated) {
-            navigate('UpdateProfile');
-        } else {
-            navigate('Main', {screen: 'Chats'});
-        }
+        navigate('Main', {screen: 'Chats'});
     }
 
     return (

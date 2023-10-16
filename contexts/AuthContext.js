@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState, useMemo } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { KEYCLOAK_CLIENT_ID, KEYCLOAK_REALM, KEYCLOAK_URL, USER_SERVICE_BASE_URL } from '../components/constants';
+import { COMET_CHAT_AUTH_KEY, KEYCLOAK_CLIENT_ID, KEYCLOAK_REALM, KEYCLOAK_URL, USER_SERVICE_BASE_URL } from '../components/constants';
 import axios from 'axios';
 import qs from 'qs';
 import { CometChat } from '@cometchat-pro/react-native-chat';
@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }) => {
     });
 
     try {
-      const response = await axiosInstance.post(TOKEN_URL, data, {
+      const response = await axios.post(TOKEN_URL, data, {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded"
         }
@@ -65,7 +65,7 @@ export const AuthProvider = ({ children }) => {
   }
 
   const loginToCometchat = async () => {
-    CometChat.login('UID', 'API_KEY').then(
+    CometChat.login(profile?.id, COMET_CHAT_AUTH_KEY).then(
       (user) => {
         console.log('Login Successful:', user);
       },
@@ -78,7 +78,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     if (accessToken) {
       getProfile();
-      loginToCometchat();
+      //loginToCometchat();
     }
   }, [accessToken]);
 
@@ -90,6 +90,7 @@ export const AuthProvider = ({ children }) => {
         setRefreshToken(storedRefreshToken);
         try {
           await getNewToken();
+
         } catch (e) {
           AsyncStorage.removeItem('refreshToken')
         }
@@ -97,6 +98,28 @@ export const AuthProvider = ({ children }) => {
       }
     })();
   }, []);
+
+//   useEffect(() => {
+//   (async () => {
+//     const storedRefreshToken = await AsyncStorage.getItem('refreshToken');
+//     console.log({ storedRefreshToken });
+//     if (storedRefreshToken) {
+//       setRefreshToken(storedRefreshToken);
+//       try {
+//         const newAccessToken = await getNewToken(storedRefreshToken);
+//         if (newAccessToken) {
+//           // User is successfully logged in using the stored tokens
+//           setIsAuthenticated(true);
+//           return;
+//         }
+//       } catch (e) {
+//         AsyncStorage.removeItem('refreshToken');
+//       }
+//     }
+//     // User is not authenticated
+//     setIsAuthenticated(false);
+//   })();
+// }, []);
 
   const login = async (username, password) => {
     try {

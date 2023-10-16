@@ -142,7 +142,6 @@ export default function App() {
             <TouchableOpacity
               style={styles.onSubmitButton}
               onPress={handleSubmit}>
-              <Text style={styles.onSubmitButton}>Submit</Text>
             </TouchableOpacity>
 
             <Button mode="contained" onPress={handleSubmit}>
