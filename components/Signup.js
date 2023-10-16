@@ -1,5 +1,5 @@
 // React and React Native core modules
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, KeyboardAvoidingView, ScrollView, TextInput } from 'react-native';
 
 // External Libraries
@@ -8,7 +8,7 @@ import * as Yup from 'yup';
 import { TextInput as PaperTextInput, Button, Checkbox as PaperCheckbox, IconButton } from 'react-native-paper';
 
 // Local modules
-import YourImage from './assets/Group85.png';  // Adjust the path as needed
+import SignupIllustration from './assets/signup-illustration.png';  // Adjust the path as needed
 import Checkbox from './checkbox';
 import { USER_SERVICE_BASE_URL } from './constants';
 import * as _ from 'lodash';
@@ -45,6 +45,10 @@ const Signup =  () => {
     setTouched({ ...touched, [field]: true });
     validateForm();
   };
+  const lastNameField = useRef();
+  const emailField = useRef();
+  const passwordField = useRef();
+  const confirmPasswordField = useRef();
 
   const validateForm = () => {
     let hasError = false;
@@ -73,12 +77,10 @@ const Signup =  () => {
     try {
       setSubmitting(true)
       const response = await axios.post(`${USER_SERVICE_BASE_URL}/users/signup`, _.omit(form, ['confirmPassword', 'terms']));
-      console.log(navigation);
       await login(form.email, form.password);
       navigation.navigate('UpdateProfile');
     } catch (e) {
       console.log('signup error:', e);
-
     } finally {
       setSubmitting(false)
     }
@@ -99,6 +101,8 @@ const Signup =  () => {
     <KeyboardAvoidingView style={styles.container} behavior="hieght" >
       <View>
         <Text style={styles.title}>Sign Up</Text>
+      </View>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
         <Text style={styles.description}>
           Create a profile in minutes and you will then
           be matched with communities and
@@ -106,7 +110,7 @@ const Signup =  () => {
         </Text>
 
         <View style={styles.imageContainer}>
-          <Image source={YourImage} style={styles.image} />
+          <Image source={SignupIllustration} style={styles.image} />
         </View>
         {errorText && (
           <View style={{alignItems: 'center', justifyContent: 'center', flexDirection: 'row'}}>
@@ -118,9 +122,7 @@ const Signup =  () => {
             <Text style={{color: 'darkred'}}>{errorText}</Text>
           </View>
         )}
-      </View>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-      <View style={styles.container}>
+      <View style={{...styles.container, paddingTop: 10}}>
 
         <View style={styles.inputContainer}>
           <Text>First Name</Text>
@@ -129,41 +131,56 @@ const Signup =  () => {
             style={styles.textInput}
             value={form.firstName}
             onChangeText={(value) => setForm({ ...form, firstName: value })}
+            returnKeyType="next"
             onBlur={() => handleBlur('firstName')}
+            blurOnSubmit={false}
+            onSubmitEditing={() => lastNameField.current.focus() }
           />
-          {touched.firstName && <Text style={styles.errorText}>{errors.firstName}</Text>}
+          {touched.firstName && errors.firstName && <Text style={styles.errorText}>{errors.firstName}</Text>}
         </View>
         <View style={styles.inputContainer}>
           <Text>Last Name</Text>
           <TextInput
+            ref={lastNameField}
             placeholder="eg. Smith"
             style={styles.textInput}
             value={form.lastName}
             onChangeText={(value) => setForm({ ...form, lastName: value })}
+            returnKeyType="next"
             onBlur={() => handleBlur('lastName')}
+            blurOnSubmit={false}
+            onSubmitEditing={() => emailField.current.focus() }
           />
           {touched.lastName && errors.lastName && <Text style={styles.errorText}>{errors.lastName}</Text>}
         </View>
         <View style={styles.inputContainer}>
           <Text>Email</Text>
           <TextInput
+            ref={emailField}
             placeholder="john@example.com"
             style={styles.textInput}
             value={form.email}
             onChangeText={(value) => setForm({ ...form, email: value })}
+            returnKeyType="next"
             onBlur={() => handleBlur('email')}
+            blurOnSubmit={false}
+            onSubmitEditing={() => passwordField.current.focus() }
           />
           {touched.email && errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
         </View>
         <View style={styles.inputContainer}>
           <Text>Password</Text>
           <TextInput
+            ref={passwordField}
             placeholder="Password"
             style={styles.textInput}
             value={form.password}
             onChangeText={(value) => setForm({ ...form, password: value })}
             onBlur={() => handleBlur('password')}
+            blurOnSubmit={false}
+            returnKeyType="next"
             secureTextEntry
+            onSubmitEditing={() => confirmPasswordField.current.focus() }
           />
           {touched.password && errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
         </View>
@@ -171,6 +188,7 @@ const Signup =  () => {
           <Text>Confirm Password</Text>
           <TextInput
             placeholder="Confirm Password"
+            ref={confirmPasswordField}
             style={styles.textInput}
             value={form.confirmPassword}
             onChangeText={(value) => setForm({ ...form, confirmPassword: value })}
@@ -180,7 +198,7 @@ const Signup =  () => {
           {touched.confirmPassword && errors.confirmPassword && <Text style={styles.errorText}>{errors.confirmPassword}</Text>}
         </View>
         <View>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 10 }}>
             <PaperCheckbox
               status={form.terms ? 'checked' : 'unchecked'}
               onPress={() => setForm({ ...form, terms: !form.terms })}
@@ -207,14 +225,15 @@ const Signup =  () => {
   );
 };
 
+
 const styles = StyleSheet.create({
   scrollContainer: {
     flexGrow: 1,
   },
   backButton: {
     position: 'absolute',
-    top: '5%',
-    left: '5%',
+    top: 10,
+    left: 10,
     zIndex: 1,
   },
   backButtonText: {
@@ -224,22 +243,23 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFF',
-    paddingHorizontal: '5%',
-    paddingTop: '10%',
+    paddingHorizontal: 10,
+    paddingTop: 64,
   },
   title: {
     color: 'black',
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
+    paddingBottom: 20
   },
   description: {
     color: '#717171',
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: 'bold',
     textAlign: 'center',
     paddingHorizontal: 15,
-    paddingTop: 40
+    paddingTop: 20
   },
   formContainer: {
     flex: 1,
@@ -250,8 +270,8 @@ const styles = StyleSheet.create({
   },
   fieldBox: {
     backgroundColor: 'white',
-    marginBottom: '3%',
-    paddingTop: "-10%" 
+    marginBottom: 10,
+    paddingTop: -20
   },
   fieldLabel: {
     fontWeight: 'bold',
@@ -269,9 +289,9 @@ const styles = StyleSheet.create({
   },
   signUpButton: {
     backgroundColor: 'black',
-    paddingVertical: '2%',
+    paddingVertical: 20,
     borderRadius: 2,
-    marginBottom: '10%',
+    marginBottom: 20,
   },
   signUpButtonText: {
     color: '#FFC003',
@@ -286,12 +306,12 @@ const styles = StyleSheet.create({
   },
   loginLinkText: {
     color: '#717171',
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: 'bold',
   },
   loginLink: {
     color: 'black',
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: 'bold',
     marginLeft: 5,
   },
@@ -309,7 +329,6 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     alignItems: 'center', 
-    marginBottom: 20, 
   },
   image: {
     width: 200, 
@@ -317,10 +336,11 @@ const styles = StyleSheet.create({
     resizeMode: 'contain', 
   },
   textInput: {
-    paddingVertical: '1%',
+    marginTop: 8,
     borderWidth: 1,
-    borderRadius: 10, 
-    paddingHorizontal: '3%', 
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    backgroundColor: '#fff',
     height: 40
   },
   errorText: {
