@@ -19,6 +19,7 @@
     "@types/react": "~18.2.14",
     "axios": "^1.5.1",
     "expo": "~49.0.13",
+    "expo-dev-client": "~2.4.11",
     "expo-status-bar": "~1.6.0",
     "formik": "^2.4.5",
     "keycloak-js": "^22.0.4",
