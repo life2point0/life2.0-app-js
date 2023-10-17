@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
   },
   description: {
     color: '#717171',
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: 'bold',
     textAlign: 'center',
     paddingHorizontal: 15,

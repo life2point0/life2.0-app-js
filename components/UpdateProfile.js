@@ -7,6 +7,7 @@ import axios from 'axios';
 import { USER_SERVICE_BASE_URL } from './constants';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigation } from '@react-navigation/native';
+import { PrimaryButton } from './PrimaryButton';
 
 
 const ProfileSchema = Yup.object().shape({
@@ -57,12 +58,20 @@ export default function App() {
           }}
           validationSchema={ProfileSchema}
           onSubmit={async (values) => {
-            await authCall({
-                method: 'PUT',
-                url: `${USER_SERVICE_BASE_URL}/users/me`,
-                data: { description: values.description }
-            });
-            await getProfile().then(() => navigate('Main', {screen: 'Home'})).catch(() => null)
+            try {
+              setProfileSubmitting(true);
+              await authCall({
+                  method: 'PUT',
+                  url: `${USER_SERVICE_BASE_URL}/users/me`,
+                  data: { description: values.description }
+              });
+              await getProfile();
+              navigate('Main', {screen: 'Home'});
+            } catch (e) {
+              setErrorText(e?.response?.data?.detail);
+            } finally {
+              setProfileSubmitting(false);
+            }
           }}
         >
         {({ handleChange, handleSubmit }) => (
@@ -132,15 +141,9 @@ export default function App() {
                 />
                 <Text style={styles.charCount}>{maxCharCount - descriptionCharCount} chars left</Text>
             </View>
-            <TouchableOpacity
-              style={styles.onSubmitButton}
-              onPress={handleSubmit}>
-              <Text style={styles.onSubmitButton}>Submit</Text>
-            </TouchableOpacity>
-
-            <Button mode="contained" onPress={handleSubmit}>
+            <PrimaryButton mode="contained" onPress={handleSubmit} loading={isProfileSubmitting} disabled={isProfileSubmitting}>
               Submit
-            </Button>
+            </PrimaryButton>
           </ScrollView>
         )}
         </Formik>

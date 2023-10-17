@@ -107,7 +107,7 @@ const Login = ({ navigation }) => {
             <Text>Log In</Text>
           </PrimaryButton>
           <View style={styles.signupLinkContainer}>
-            <Text style={styles.signupLinkText}>Already have an account?</Text>
+            <Text style={styles.signupLinkText}>Don't have an account?</Text>
             <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
               <Text style={styles.signupLink}>Sign up</Text>
             </TouchableOpacity>
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
   },
   description: {
     color: '#717171',
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: 'bold',
     textAlign: 'center',
     paddingHorizontal: 15,
