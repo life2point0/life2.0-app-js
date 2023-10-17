@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useReducer, useRef, useState } from 'react';
 import { View, Text, TextInput, StyleSheet, Image, TouchableOpacity, KeyboardAvoidingView, ScrollView, Button } from 'react-native';
-import YourImage from './assets/Group85.png'; // Adjust the path as needed
+import LoginIllustration from './assets/signup-illustration.png'; // Adjust the path as needed
 import Checkbox from './checkbox'; // Import your Checkbox component
 import { useAuth } from '../contexts/AuthContext';
-import { Banner, IconButton, Snackbar } from 'react-native-paper';
+import { Banner, IconButton, RadioButton } from 'react-native-paper';
+import { PrimaryButton } from './PrimaryButton';
+// TODO: Use yup and formik
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -11,93 +13,105 @@ const Login = ({ navigation }) => {
   const [isChecked, setIsChecked] = useState(false); // For the checkbox
   const { login } = useAuth();
   const [errorText, setErrorText] = useState('');
+  const [isSubmitting, setSubmitting] = useState(false);
+  const passwordField = useRef();
 
   const handleLogin = async () => {
     try {
+      setSubmitting(true)
       await login(email, password);
       navigation.navigate('Main', { screen: 'Home' })
     } catch (e) {
       setErrorText(e?.response?.data?.error_description || 'Unknown Error');
+    } finally {
+      setSubmitting(false);
     }
   };
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior="height">
+      <View>
+        <Text style={styles.title}>Log In</Text>
+        <IconButton
+          icon="arrow-left"
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
+        />
+      </View>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.container}>
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={() => navigation.goBack()}
-          >
-            <Text style={styles.backButtonText}>Back</Text>
-          </TouchableOpacity>
-            <Text style={styles.title}>Log In</Text>
-              <View style={styles.imageContainer}>
-                <Image source={YourImage} style={styles.image} />
+          <Text style={styles.description}>
+          Log In if you already have a Life 2.0 profile, or else Register and build your profile
+          </Text>
+          <View style={styles.imageContainer}>
+            <Image source={LoginIllustration} style={styles.image} />
+          </View>
+          <View style={styles.formContainer}>
+            <View style={{flexDirection: 'row', alignItems: 'center', paddingBottom: 20}}>
+                <RadioButton status="checked" style={{flex: 1}}n></RadioButton>
+                <Text style={{flex: 2}}>Email</Text>
+                <RadioButton disabled style={{flex: 1}}></RadioButton>
+                <Text style={{flex: 2}}>Phone</Text>
+            </View> 
+            {errorText && (
+              <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
+                <IconButton
+                  icon="alert-circle"
+                  iconColor='darkred'
+                  size={20}
+                />
+                <Text style={{ color: 'darkred' }}>{errorText}</Text>
               </View>
-              {errorText && (
-                <View style={{alignItems: 'center', justifyContent: 'center', flexDirection: 'row'}}>
-                  <IconButton
-                    icon="alert-circle"
-                    iconColor='darkred'
-                    size={20}
-                  />
-                  <Text style={{color: 'darkred'}}>{errorText}</Text>
-                </View>
-                )}
-                <View style={styles.formContainer}>
-                  <View style={styles.fieldBox}>
-                    <Text style={styles.fieldLabel}>Email</Text>
-                      <TextInput
-                        style={styles.fieldValue}
-                        placeholder="Email"
-                        placeholderTextColor="#E1E1E1"
-                        keyboardType="email-address"
-                        value={email}
-                        onChangeText={(text) => setEmail(text)}
-                      />
-                  </View>
-                  <View style={styles.fieldBox}>
-                    <Text style={styles.fieldLabel}>Password</Text>
-                      <TextInput
-                        style={styles.fieldValue}
-                        placeholder="Password"
-                        placeholderTextColor="#E1E1E1"
-                        secureTextEntry={true}
-                        value={password}
-                        onChangeText={(text) => setPassword(text)}
-                      />
-
-                      {/* Forgot Password Link */}
-                      <TouchableOpacity
-                         style={styles.forgotPasswordLink}
-                         onPress={() => navigation.navigate('ForgotPassword')}
-                      >
-                        <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
-                      </TouchableOpacity>
-                  </View>
-
-            {/* Checkbox for "Terms and Conditions" */}
-              <Checkbox
-              label="I agree with the Terms of Use of Life 2.0 and accept the privacy policy"
-              isChecked={isChecked}
-              onToggle={() => setIsChecked(!isChecked)}
+            )}
+            <View style={styles.fieldBox}>
+              <Text style={styles.fieldLabel}>Email</Text>
+              <TextInput
+                style={styles.fieldValue}
+                placeholder="Email"
+                placeholderTextColor="#E1E1E1"
+                keyboardType="email-address"
+                value={email}
+                onChangeText={(text) => setEmail(text)}
+                blurOnSubmit={false}
+                returnKeyType="next"
+                onSubmitEditing={() => passwordField.current.focus()}
               />
             </View>
+            <View style={styles.fieldBox}>
+              <Text style={styles.fieldLabel}>Password</Text>
+              <TextInput
+                style={styles.fieldValue}
+                placeholder="Password"
+                placeholderTextColor="#E1E1E1"
+                secureTextEntry={true}
+                value={password}
+                onChangeText={(text) => setPassword(text)}
+                ref={passwordField}
+              />
 
-            <TouchableOpacity
-             style={styles.loginButton}
-              onPress={handleLogin}>
-              <Text style={styles.loginButtonText}>Log In</Text>
-            </TouchableOpacity>
-          <View style={styles.signupLinkContainer}>
-            <Text style={styles.signupLinkText}>Not a member?</Text>
-          </View>
-            <View>
-              <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
-                  <Text style={styles.signupLink}>Sign Up</Text>
+              {/* Forgot Password Link */}
+              <TouchableOpacity
+                style={styles.forgotPasswordLink}
+                onPress={() => navigation.navigate('ForgotPassword')}
+              >
+                <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
               </TouchableOpacity>
-             </View>
+            </View>
+          </View>
+
+          <PrimaryButton
+            disabled={isSubmitting}
+            loading={isSubmitting}
+            onPress={handleLogin}
+          >
+            <Text>Log In</Text>
+          </PrimaryButton>
+          <View style={styles.signupLinkContainer}>
+            <Text style={styles.signupLinkText}>Already have an account?</Text>
+            <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
+              <Text style={styles.signupLink}>Sign up</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -111,26 +125,35 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFF',
-    paddingHorizontal: '5%',
-    paddingTop: '10%',
+    paddingHorizontal: 10,
+  },
+  description: {
+    color: '#717171',
+    fontSize: 14,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    paddingHorizontal: 15,
+    paddingTop: 20,
+    flex: 1
   },
   title: {
     color: 'black',
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
+    paddingTop: 20
   },
   imageContainer: {
     alignItems: 'center',
-    marginBottom: 20,
+    flex: 10
   },
   image: {
-    width: 300,
-    height: 300,
+    width: 250,
+    height: 250,
     resizeMode: 'contain',
   },
   formContainer: {
-    flex: 1,
+    flex: 0.01,
     justifyContent: 'center'
   },
   fieldBox: {
@@ -138,7 +161,6 @@ const styles = StyleSheet.create({
     marginBottom: '10%',
   },
   fieldLabel: {
-    fontWeight: 'bold',
     color: 'black',
     marginBottom: 8
   },
@@ -163,27 +185,24 @@ const styles = StyleSheet.create({
   signupLinkContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: 80,
+    paddingVertical: 24
   },
   signupLinkText: {
     color: '#717171',
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: 'bold',
-    marginLeft: '-15%',
-    marginTop: '-30%'
   },
   signupLink: {
     color: 'black',
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: 'bold',
-    marginLeft: '58%',
-    marginTop: '-30%'
+    marginLeft: 5,
   },
   backButton: {
     position: 'absolute',
-    top: '5%',
-    left: '5%',
     zIndex: 1,
+    borderRadius: 1,
+    borderColor: 'black',
   },
   backButtonText: {
     color: 'black',
@@ -194,12 +213,6 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 5,
     marginBottom: 20,
-  },
-  loginButtonText: {
-    color: '#FFC003', // Change the text color to your desired color
-    textAlign: 'center',
-    fontSize: 16,
-    fontWeight: 'bold',
   },
 });
 

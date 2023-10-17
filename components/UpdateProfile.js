@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { Button, Chip } from 'react-native-paper';
+import { ActivityIndicator, Button, Chip } from 'react-native-paper';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
@@ -15,15 +15,19 @@ const ProfileSchema = Yup.object().shape({
 
 export default function App() {
   const [profile, setProfile] = useState(null);
+  const [isProfileSubmitting, setProfileSubmitting] = useState(false);
   const [selectedOccupations, setSelectedOccupations] = useState([]);
   const [descriptionCharCount, setDescriptionCharCount] = useState(0);
   const { authCall, getProfile } = useAuth();
   const { navigate } = useNavigation();
+  const [errorText, setErrorText] = useState('');
 
   useEffect(() => {
     getProfile().then(profile => setProfile(profile)).catch(() => null)
   }, []);
 
+  const maxCharCount = 600;
+  
   const occupations = [
     'Tourist', 'Student', 'Entrepreneur', 'C-suite', 'Doctor', 'Lawyer', 'Entertainer',
     'Artist', 'Nurse', 'Tutor', 'Teacher', 'Chef', 'Baker', 'Engineer', 'Hairdresser',
@@ -33,6 +37,16 @@ export default function App() {
   return (
     <View style={styles.container}>
       <Text style={{fontSize: 24, fontWeight: 'bold', padding: 20, textAlign: 'center'}}>Complete Profile</Text>
+      {errorText && (
+        <View style={{alignItems: 'center', justifyContent: 'center', flexDirection: 'row'}}>
+          <IconButton
+            icon="alert-circle"
+            iconColor='darkred'
+            size={20}
+          />
+          <Text style={{color: 'darkred'}}>{errorText}</Text>
+        </View>
+      )}
       {profile ? (
         <Formik
           initialValues={{
@@ -109,15 +123,20 @@ export default function App() {
                 style={styles.inputMultiline}
                 placeholder="Anything about you"
                 multiline={true}
-                maxLength={600}
+                maxLength={maxCharCount}
                 onChangeText={text => {
                     handleChange('description')(text);
                     setDescriptionCharCount(text.length);
                 }}
                 value={profile.description}
                 />
-                <Text style={styles.charCount}>{600 - descriptionCharCount} chars left</Text>
+                <Text style={styles.charCount}>{maxCharCount - descriptionCharCount} chars left</Text>
             </View>
+            <TouchableOpacity
+              style={styles.onSubmitButton}
+              onPress={handleSubmit}>
+              <Text style={styles.onSubmitButton}>Submit</Text>
+            </TouchableOpacity>
 
             <Button mode="contained" onPress={handleSubmit}>
               Submit
@@ -126,7 +145,7 @@ export default function App() {
         )}
         </Formik>
       ) : (
-        <Text>Loading...</Text>
+        <ActivityIndicator style={{alignSelf: 'center'}} animating={true} color="black" />
       )}
     </View>
   );

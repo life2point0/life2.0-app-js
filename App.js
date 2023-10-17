@@ -21,10 +21,8 @@ import Conversations from './components/Conversations';
 const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion('in').build();
 CometChat.init(COMET_CHAT_APP_ID, appSetting).then(
   () => {
-    console.log('Cometchat Initialization completed successfully');
   },
   (error) => {
-    console.log('Cometchat Initialization failed with error:', error);
   }
 );
 

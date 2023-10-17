@@ -9,12 +9,12 @@ export const TextField = ({ field, form, ...props }) => {
     <View>
       <TextInput
         style={{
-            paddingTop: '8px',
+            paddingTop: '2%',
             borderWidth: 1,
             borderRadius: 10,
             paddingHorizontal: 12,
             backgroundColor: '#fff',
-            height: 40
+            height: '10%'
         }}
         {...props}
         onChangeText={form.handleChange(name)}
