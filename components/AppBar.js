@@ -1,21 +1,22 @@
 import React from 'react';
 import { Appbar, Avatar } from 'react-native-paper';
-import logo from './assets/LIFE2.0.png';
-import { Image } from 'react-native';
+import logo from './assets/logo.png';
+import { Image, StatusBar } from 'react-native';
 
 // Import your custom menu icon image
 import menuIcon from './assets/menu-slider-icon.png';
 
 const AppBar = ({ title }) => {
   return (
-    <Appbar.Header style={{ backgroundColor: '#FFC003' }}>
+    <Appbar.Header style={{ backgroundColor: '#FFC003', position: '' }}>
+      <StatusBar backgroundColor="#FFC003" barStyle="light-content" />
       <Appbar.Action
         icon={() => <Image source={menuIcon} style={{ width: 24, height: 24 }} />}
         onPress={() => {
           /* Implement navigation logic here */
         }}
       />
-      <Appbar.Content title={title || <Image source={logo} />} style={{ alignItems: 'center' }} />
+      <Appbar.Content title={title || <Image source={logo} style={{flex: 1, maxHeight: 32}} resizeMode="contain"/>} style={{ alignItems: 'center' }}  />
       <Appbar.Action
         icon={() => <Avatar.Icon size={30} icon="account" />}
         onPress={() => {

@@ -9,7 +9,6 @@ import { TextInput as PaperTextInput, Button, Checkbox as PaperCheckbox, IconBut
 
 // Local modules
 import SignupIllustration from './assets/signup-illustration.png';  // Adjust the path as needed
-import Checkbox from './checkbox';
 import { USER_SERVICE_BASE_URL } from './constants';
 import * as _ from 'lodash';
 import { useAuth } from '../contexts/AuthContext';
@@ -53,7 +52,6 @@ const Signup =  () => {
   const validateForm = () => {
     let hasError = false;
     try {
-      console.log(form);
       validationSchema.validateSync(form, { abortEarly: false });
       setErrors({});
     } catch (e) {
@@ -65,12 +63,19 @@ const Signup =  () => {
         });
       }
       setErrors(newErrors);
-      console.log({newErrors})
     }
     return !hasError;
   };
 
   const handleSubmit = async () => {
+    setTouched({
+      firstName: true,
+      lastName: true,
+      email: true,
+      password: true,
+      confirmPassword: true,
+      terms: true,
+    });
     if (!validateForm()) {
       return;
     }
@@ -78,29 +83,24 @@ const Signup =  () => {
       setSubmitting(true)
       const response = await axios.post(`${USER_SERVICE_BASE_URL}/users/signup`, _.omit(form, ['confirmPassword', 'terms']));
       await login(form.email, form.password);
-      navigation.navigate('UpdateProfile');
+      navigation.replace('UpdateProfile');
     } catch (e) {
-      console.log('signup error:', e);
+      setErrorText(e?.response?.data?.detail || "Unknown Error");
     } finally {
       setSubmitting(false)
     }
   };
-  const handleSignUp = async () => {
-    try {
-      await Signup(firstName, lastName,email, password);
-      navigation.navigate('Main', { screen: 'Home' })
-    } catch (e) {
-      setErrorText(e?.response?.data?.error_description);
-    }
-  };
   
 
-
   return (
-            
-    <KeyboardAvoidingView style={styles.container} behavior="hieght" >
+    <KeyboardAvoidingView style={styles.container} behavior="height">
       <View>
         <Text style={styles.title}>Sign Up</Text>
+        <IconButton
+          icon="arrow-left"
+          style={styles.backButton}
+          onPress={() => navigation.navigate('Main', { screen: 'Home' })}
+        />
       </View>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <Text style={styles.description}>
@@ -232,9 +232,8 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position: 'absolute',
-    top: 10,
-    left: 10,
-    zIndex: 1,
+    top: 0,
+    left: 0,
   },
   backButtonText: {
     color: 'black',
@@ -244,14 +243,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFF',
     paddingHorizontal: 10,
-    paddingTop: 64,
   },
   title: {
     color: 'black',
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
-    paddingBottom: 20
+    paddingVertical: 20,
   },
   description: {
     color: '#717171',

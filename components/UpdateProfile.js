@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { Button, Chip } from 'react-native-paper';
+import { ActivityIndicator, Button, Chip } from 'react-native-paper';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
@@ -15,6 +15,7 @@ const ProfileSchema = Yup.object().shape({
 
 export default function App() {
   const [profile, setProfile] = useState(null);
+  const [isProfileSubmitting, setProfileSubmitting] = useState(false);
   const [selectedOccupations, setSelectedOccupations] = useState([]);
   const [descriptionCharCount, setDescriptionCharCount] = useState(0);
   const { authCall, getProfile } = useAuth();
@@ -32,14 +33,6 @@ export default function App() {
     'Artist', 'Nurse', 'Tutor', 'Teacher', 'Chef', 'Baker', 'Engineer', 'Hairdresser',
     'Masseuse', 'Banker', 'Bartender', 'Handyman', 'Technician'
   ];
-  const handleUpdateProfile = async () => {
-    try {
-      await UpdateProfile(firstName, lastName, description);
-      navigation.navigate('Main', { screen: 'Home' })
-    } catch (e) {
-      setErrorText(e?.response?.data?.error_description || 'Unknown Error');
-    }
-  };
 
   return (
     <View style={styles.container}>
@@ -152,7 +145,7 @@ export default function App() {
         )}
         </Formik>
       ) : (
-        <Text>Loading...</Text>
+        <ActivityIndicator style={{alignSelf: 'center'}} animating={true} color="black" />
       )}
     </View>
   );
