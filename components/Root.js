@@ -33,7 +33,7 @@ const Root = ({ navigation }) => {
         return <SplashScreen />;
     }
 
-    if (!hasViewedIntro) {
+    if (!hasViewedIntro ) {
         AsyncStorage.setItem('hasViewedIntro', 'true');
         return <IntroSlides />;
     }

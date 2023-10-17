@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }) => {
     });
 
     try {
-      const response = await axiosInstance.post(TOKEN_URL, data, {
+      const response = await axios.post(TOKEN_URL, data, {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded"
         }
@@ -78,7 +78,6 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     if (accessToken) {
       getProfile();
-      loginToCometchat();
     }
   }, [accessToken]);
 
@@ -89,8 +88,9 @@ export const AuthProvider = ({ children }) => {
       if (storedRefreshToken) {
         setRefreshToken(storedRefreshToken);
         try {
-          await getNewToken();
+          await getNewToken(storedRefreshToken);
         } catch (e) {
+          console.log(e?.response?.data)
           AsyncStorage.removeItem('refreshToken')
         }
         setIsAuthenticated(true);

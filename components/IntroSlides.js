@@ -8,8 +8,8 @@ const slides = [
   {
     title: 'Welcome to Life 2.0',
     description: 'Moving to a new city or new country? Now immediately find like-minded people who will help you settle in!',
-    image: require('./assets/Group78.png'),
-    logo: require('./assets/LIFE2.0.png'),
+    image: require('./assets/intro-1.png'),
+    logo: require('./assets/logo.png'),
     buttons: [
       { label: 'Next', action: 'next', type: 'primary' },
       { label: 'Skip', action: 'skip' },
@@ -18,8 +18,8 @@ const slides = [
   {
     title: 'Introduce yourself to people in your city!',
     description: 'Setup your profile and connect with people with similar interests and backgrounds in your new city.',
-    image: require('./assets/Group80.png'),
-    logo: require('./assets/LIFE2.0.png'),
+    image: require('./assets/intro-2.png'),
+    logo: require('./assets/logo.png'),
     buttons: [
       { label: 'Next', action: 'next', type: 'primary' },
       { label: 'Skip', action: 'skip' },
@@ -28,8 +28,8 @@ const slides = [
   {
     title: 'Explore opportunities in your new city!',
     description: 'Life 2.0 will match you with communities, meetups & jobs in your new community. Offer help when you can, seek help when you need.',
-    image: require('./assets/Group81.png'),
-    logo: require('./assets/LIFE2.0.png'),
+    image: require('./assets/intro-3.png'),
+    logo: require('./assets/logo.png'),
     buttons: [
       { label: 'Start Exploring', action: 'home', type: 'primary' },
     ],
@@ -45,8 +45,8 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position: 'absolute',
-    top: '5%',
-    left: '5%',
+    top: 10,
+    left: 10,
     zIndex: 1,
   },
   backButtonText: {
@@ -60,12 +60,11 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '100%',
-    height: 300,
-    resizeMode: 'contain',
+    height: 200,
   },
   logo: {
-    width: 150,
-    height: 150,
+    width: 120,
+    height: 120,
     resizeMode: 'contain',
     marginBottom: 20,
   },
@@ -94,7 +93,8 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     width: '100%',
-    alignSelf: 'stretch'
+    alignSelf: 'stretch',
+    padding: 20
   },
   button: {
     // backgroundColor: 'transparent',
@@ -147,18 +147,21 @@ const IntroSlides = () => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {currentScreen > 0 && (
-        <IconButton 
+        <IconButton
+          style={styles.backButton}
           onPress={() => handleButtonPress('back')}
           icon="arrow-left"
         />
       )}
       <View style={styles.slide}>
-        <Image source={slide.logo} style={styles.logo} />
+        <Image source={slide.logo} style={styles.logo}/>
         <View style={styles.imageContainer}>
-          <Image source={slide.image} style={styles.image} />
+          <Image source={slide.image} style={styles.image} resizeMode="contain" />
         </View>
-        <Text style={styles.title}>{slide.title}</Text>
-        <Text style={styles.description}>{slide.description}</Text>
+        <View style={{flex: 1, justifyContent: 'center', padding: 20}}>
+          <Text style={styles.title}>{slide.title}</Text>
+          <Text style={styles.description}>{slide.description}</Text>
+        </View>
         <View style={styles.buttonContainer}>
           {slide.buttons.map((button, buttonIndex) => (
             <Fragment key={buttonIndex}>

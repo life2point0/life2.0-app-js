@@ -6,18 +6,23 @@ import { useNavigation } from '@react-navigation/native';
 
 
 export default function ChatScreen() {
-  const { profile, isAuthenticated } = useAuth();
+  const { profile, isAuthenticated, isProfileCreated } = useAuth();
   const navigation = useNavigation();
 
   useEffect(() => {
     return navigation.addListener('focus', () => {
-      if (isAuthenticated) {
-        navigation.replace('Conversations')
-      } else {
-        navigation.replace('Signup')
+      navigation.replace('Main', { screen: 'Home' })
+      if (!isAuthenticated) {
+        navigation.navigate('Signup');
+        return;
+      } 
+      if (!isProfileCreated) {
+        navigation.navigate('UpdateProfile');
+        return;
       }
+      navigation.navigate('Conversations')
     });
-  }, [])
+  }, []);
 
 
   return (
