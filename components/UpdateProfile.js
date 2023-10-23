@@ -1,20 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { ActivityIndicator, Button, Chip } from 'react-native-paper';
-import { Formik } from 'formik';
+import { View, Text, StyleSheet } from 'react-native';
+import { ActivityIndicator } from 'react-native-paper';
 import * as Yup from 'yup';
 import axios from 'axios';
 import { USER_SERVICE_BASE_URL } from './constants';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigation } from '@react-navigation/native';
-import { PrimaryButton } from './PrimaryButton';
+import { Form } from '../shared-library'
 
-
-const ProfileSchema = Yup.object().shape({
+const profileSchema = Yup.object().shape({
   description: Yup.string().required('Required'),
 });
 
-export default function App() {
+export default UpdateProfile = () => {
   const [profile, setProfile] = useState(null);
   const [isProfileSubmitting, setProfileSubmitting] = useState(false);
   const [selectedOccupations, setSelectedOccupations] = useState([]);
@@ -26,14 +24,82 @@ export default function App() {
   useEffect(() => {
     getProfile().then(profile => setProfile(profile)).catch(() => null)
   }, []);
-
-  const maxCharCount = 600;
   
   const occupations = [
     'Tourist', 'Student', 'Entrepreneur', 'C-suite', 'Doctor', 'Lawyer', 'Entertainer',
     'Artist', 'Nurse', 'Tutor', 'Teacher', 'Chef', 'Baker', 'Engineer', 'Hairdresser',
     'Masseuse', 'Banker', 'Bartender', 'Handyman', 'Technician'
   ];
+
+  const fields = [
+    {
+      name: 'firstName',
+      label: 'First Name',
+      type: 'text'
+    },
+    {
+      name: 'lastName',
+      label: 'Last Name',
+      type: 'text'
+    },
+    {
+      name: 'email',
+      label: 'Email',
+      type: 'text'
+    },
+    {
+      name: 'occupation',
+      label: 'What I do for a living?',
+      type: 'chips',
+      selectedChips: selectedOccupations,
+      options: occupations
+    },
+    {
+      name: 'description',
+      label: 'Bio',
+      type: 'textarea',
+      placeholder: 'Anything about you',
+      maxCharCount: 600,
+      charCount: descriptionCharCount,
+      setCharCount: setDescriptionCharCount
+    }
+  ];
+
+  const initialValues = {
+    firstName: profile?.firstName,
+    lastName: profile?.lastName,
+    email: profile?.email,
+    description: '',
+  }
+
+
+  const handleProfileSubmit = async (values) => {
+    try {
+      setProfileSubmitting(true);
+      await authCall({
+        method: 'PUT',
+        url: `${USER_SERVICE_BASE_URL}/users/me`,
+        data: { description: values.description },
+      });
+      await getProfile();
+      navigate('Main', { screen: 'Home' });
+    } catch (e) {
+      setErrorText(e?.response?.data?.detail);
+    } finally {
+      setProfileSubmitting(false);
+    }
+  };
+
+  const handleChipSelection = (chip) => {
+    setSelectedOccupations((prevState) => {
+      if (prevState.includes(chip)) {
+        return prevState.filter((o) => o !== chip);
+      } else {
+        return [...prevState, chip];
+      }
+    });
+  }
+
 
   return (
     <View style={styles.container}>
@@ -49,104 +115,114 @@ export default function App() {
         </View>
       )}
       {profile ? (
-        <Formik
-          initialValues={{
-            firstName: profile.firstName,
-            lastName: profile.lastName,
-            email: profile.email,
-            description: '',
-          }}
-          validationSchema={ProfileSchema}
-          onSubmit={async (values) => {
-            try {
-              setProfileSubmitting(true);
-              await authCall({
-                  method: 'PUT',
-                  url: `${USER_SERVICE_BASE_URL}/users/me`,
-                  data: { description: values.description }
-              });
-              await getProfile();
-              navigate('Main', {screen: 'Home'});
-            } catch (e) {
-              setErrorText(e?.response?.data?.detail);
-            } finally {
-              setProfileSubmitting(false);
-            }
-          }}
-        >
-        {({ handleChange, handleSubmit }) => (
-          <ScrollView>
-            <View style={styles.fieldContainer}>
-              <Text>First Name</Text>
-              <TextInput
-                style={styles.input}
-                value={profile.firstName}
-                editable={false}
-              />
-            </View>
+        // <Formik
+        //   initialValues={{
+        //     firstName: profile.firstName,
+        //     lastName: profile.lastName,
+        //     email: profile.email,
+        //     description: '',
+        //   }}
+        //   validationSchema={ProfileSchema}
+        //   onSubmit={async (values) => {
+        //     try {
+        //       setProfileSubmitting(true);
+        //       await authCall({
+        //           method: 'PUT',
+        //           url: `${USER_SERVICE_BASE_URL}/users/me`,
+        //           data: { description: values.description }
+        //       });
+        //       await getProfile();
+        //       navigate('Main', {screen: 'Home'});
+        //     } catch (e) {
+        //       setErrorText(e?.response?.data?.detail);
+        //     } finally {
+        //       setProfileSubmitting(false);
+        //     }
+        //   }}
+        // >
+        // {({ handleChange, handleSubmit }) => (
+        //   <ScrollView>
+        //     <View style={styles.fieldContainer}>
+        //       <Text>First Name</Text>
+        //       <TextInput
+        //         style={styles.input}
+        //         value={profile.firstName}
+        //         editable={false}
+        //       />
+        //     </View>
 
-            <View style={styles.fieldContainer}>
-              <Text>Last Name</Text>
-              <TextInput
-                style={styles.input}
-                value={profile.lastName}
-                editable={false}
-              />
-            </View>
+        //     <View style={styles.fieldContainer}>
+        //       <Text>Last Name</Text>
+        //       <TextInput
+        //         style={styles.input}
+        //         value={profile.lastName}
+        //         editable={false}
+        //       />
+        //     </View>
 
-            <View style={styles.fieldContainer}>
-              <Text>Email</Text>
-              <TextInput
-                style={styles.input}
-                value={profile.email}
-                editable={false}
-              />
-            </View>
+        //     <View style={styles.fieldContainer}>
+        //       <Text>Email</Text>
+        //       <TextInput
+        //         style={styles.input}
+        //         value={profile.email}
+        //         editable={false}
+        //       />
+        //     </View>
 
-            <View style={styles.chipContainer}>
-              <View style={{width: '100%'}}>
-                <Text>What I do for a living?</Text>
-              </View>
-              {occupations.map((occupation) => (
-                <Chip
-                  key={occupation}
-                  selected={selectedOccupations.includes(occupation)}
-                  onPress={() => {
-                    setSelectedOccupations(prevState => {
-                      if (prevState.includes(occupation)) {
-                        return prevState.filter(o => o !== occupation);
-                      } else {
-                        return [...prevState, occupation];
-                      }
-                    });
-                  }}
-                >
-                  {occupation}
-                </Chip>
-              ))}
-            </View>
+        //     <View style={styles.chipContainer}>
+        //       <View style={{width: '100%'}}>
+        //         <Text>What I do for a living?</Text>
+        //       </View>
+        //       {occupations.map((occupation) => (
+        //         <Chip
+        //           key={occupation}
+        //           selected={selectedOccupations.includes(occupation)}
+        //           onPress={() => {
+        //             setSelectedOccupations(prevState => {
+        //               if (prevState.includes(occupation)) {
+        //                 return prevState.filter(o => o !== occupation);
+        //               } else {
+        //                 return [...prevState, occupation];
+        //               }
+        //             });
+        //           }}
+        //         >
+        //           {occupation}
+        //         </Chip>
+        //       ))}
+        //     </View>
 
-            <View style={styles.fieldContainer}>
-                <Text>Bio</Text>
-                <TextInput
-                style={styles.inputMultiline}
-                placeholder="Anything about you"
-                multiline={true}
-                maxLength={maxCharCount}
-                onChangeText={text => {
-                    handleChange('description')(text);
-                    setDescriptionCharCount(text.length);
-                }}
-                value={profile.description}
-                />
-                <Text style={styles.charCount}>{maxCharCount - descriptionCharCount} chars left</Text>
-            </View>
-            <PrimaryButton mode="contained" onPress={handleSubmit} loading={isProfileSubmitting} disabled={isProfileSubmitting}>
-              Submit
-            </PrimaryButton>
-          </ScrollView>
-        )}
-        </Formik>
+        //     <View style={styles.fieldContainer}>
+        //         <Text>Bio</Text>
+        //         <TextInput
+        //         style={styles.inputMultiline}
+        //         placeholder="Anything about you"
+        //         multiline={true}
+        //         maxLength={maxCharCount}
+        //         onChangeText={text => {
+        //             handleChange('description')(text);
+        //             setDescriptionCharCount(text.length);
+        //         }}
+        //         value={profile.description}
+        //         />
+        //         <Text style={styles.charCount}>{maxCharCount - descriptionCharCount} chars left</Text>
+        //     </View>
+        //     <PrimaryButton mode="contained" onPress={handleSubmit} loading={isProfileSubmitting} disabled={isProfileSubmitting}>
+        //       Submit
+        //     </PrimaryButton>
+        //   </ScrollView>
+        // )}
+        // </Formik>
+
+        <Form
+          initialValues={initialValues}
+          validationSchema={profileSchema}
+          fields={fields}
+          onSubmit={handleProfileSubmit}
+          onChipClick={handleChipSelection}
+          isLoading={isProfileSubmitting}
+          styles={styles}
+        />
       ) : (
         <ActivityIndicator style={{alignSelf: 'center'}} animating={true} color="black" />
       )}
@@ -178,7 +254,7 @@ const styles = StyleSheet.create({
       marginBottom: 20,
       gap: 8,
     },
-    inputMultiline: {
+    textarea: {
       height: 100,
       borderColor: 'gray',
       borderWidth: 1,
@@ -192,5 +268,8 @@ const styles = StyleSheet.create({
     charCount: {
       textAlign: 'right',
       fontSize: 12,
+    },
+    errorText: {
+      color: 'red',
     },
 });
