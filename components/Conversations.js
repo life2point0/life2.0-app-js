@@ -1,23 +1,37 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { WebView } from 'react-native-webview';
 import { CHAT_URL } from './constants';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigation } from '@react-navigation/native';
+import { 
+  Channel, 
+  ChannelList, 
+  useChatContext,
+  MessageList,
+  MessageInput, 
+} from 'stream-chat-expo';
+import AppBar from './AppBar';
+import { View } from 'react-native';
 
 
 export default function Conversations() {
   const { profile, isAuthenticated } = useAuth();
   const navigation = useNavigation();
+  const { channel } = useChatContext();
 
   if (!isAuthenticated) {
-    return navigation.navigate('Signup');
+    navigation.navigate('Signup');
   }
 
   return (
-    <WebView
-      style={{marginTop: 30}}
-      source={{ uri: `${CHAT_URL}/login?userId=${profile?.id}` }}
-      // injectedJavaScript={`window.localStorage.clear();`}
-    />
+    <>
+      <AppBar title={channel?.data?.name} />
+      <View style={{flex: 1}}>
+        <Channel channel={channel} hasCommands={false}>
+          <MessageList />
+          <MessageInput />
+        </Channel>
+      </View>
+    </>
   );
 }

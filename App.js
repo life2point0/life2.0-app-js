@@ -10,25 +10,22 @@ import Login from './components/Login';
 import UpdateProfile from './components/UpdateProfile';
 import HomeScreen from './components/HomeScreen';
 import { IconButton } from 'react-native-paper';
-import { View } from 'react-native';
 import ComingSoonScreen from './components/ComingSoonScreen';
 import Signup from './components/Signup';
 import ChatScreen from './components/ChatScreen';
-import { CometChat } from '@cometchat-pro/react-native-chat';
-import { COMET_CHAT_APP_ID } from './components/constants';
 import Conversations from './components/Conversations';
+import { StreamChat } from 'stream-chat';
+import {
+  Chat,
+  OverlayProvider
+} from 'stream-chat-expo';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion('in').build();
-CometChat.init(COMET_CHAT_APP_ID, appSetting).then(
-  () => {
-  },
-  (error) => {
-  }
-);
 
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
+const chatClient = StreamChat.getInstance('ys9k7stx4245');
 
 
 const getTabOptions = (iconName) => {
@@ -79,20 +76,26 @@ function SharedTabs() {
 
 const App = () => {
   return (
-    <AuthProvider>
-      <PaperProvider theme={theme}>
-        <NavigationContainer>
-          <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="Root" component={Root} />
-            <Stack.Screen name="Main" component={SharedTabs} options={{ headerShown: false }}/>
-            <Stack.Screen name="Login" component={Login} />
-            <Stack.Screen name="Signup" component={Signup} />
-            <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
-            <Stack.Screen name="Conversations" component={Conversations} />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </PaperProvider>
-    </AuthProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <OverlayProvider>
+        <Chat client={chatClient}>
+          <AuthProvider>
+            <PaperProvider theme={theme}>
+              <NavigationContainer>
+                <Stack.Navigator screenOptions={{ headerShown: false }}>
+                  <Stack.Screen name="Root" component={Root} />
+                  <Stack.Screen name="Main" component={SharedTabs} options={{ headerShown: false }}/>
+                  <Stack.Screen name="Login" component={Login} />
+                  <Stack.Screen name="Signup" component={Signup} />
+                  <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
+                  <Stack.Screen name="Conversations" component={Conversations} />
+                </Stack.Navigator>
+              </NavigationContainer>
+            </PaperProvider>
+          </AuthProvider>
+        </Chat>
+      </OverlayProvider>
+    </GestureHandlerRootView>
   );
 };
 
