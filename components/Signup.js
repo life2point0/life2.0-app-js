@@ -85,7 +85,7 @@ const Signup =  () => {
       await login(form.email, form.password);
       navigation.replace('UpdateProfile');
     } catch (e) {
-      setErrorText(e?.response?.data?.detail || "Unknown Error");
+      setErrorText(e?.response?.data?.detail?.msg || "Unknown Error");
     } finally {
       setSubmitting(false)
     }

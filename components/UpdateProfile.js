@@ -1,16 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { ActivityIndicator } from 'react-native-paper';
+import { ActivityIndicator, IconButton } from 'react-native-paper';
 import * as Yup from 'yup';
-import axios from 'axios';
 import { USER_SERVICE_BASE_URL } from './constants';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigation } from '@react-navigation/native';
-import { Form } from '../shared-library'
+import { Form } from '../shared-components/form/Form'
+
 
 const profileSchema = Yup.object().shape({
-  description: Yup.string().required('Required'),
-});
+  description: Yup.string().required('Required')
+})
+
+const occupations = [
+  'Tourist', 'Student', 'Entrepreneur', 'C-suite', 'Doctor', 'Lawyer', 'Entertainer',
+  'Artist', 'Nurse', 'Tutor', 'Teacher', 'Chef', 'Baker', 'Engineer', 'Hairdresser',
+  'Masseuse', 'Banker', 'Bartender', 'Handyman', 'Technician'
+]
 
 export default UpdateProfile = () => {
   const [profile, setProfile] = useState(null);
@@ -25,43 +31,59 @@ export default UpdateProfile = () => {
     getProfile().then(profile => setProfile(profile)).catch(() => null)
   }, []);
   
-  const occupations = [
-    'Tourist', 'Student', 'Entrepreneur', 'C-suite', 'Doctor', 'Lawyer', 'Entertainer',
-    'Artist', 'Nurse', 'Tutor', 'Teacher', 'Chef', 'Baker', 'Engineer', 'Hairdresser',
-    'Masseuse', 'Banker', 'Bartender', 'Handyman', 'Technician'
-  ];
 
   const fields = [
     {
       name: 'firstName',
       label: 'First Name',
+      placeholder: 'First Name',
       type: 'text'
     },
     {
       name: 'lastName',
       label: 'Last Name',
+      placeholder: 'Last Name',
       type: 'text'
     },
     {
       name: 'email',
       label: 'Email',
+      placeholder: 'Email',
       type: 'text'
     },
     {
-      name: 'occupation',
+      name: 'placeOfOrigin',
+      label: 'Where am I from',
+      type: 'location',
+      placeholder: 'Select where you are from'
+    },
+    {
+      name: 'pastLocations',
+      label: 'Places I have lived in',
+      type: 'location',
+      multiple: true,
+      placeholder: 'Select where you have been'
+    },
+    {
+      name: 'currentLocation',
+      label: 'Where am I now',
+      placeholder: 'Select where you are now',
+      type: 'location'
+    },
+    {
+      name: 'occupations',
       label: 'What I do for a living?',
-      type: 'chips',
+      type: 'chip',
       selectedChips: selectedOccupations,
       options: occupations
     },
     {
       name: 'description',
       label: 'Bio',
-      type: 'textarea',
       placeholder: 'Anything about you',
+      type: 'textarea',
       maxCharCount: 600,
-      charCount: descriptionCharCount,
-      setCharCount: setDescriptionCharCount
+      charCount: descriptionCharCount
     }
   ];
 
@@ -74,17 +96,23 @@ export default UpdateProfile = () => {
 
 
   const handleProfileSubmit = async (values) => {
+    const profileData = {
+      ...values,
+      occupations: selectedOccupations
+    }
+    console.log("DATA", profileData)
     try {
       setProfileSubmitting(true);
       await authCall({
         method: 'PUT',
         url: `${USER_SERVICE_BASE_URL}/users/me`,
-        data: { description: values.description },
+        data: profileData
       });
       await getProfile();
       navigate('Main', { screen: 'Home' });
     } catch (e) {
-      setErrorText(e?.response?.data?.detail);
+      setErrorText(e?.response?.data?.detail?.msg || 'Unknown Error' );
+      console.log('API ERROR', e?.response?.data?.detail)
     } finally {
       setProfileSubmitting(false);
     }
@@ -100,6 +128,9 @@ export default UpdateProfile = () => {
     });
   }
 
+  const updateCharCount = (field, value) => {
+    setDescriptionCharCount(value)
+  }
 
   return (
     <View style={styles.container}>
@@ -115,111 +146,13 @@ export default UpdateProfile = () => {
         </View>
       )}
       {profile ? (
-        // <Formik
-        //   initialValues={{
-        //     firstName: profile.firstName,
-        //     lastName: profile.lastName,
-        //     email: profile.email,
-        //     description: '',
-        //   }}
-        //   validationSchema={ProfileSchema}
-        //   onSubmit={async (values) => {
-        //     try {
-        //       setProfileSubmitting(true);
-        //       await authCall({
-        //           method: 'PUT',
-        //           url: `${USER_SERVICE_BASE_URL}/users/me`,
-        //           data: { description: values.description }
-        //       });
-        //       await getProfile();
-        //       navigate('Main', {screen: 'Home'});
-        //     } catch (e) {
-        //       setErrorText(e?.response?.data?.detail);
-        //     } finally {
-        //       setProfileSubmitting(false);
-        //     }
-        //   }}
-        // >
-        // {({ handleChange, handleSubmit }) => (
-        //   <ScrollView>
-        //     <View style={styles.fieldContainer}>
-        //       <Text>First Name</Text>
-        //       <TextInput
-        //         style={styles.input}
-        //         value={profile.firstName}
-        //         editable={false}
-        //       />
-        //     </View>
-
-        //     <View style={styles.fieldContainer}>
-        //       <Text>Last Name</Text>
-        //       <TextInput
-        //         style={styles.input}
-        //         value={profile.lastName}
-        //         editable={false}
-        //       />
-        //     </View>
-
-        //     <View style={styles.fieldContainer}>
-        //       <Text>Email</Text>
-        //       <TextInput
-        //         style={styles.input}
-        //         value={profile.email}
-        //         editable={false}
-        //       />
-        //     </View>
-
-        //     <View style={styles.chipContainer}>
-        //       <View style={{width: '100%'}}>
-        //         <Text>What I do for a living?</Text>
-        //       </View>
-        //       {occupations.map((occupation) => (
-        //         <Chip
-        //           key={occupation}
-        //           selected={selectedOccupations.includes(occupation)}
-        //           onPress={() => {
-        //             setSelectedOccupations(prevState => {
-        //               if (prevState.includes(occupation)) {
-        //                 return prevState.filter(o => o !== occupation);
-        //               } else {
-        //                 return [...prevState, occupation];
-        //               }
-        //             });
-        //           }}
-        //         >
-        //           {occupation}
-        //         </Chip>
-        //       ))}
-        //     </View>
-
-        //     <View style={styles.fieldContainer}>
-        //         <Text>Bio</Text>
-        //         <TextInput
-        //         style={styles.inputMultiline}
-        //         placeholder="Anything about you"
-        //         multiline={true}
-        //         maxLength={maxCharCount}
-        //         onChangeText={text => {
-        //             handleChange('description')(text);
-        //             setDescriptionCharCount(text.length);
-        //         }}
-        //         value={profile.description}
-        //         />
-        //         <Text style={styles.charCount}>{maxCharCount - descriptionCharCount} chars left</Text>
-        //     </View>
-        //     <PrimaryButton mode="contained" onPress={handleSubmit} loading={isProfileSubmitting} disabled={isProfileSubmitting}>
-        //       Submit
-        //     </PrimaryButton>
-        //   </ScrollView>
-        // )}
-        // </Formik>
-
         <Form
           initialValues={initialValues}
           validationSchema={profileSchema}
           fields={fields}
           onSubmit={handleProfileSubmit}
           onChipClick={handleChipSelection}
+          updateCharCount={updateCharCount}
           isLoading={isProfileSubmitting}
           styles={styles}
         />
@@ -227,7 +160,7 @@ export default UpdateProfile = () => {
         <ActivityIndicator style={{alignSelf: 'center'}} animating={true} color="black" />
       )}
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -246,7 +179,7 @@ const styles = StyleSheet.create({
       marginTop: 5,
       paddingHorizontal: 10,
       borderRadius: 10,
-
+      justifyContent: 'center'
     },
     chipContainer: {
       flexDirection: 'row',
