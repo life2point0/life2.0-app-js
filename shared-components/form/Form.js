@@ -17,7 +17,7 @@ const Form = ({ initialValues, validationSchema, onSubmit, fields, styles, onChi
       onChipClick={onChipClick}
       updateCharCount={updateCharCount}
     >
-      {({ errors, touched, handleChange, handleSubmit, setFieldValue }) => (
+      {({ errors, touched, handleChange, handleSubmit, setFieldValue, setFieldTouched }) => (
         <>
         <ScrollView keyboardShouldPersistTaps='always'> 
           {fields.map((field) => {
@@ -72,6 +72,7 @@ const Form = ({ initialValues, validationSchema, onSubmit, fields, styles, onChi
                       field={field}
                       styles={styles}
                       setFieldValue={setFieldValue}
+                      setFieldTouched={setFieldTouched}
                     />
                   </View>
               );
@@ -121,6 +122,6 @@ const defaultStyles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     marginBottom: 20,
-    gap: 8,
+    gap: 8
   },
 });
