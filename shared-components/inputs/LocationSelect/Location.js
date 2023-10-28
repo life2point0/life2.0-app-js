@@ -3,17 +3,18 @@ import { StyleSheet, View, Text, Button } from 'react-native'
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete'
 import { KEYS } from '../../constants'
 
-const LocationSelect = ({ field, setFieldValue, setFieldTouched }) => {
+const LocationSelect = ({ label, multiple, styles, onLoationSelect }) => {
   const [selectedPlaces, setSelectedPlaces] = useState([{}])
+
+
+  const handleSinglePlaceSelection = (place) => {
+    onLoationSelect(place)
+  }
 
   const handlePlaceSelection = (newPlace) => {
     const updatedPlaces = [...selectedPlaces, newPlace].filter((place) => Object.keys(place).length !== 0)
-    console.log('UPDATED PLACES', updatedPlaces)
     setSelectedPlaces(updatedPlaces)
-    setTimeout(() => {
-      setFieldTouched(field.name)
-    }, 0)
-    setFieldValue(field.name, updatedPlaces)
+    onLoationSelect(updatedPlaces)
   }
 
   const addMorePlace = () => {
@@ -21,9 +22,9 @@ const LocationSelect = ({ field, setFieldValue, setFieldTouched }) => {
   }
 
   return (
-    <View>
-      <Text style={{ marginBottom: 8 }}>{field.label}</Text>
-      {field.multiple ? (
+    <View style={styles.container} key={label}>
+      {label && <Text style={styles.label}>{label}</Text> }
+      {multiple ? (
         selectedPlaces.map((place, index) => (
           <GooglePlacesAutocomplete
             key={index}
@@ -32,7 +33,7 @@ const LocationSelect = ({ field, setFieldValue, setFieldTouched }) => {
             isRowScrollable={false}
             listViewDisplayed={false}
             fetchDetails={true}
-            styles={locationDropdownStyles}
+            styles={styles.dropdown}
             query={{ key: KEYS.googleApiKey }}
             onPress={(data, details) => {
                 const place = { name: data.description, geolocation: details.geometry.location }
@@ -45,22 +46,22 @@ const LocationSelect = ({ field, setFieldValue, setFieldTouched }) => {
         ))
       ) : (
         <GooglePlacesAutocomplete
-          placeholder={field.placeholder}
+          placeholder='Select'
           disableScroll={true}
           isRowScrollable={false}
           listViewDisplayed={false}
           fetchDetails={true}
-          styles={locationDropdownStyles}
+          styles={styles.dropdown}
           query={{ key: KEYS.googleApiKey }}
           onPress={(data, details) => {
             const place = { name: data.description, geolocation: details.geometry.location }
-            setFieldValue(field.name, place)
+            handleSinglePlaceSelection(place)
           }}
           onFail={(error) => console.log('MAP ERROR', error)}
           onNotFound={() => console.log('MAP', 'no results')}
         />
       )}
-      {field.multiple && (
+      {multiple && (
         <Button color='#333' title="+ Add More" onPress={addMorePlace} />
       )}
     </View>
@@ -69,16 +70,3 @@ const LocationSelect = ({ field, setFieldValue, setFieldTouched }) => {
 
 export { LocationSelect }
 
-const locationDropdownStyles = StyleSheet.create({
-  textInput: {
-    borderWidth: 1,
-    borderBottomEndRadius: 10,
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
-    borderBottomStartRadius: 10,
-    borderTopEndRadius: 10,
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-    borderTopStartRadius: 10
-  },
-})
