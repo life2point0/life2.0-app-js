@@ -103,6 +103,8 @@ const Login = ({ navigation }) => {
             disabled={isSubmitting}
             loading={isSubmitting}
             onPress={handleLogin}
+            mode='contained'
+            textColor='#FFC003'
           >
             <Text>Log In</Text>
           </PrimaryButton>

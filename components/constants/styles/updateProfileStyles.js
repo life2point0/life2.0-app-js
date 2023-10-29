@@ -59,26 +59,38 @@ const updateProfileStyles = StyleSheet.create({
             }
         },
         location: {
-            container: {
-             padding: 0,
-             marginBottom: 20
+          container: {
+           marginBottom: 20,
+          },
+          label: {
+              marginBottom: 8 
+          },
+          textField: {
+            height: 40,
+            borderColor: 'black',
+            borderRadius: 2,
+            borderWidth: 1,
+            marginTop: 5,
+            paddingHorizontal: 10,
+            borderRadius: 10,
+            justifyContent: 'center'
+          },
+          dropdown: {
+            textInput: {
+              height: '100%',
+              borderWidth: 1,
+              borderColor: '#ccc'
             },
-            label: {
-                marginBottom: 8 
-            },
-            dropdown: {
-                textInput: {
-                borderWidth: 1,
-                borderBottomEndRadius: 10,
-                borderBottomLeftRadius: 10,
-                borderBottomRightRadius: 10,
-                borderBottomStartRadius: 10,
-                borderTopEndRadius: 10,
-                borderTopLeftRadius: 10,
-                borderTopRightRadius: 10,
-                borderTopStartRadius: 10
-              }
+            textInputContainer: {
+              height: 50,
+              margin: 10,
+              elevation: 0
             }
+          },
+          addMoreButton: {
+            marginTop: 5,
+            marginLeft: 'auto'
+          }
         },
         errorText: {
         color: 'red',

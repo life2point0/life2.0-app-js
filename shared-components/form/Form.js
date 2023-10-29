@@ -56,7 +56,7 @@ const Form = ({ initialValues, validationSchema, fields, styles, onSubmit, isLoa
                         label={formField.label}
                         multiple={formField.multiple}
                         styles={styles.location}
-                        onLoationSelect={(selectedLocation) => {
+                        onLocationSelect={(selectedLocation) => {
                           setTimeout(() => {
                             setFieldTouched(formField.name)
                           }, 0)
@@ -86,7 +86,7 @@ const Form = ({ initialValues, validationSchema, fields, styles, onSubmit, isLoa
             }
           })}
         </ScrollView>
-        <PrimaryButton mode="contained" onPress={handleSubmit} loading={isLoading} disabled={isLoading}>
+        <PrimaryButton mode="contained" textColor='#FFC003' onPress={handleSubmit} loading={isLoading} disabled={isLoading}>
             Submit
         </PrimaryButton>
         </>

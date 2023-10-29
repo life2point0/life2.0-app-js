@@ -86,6 +86,7 @@ const Signup =  () => {
       navigation.replace('UpdateProfile');
     } catch (e) {
       setErrorText(e?.response?.data?.detail?.msg || "Unknown Error");
+      console.log(e?.response?.data)
     } finally {
       setSubmitting(false)
     }
@@ -208,7 +209,7 @@ const Signup =  () => {
           {touched.terms && errors.terms && <Text>{errors.terms}</Text>}
         </View>
         <View>
-          <PrimaryButton mode="contained" onPress={handleSubmit} loading={isSubmitting} disabled={isSubmitting}>
+          <PrimaryButton mode="contained" textColor='#FFC003' onPress={handleSubmit} loading={isSubmitting} disabled={isSubmitting}>
             Sign Up
           </PrimaryButton>
         </View>
