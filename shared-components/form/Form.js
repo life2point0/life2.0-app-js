@@ -15,8 +15,6 @@ const Form = ({ initialValues, validationSchema, fields, styles, onSubmit, isLoa
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={onSubmit}
-      // onChipClick={onChipClick}
-      // updateCharCount={updateCharCount}
     >
       {({ values, errors, touched, handleChange, handleSubmit, setFieldValue, setFieldTouched }) => (
         <>

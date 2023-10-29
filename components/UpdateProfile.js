@@ -8,18 +8,9 @@ import { Form } from '../shared-components/form/Form'
 import { updateProfileFields, updateProfileSchema } from './constants/fields/updateProfileFields';
 import { updateProfileStyles } from './constants/styles/updateProfileStyles';
 
-
-// const occupations = [
-//   'Tourist', 'Student', 'Entrepreneur', 'C-suite', 'Doctor', 'Lawyer', 'Entertainer',
-//   'Artist', 'Nurse', 'Tutor', 'Teacher', 'Chef', 'Baker', 'Engineer', 'Hairdresser',
-//   'Masseuse', 'Banker', 'Bartender', 'Handyman', 'Technician'
-// ]
-
 export default UpdateProfile = () => {
   const [profile, setProfile] = useState(null)
   const [isProfileSubmitting, setProfileSubmitting] = useState(false)
-  // const [selectedOccupations, setSelectedOccupations] = useState([]);
-  // const [descriptionCharCount, setDescriptionCharCount] = useState(0);
   const { authCall, getProfile } = useAuth()
   const { navigate } = useNavigation()
   const [errorText, setErrorText] = useState('')
@@ -37,12 +28,9 @@ export default UpdateProfile = () => {
   }
 
   const handleProfileSubmit = async (values) => {
-    console.log('VALUES', values)
     const profileData = {
       ...values
-      // occupations: selectedOccupations
     }
-    console.log("DATA", profileData)
     try {
       setProfileSubmitting(true);
       await authCall({
@@ -59,20 +47,6 @@ export default UpdateProfile = () => {
       setProfileSubmitting(false);
     }
   }
-
-  // const handleChipSelection = (chip) => {
-  //   setSelectedOccupations((prevState) => {
-  //     if (prevState.includes(chip)) {
-  //       return prevState.filter((o) => o !== chip);
-  //     } else {
-  //       return [...prevState, chip];
-  //     }
-  //   });
-  // }
-
-  // const updateCharCount = (field, value) => {
-  //   setDescriptionCharCount(value)
-  // }
 
   return (
     <View style={updateProfileStyles.container}>
@@ -94,8 +68,6 @@ export default UpdateProfile = () => {
             fields={updateProfileFields}
             styles={updateProfileStyles.form}
             onSubmit={handleProfileSubmit}
-            // onChipClick={handleChipSelection}
-            // updateCharCount={updateCharCount}
             isLoading={isProfileSubmitting}
           />
         ) : 

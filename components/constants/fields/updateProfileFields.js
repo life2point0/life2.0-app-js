@@ -52,7 +52,6 @@ const updateProfileFields = [
       name: 'occupations',
       label: 'What I do for a living?',
       type: 'chip',
-      // selectedChips: selectedOccupations,
       options: occupations
     },
     {
@@ -62,7 +61,6 @@ const updateProfileFields = [
       type: 'input',
       multiline: true,
       maxCharCount: 600,
-      // charCount: descriptionCharCount
     }
 ]
 
