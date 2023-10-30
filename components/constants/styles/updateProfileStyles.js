@@ -19,6 +19,9 @@ const updateProfileStyles = StyleSheet.create({
             container: {
               marginBottom: 20
             },
+            label: {
+              fontWeight: 500
+            },
             textField: {
               height: 40,
               borderWidth: 1.4,
@@ -52,7 +55,8 @@ const updateProfileStyles = StyleSheet.create({
             },
             label: {
                 width: '100%',
-                marginBottom: 8
+                marginBottom: 8,
+                fontWeight: 500
             }
         },
         location: {
@@ -60,7 +64,8 @@ const updateProfileStyles = StyleSheet.create({
            marginBottom: 20,
           },
           label: {
-              marginBottom: 5
+              marginBottom: 5,
+              fontWeight: 500
           },
           textField: {
             height: 40,
