@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text } from 'react-native';
 import { Avatar, Card } from 'react-native-paper';
 import { PrimaryButton } from './PrimaryButton';
 import { useNavigation } from '@react-navigation/native';
@@ -11,6 +11,9 @@ import user3Image from './assets/user-3.png';
 import user4Image from './assets/user-4.png';
 import user5Image from './assets/user-5.png';
 import AvatarGroup from './AvatarGroup';
+import defaultCommunityIcon from './assets/community.png'
+import { useChatContext,  } from 'stream-chat-expo';
+import { USER_SERVICE_BASE_URL } from './constants';
 
 const communityUsers = [
     { icon: user1Image },
@@ -20,21 +23,44 @@ const communityUsers = [
     { icon: user5Image },
 ];
 
-const CommunityCard = ({ communityName, users = communityUsers, description, icon }) => {
-    const { navigate } = useNavigation();
+const CommunityCard = ({ community, users = communityUsers }) => {
+    const navigation = useNavigation()
+    const { client, setActiveChannel } = useChatContext()
+    const { authCall } = useAuth()
 
-    const navigateToChats = () => {
-        navigate('Main', {screen: 'Chats'});
+    const icon= community.image ? {uri: community.image} : defaultCommunityIcon
+
+    const createAndWatchChannel = async (id) => {
+      const newChannel = client.channel('community', id)
+      await newChannel.watch();
+      setActiveChannel(newChannel);
+    }
+
+    const navigateToChats = async (communityId) => {
+      try {
+        await authCall({
+          method: 'POST',
+          url: `${USER_SERVICE_BASE_URL}/users/me/communities`,
+          body: JSON.stringify({ communityId }),
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        })
+        await createAndWatchChannel(community.id)
+        navigation.navigate('Conversations')
+      } catch (e) {
+        console.log(e)
+      }
     }
 
     return (
         <Card style={{ margin: 8, width: 300, backgroundColor: '#fff' }}>
-            <Card.Title title={<Text style={{fontSize: 20}}>{communityName}</Text>} />
+            <Card.Title title={<Text style={{fontSize: 20}}>{community.name}</Text>} />
             <Card.Content>
             <View style={{ flexDirection: 'row', alignItems: 'center', width: "100%", paddingBottom: 20 }}>
                 <Avatar.Image source={icon} style={{ width: 64, height: 64, backgroundColor: '#fff' }} />
                 <View style={{ marginLeft: 8, alignItems: 'center', justifyContent: 'center', flex: 1 }}>
-                <Text style={{ fontSize: 17, overflow: "hidden", letterSpacing: 0.1, lineHeight: 25 }} numberOfLines={3} ellipsizeMode='tail'>{description}</Text>
+                <Text style={{ fontSize: 17, overflow: "hidden", letterSpacing: 0.1, lineHeight: 25 }} numberOfLines={3} ellipsizeMode='tail'>{community.description}</Text>
                 </View>
             </View>
             </Card.Content>
@@ -44,7 +70,7 @@ const CommunityCard = ({ communityName, users = communityUsers, description, ico
                 <Text style={{paddingVertical: 10, fontSize: 16}}>Join Conversation</Text>
                 <AvatarGroup users={users} />
             </View>
-             <PrimaryButton onPress={navigateToChats} style={{ marginLeft: 'auto' }} mode="contained" textColor='#FFC003'>Join Chat</PrimaryButton>
+             <PrimaryButton onPress={() => navigateToChats(community.id)} style={{ marginLeft: 'auto' }} mode="contained" textColor='#FFC003'>Join Chat</PrimaryButton>
             </Card.Actions>
             </View>
         </Card>

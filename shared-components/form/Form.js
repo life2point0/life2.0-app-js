@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, ScrollView, StyleSheet } from 'react-native';
 import { PrimaryButton } from '../../components/PrimaryButton';
 import { Formik, Field } from 'formik';
-import { LocationSelect } from '../inputs/locationSelect/Location';
+import { LocationSelect } from '../inputs/LocationSelect/Location.js';
 import { TextField } from '../inputs/textField/TextField';
 import { ChipsArray } from '../inputs/chipsArray/ChipsArray';
 

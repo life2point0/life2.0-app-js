@@ -1,11 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { WebView } from 'react-native-webview';
-import { CHAT_URL } from './constants';
+import React from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigation } from '@react-navigation/native';
 import { 
   Channel, 
-  ChannelList, 
   useChatContext,
   MessageList,
   MessageInput, 
@@ -15,7 +12,7 @@ import { View } from 'react-native';
 
 
 export default function Conversations() {
-  const { profile, isAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuth();
   const navigation = useNavigation();
   const { channel } = useChatContext();
 
@@ -33,5 +30,5 @@ export default function Conversations() {
         </Channel>
       </View>
     </>
-  );
+  )
 }
