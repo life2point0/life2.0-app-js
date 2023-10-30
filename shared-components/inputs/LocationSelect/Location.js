@@ -59,6 +59,7 @@ const LocationSelect = ({ label, multiple, styles, onLocationSelect }) => {
             <TextInput
               value={selectedPlaces[index]?.name}
               style={styles.textField}
+              placeholder='Select'
               onFocus={() => setVisible(true)}
             />
             <Portal>
@@ -78,6 +79,7 @@ const LocationSelect = ({ label, multiple, styles, onLocationSelect }) => {
             value={selectedPlace?.name}
             style={styles.textField}
             onFocus={() => setVisible(true)}
+            placeholder='Select'
           />
           <Portal>
             <Modal visible={visible} onDismiss={() => setVisible(false)} contentContainerStyle={containerStyle}>
