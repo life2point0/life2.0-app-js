@@ -21,24 +21,21 @@ const updateProfileStyles = StyleSheet.create({
             },
             textField: {
               height: 40,
-              borderColor: 'black',
-              borderRadius: 2,
-              borderWidth: 1,
+              borderWidth: 1.4,
+              borderRadius: 5,
+              borderColor: '#ccc',
               marginTop: 5,
               paddingHorizontal: 10,
-              borderRadius: 10,
               justifyContent: 'center'
             },
             textarea: {
               height: 100,
-              borderColor: 'gray',
-              borderWidth: 1,
               marginTop: 5,
               padding: 10,
               textAlignVertical: 'top',
-              borderColor: 'black',
-              borderRadius: 10,
-              borderWidth: 1,
+              borderWidth: 1.4,
+              borderColor: '#ccc',
+              borderRadius: 5
             },
             charCount: {
               textAlign: 'right',
@@ -63,17 +60,16 @@ const updateProfileStyles = StyleSheet.create({
            marginBottom: 20,
           },
           label: {
-              marginBottom: 8 
+              marginBottom: 5
           },
           textField: {
             height: 40,
-            borderColor: 'black',
-            borderRadius: 2,
-            borderWidth: 1,
-            marginTop: 5,
+            marginTop: 8,
             paddingHorizontal: 10,
-            borderRadius: 10,
-            justifyContent: 'center'
+            justifyContent: 'center',
+            borderColor: '#ccc',
+            borderWidth: 1.4,
+            borderRadius: 5
           },
           dropdown: {
             textInput: {

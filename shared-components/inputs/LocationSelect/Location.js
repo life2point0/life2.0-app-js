@@ -33,12 +33,11 @@ const LocationSelect = ({ label, multiple, styles, onLocationSelect }) => {
   const renderGooglePlacesAutocomplete = () => {
     return (
       <GooglePlacesAutocomplete
-        placeholder='Select'
+        placeholder='Type'
         disableScroll={true}
         isRowScrollable={false}
         listViewDisplayed={false}
         fetchDetails={true}
-        types='cities'
         styles={styles.dropdown}
         query={{ key: KEYS.googleApiKey }}
         onPress={(data, details) => {
