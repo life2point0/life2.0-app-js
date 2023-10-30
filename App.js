@@ -2,7 +2,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Provider as PaperProvider, Appbar, Text } from 'react-native-paper';
+import { Provider as PaperProvider } from 'react-native-paper';
 import { AuthProvider } from './contexts/AuthContext';
 import theme from './themes/default.theme';
 import Root from './components/Root';

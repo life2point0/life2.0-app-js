@@ -22,7 +22,7 @@ const HomeScreen = () => {
     try {
         setCommunitiesLoading(true);
         const res = (await axios.get(`${USER_SERVICE_BASE_URL}/communities`)).data;
-        setCommunities(res.data);
+        setCommunities(res);
     } catch (e) {
         setCommunities([]);
     } finally {
@@ -62,7 +62,7 @@ const HomeScreen = () => {
           {isCommunitiesLoading ? (
             <SkeletonCard />
           ) :  communities.map((community) => (
-            <CommunityCard key={community.guid} communityName={community.name} users={community.users} description={community.description} icon={community.icon ? {uri: community.icon} : defaultCommunityIcon}/>
+            <CommunityCard key={community.channel.id} communityName={community.channel.name} users={community.members} description={community.channel.description} icon={community.channel.image ? {uri: community.channel.image} : defaultCommunityIcon}/>
           ))}
         </ScrollView>
         <View style={styles.subHeader}>

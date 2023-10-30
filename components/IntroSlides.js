@@ -167,7 +167,7 @@ const IntroSlides = () => {
             <Fragment key={buttonIndex}>
             {
               button.type === 'primary' 
-              ? <PrimaryButton style={styles.button} onPress={() => handleButtonPress(button.action)}>{button.label}</PrimaryButton>
+              ? <PrimaryButton textColor='#FFC003' mode='contained' style={styles.button} onPress={() => handleButtonPress(button.action)}>{button.label}</PrimaryButton>
               : <Button mode="outlined" style={styles.button} onPress={() => handleButtonPress(button.action)}>{button.label}</Button>
             }
             </Fragment>

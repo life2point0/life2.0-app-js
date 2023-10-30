@@ -44,7 +44,7 @@ const CommunityCard = ({ communityName, users = communityUsers, description, ico
                 <Text style={{paddingVertical: 10, fontSize: 16}}>Join Conversation</Text>
                 <AvatarGroup users={users} />
             </View>
-             <PrimaryButton onPress={navigateToChats} style={{ marginLeft: 'auto' }}>Join Chat</PrimaryButton>
+             <PrimaryButton onPress={navigateToChats} style={{ marginLeft: 'auto' }} mode="contained" textColor='#FFC003'>Join Chat</PrimaryButton>
             </Card.Actions>
             </View>
         </Card>
