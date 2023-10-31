@@ -51,23 +51,23 @@ const CommunityCard = ({ community, users = communityUsers }) => {
     }
 
     return (
-        <Card style={{ margin: 8, width: 275, backgroundColor: '#fff' }}>
-            <Card.Title title={<Text style={{fontSize: 16}}>{community.name}</Text>} />
+        <Card style={{ margin: 8, width: 275, borderWidth: 0, backgroundColor: '#fff', borderRadius: 10 }}>
+            <Card.Title title={<Text style={{fontSize: 14, fontWeight: 'bold' }}>{community.name}</Text>} />
             <Card.Content>
-            <View style={{ flexDirection: 'row', alignItems: 'center', width: "100%", paddingBottom: 10 }}>
-                <Avatar.Image source={icon} style={{ width: 64, height: 64, backgroundColor: '#fff' }} />
-                <View style={{ marginLeft: 8, alignItems: 'center', justifyContent: 'center', flex: 1 }}>
-                <Text style={{ fontSize: 17, overflow: "hidden", letterSpacing: 0.1, lineHeight: 25 }} numberOfLines={3} ellipsizeMode='tail'>{community.description}</Text>
-                </View>
-            </View>
+              <View style={{ flexDirection: 'row', alignItems: 'center', width: "100%", paddingBottom: 10 }}>
+                  <Avatar.Image source={icon} style={{ width: 64, height: 64, backgroundColor: '#fff' }} />
+                  <View style={{ marginLeft: 8, alignItems: 'center', justifyContent: 'center', flex: 1 }}>
+                    <Text style={{ fontSize: 12, overflow: "hidden", letterSpacing: 0.1, lineHeight: 16 }} numberOfLines={3} ellipsizeMode='tail'>{community.description}</Text>
+                  </View>
+              </View>
             </Card.Content>
-            <View style={{ backgroundColor: '#FFFCF2' }}>
-            <Card.Actions style={{borderRadius: 90, alignItems: 'flex-end'}}>
-            <View>
-                <Text style={{paddingVertical: 10, fontSize: 16}}>Join Conversation</Text>
+            <View style={{ backgroundColor: '#F2FFF2',  borderRadius: 10 }}>
+            <Card.Actions>
+              <View>
+                <Text style={{paddingVertical: 10, fontSize: 14}}>Join Conversation</Text>
                 <AvatarGroup users={users} />
-            </View>
-             <PrimaryButton onPress={() => navigateToChats(community.id)} style={{ marginLeft: 'auto' }} mode="contained" textColor='#FFC003'>Join Chat</PrimaryButton>
+              </View>
+              <PrimaryButton onPress={() => navigateToChats(community.id)} style={{ marginLeft: 'auto' }} mode="contained" textColor='#FFC003'>Join Chat</PrimaryButton>
             </Card.Actions>
             </View>
         </Card>
