@@ -5,16 +5,20 @@ import {
   Channel, 
   useChatContext,
   MessageList,
-  MessageInput, 
+  MessageInput,
+  SendButton
 } from 'stream-chat-expo';
-import AppBar from './AppBar';
 import { View } from 'react-native';
-
+import ChatScreenAppBar from './ChatScreenAppBar';
+import defaultCommunityIcon from './assets/community.png'
+import { IconButton } from 'react-native-paper';
 
 export default function Conversations() {
   const { isAuthenticated } = useAuth();
   const navigation = useNavigation();
   const { channel } = useChatContext();
+
+  console.log(channel)
 
   if (!isAuthenticated) {
     navigation.navigate('Signup');
@@ -22,9 +26,9 @@ export default function Conversations() {
 
   return (
     <>
-      <AppBar title={channel?.data?.name} />
+      <ChatScreenAppBar title={channel?.data?.name} image={channel?.data?.image ? {uri: channel?.data?.image} : defaultCommunityIcon} />
       <View style={{flex: 1}}>
-        <Channel channel={channel} hasCommands={false}>
+        <Channel channel={channel} hasCommands={false} >
           <MessageList />
           <MessageInput />
         </Channel>

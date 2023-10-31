@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
   const [profile, setProfile] = useState();
   const [chatToken, setChatToken] = useState();
   const { client } = useChatContext();
-  const isProfileCreated = profile?.description;
+  const isProfileCreated = !!profile?.description;
 
   const getNewToken = async (refreshToken) => {
   

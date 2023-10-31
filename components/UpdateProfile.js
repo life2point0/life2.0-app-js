@@ -48,7 +48,7 @@ export default UpdateProfile = () => {
   return (
     <View style={updateProfileStyles.container}>
       <Text style={updateProfileStyles.title}>Complete Profile</Text>
-      <Text style={updateProfileStyles.subTitle}>
+      <Text style={{...updateProfileStyles.subTitle, name: undefined}}>
         Please complete your profile{'\n'}
         <Text style={updateProfileStyles.username}>
           {profile?.firstName} {profile?.lastName}
