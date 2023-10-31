@@ -50,7 +50,7 @@ export default UpdateProfile = () => {
       <Text style={updateProfileStyles.title}>Complete Profile</Text>
       <Text style={updateProfileStyles.subTitle}>
         Please complete your profile{'\n'}
-        <Text style={updateProfileStyles.subTitle.username}>
+        <Text style={updateProfileStyles.username}>
           {profile?.firstName} {profile?.lastName}
         </Text>
       </Text>
