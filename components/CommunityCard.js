@@ -41,10 +41,7 @@ const CommunityCard = ({ community, users = communityUsers }) => {
         await authCall({
           method: 'POST',
           url: `${USER_SERVICE_BASE_URL}/users/me/communities`,
-          body: JSON.stringify({ communityId }),
-          headers: {
-            'Content-Type': 'application/json',
-          }
+          data: { communityId }
         })
         await createAndWatchChannel(community.id)
         navigation.navigate('Conversations')
@@ -54,10 +51,10 @@ const CommunityCard = ({ community, users = communityUsers }) => {
     }
 
     return (
-        <Card style={{ margin: 8, width: 300, backgroundColor: '#fff' }}>
-            <Card.Title title={<Text style={{fontSize: 20}}>{community.name}</Text>} />
+        <Card style={{ margin: 8, width: 275, backgroundColor: '#fff' }}>
+            <Card.Title title={<Text style={{fontSize: 16}}>{community.name}</Text>} />
             <Card.Content>
-            <View style={{ flexDirection: 'row', alignItems: 'center', width: "100%", paddingBottom: 20 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', width: "100%", paddingBottom: 10 }}>
                 <Avatar.Image source={icon} style={{ width: 64, height: 64, backgroundColor: '#fff' }} />
                 <View style={{ marginLeft: 8, alignItems: 'center', justifyContent: 'center', flex: 1 }}>
                 <Text style={{ fontSize: 17, overflow: "hidden", letterSpacing: 0.1, lineHeight: 25 }} numberOfLines={3} ellipsizeMode='tail'>{community.description}</Text>

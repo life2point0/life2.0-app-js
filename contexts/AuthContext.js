@@ -49,8 +49,7 @@ export const AuthProvider = ({ children }) => {
       headers: {
         ...config.headers,
         'Authorization': `Bearer ${accessToken}`
-      },
-      data: config.body
+      }
     })
   }
 

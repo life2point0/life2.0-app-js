@@ -81,6 +81,8 @@ const Signup =  () => {
     }
     try {
       setSubmitting(true)
+      form.firstName = capitalizeName(form.firstName)
+      form.lastName = capitalizeName(form.lastName)
       const response = await axios.post(`${USER_SERVICE_BASE_URL}/users/signup`, _.omit(form, ['confirmPassword', 'terms']));
       await login(form.email, form.password);
       navigation.replace('UpdateProfile');
@@ -91,6 +93,10 @@ const Signup =  () => {
       setSubmitting(false)
     }
   };
+
+  const capitalizeName = (name) => {
+    return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+  }
   
 
   return (

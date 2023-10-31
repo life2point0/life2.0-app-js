@@ -28,15 +28,12 @@ export default UpdateProfile = () => {
   }
 
   const handleProfileSubmit = async (values) => {
-    const profileData = {
-      ...values
-    }
     try {
       setProfileSubmitting(true);
       await authCall({
         method: 'PUT',
         url: `${USER_SERVICE_BASE_URL}/users/me`,
-        data: profileData
+        data: values
       });
       await getProfile();
       navigate('Main', { screen: 'Home' });
@@ -51,6 +48,12 @@ export default UpdateProfile = () => {
   return (
     <View style={updateProfileStyles.container}>
       <Text style={updateProfileStyles.title}>Complete Profile</Text>
+      <Text style={updateProfileStyles.subTitle}>
+        Please complete your profile{'\n'}
+        <Text style={updateProfileStyles.subTitle.name}>
+          {profile?.firstName} {profile?.lastName}
+        </Text>
+      </Text>
       {errorText && (
         <View style={{alignItems: 'center', justifyContent: 'center', flexDirection: 'row'}}>
           <IconButton

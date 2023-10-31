@@ -13,14 +13,16 @@ const updateProfileFields = [
       label: 'First Name',
       placeholder: 'First Name',
       type: 'input',
-      variant: 'text'
+      variant: 'text',
+      hidden: true
     },
     {
       name: 'lastName',
       label: 'Last Name',
       placeholder: 'Last Name',
       type: 'input',
-      variant: 'text'
+      variant: 'text',
+      hidden: true
     },
     {
       name: 'email',

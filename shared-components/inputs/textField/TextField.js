@@ -1,6 +1,12 @@
 import { View, TextInput, Text } from "react-native"
 
-const TextField = ({label, value, variant, multiline, placeholder, styles, onChange}) => {
+const TextField = ({label, value, variant, multiline, placeholder, styles, hidden, onChange}) => {
+   
+    if(hidden) {
+        return (
+            <View key={label}></View>
+        )
+    }
     return (
         <View style={styles.container} key={label}>
             { label && <Text style={styles.label}> { label}</Text> }

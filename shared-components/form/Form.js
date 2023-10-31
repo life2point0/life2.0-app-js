@@ -33,6 +33,7 @@ const Form = ({ initialValues, validationSchema, fields, styles, onSubmit, isLoa
                           placeholder={formField.placeholder || null}
                           variant={formField.variant || null}
                           maxLength={formField.maxCharCount || null}
+                          hidden={formField.hidden || null}
                           styles={styles.input}
                           onChange={text => {
                             handleChange(formField.name)(text);

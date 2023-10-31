@@ -11,6 +11,17 @@ const updateProfileStyles = StyleSheet.create({
         padding: 20, 
         textAlign: 'center'
     },
+    subTitle: {
+      fontSize: 15, 
+      fontWeight: 600, 
+      padding: 10, 
+      textAlign: 'center',
+      color: '#717171',
+      name: {
+        color: '#333',
+        fontWeight: 700
+      }
+    },
     form: {
         container: {
             padding: 0,

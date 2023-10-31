@@ -12,7 +12,7 @@ const slides = [
     logo: require('./assets/logo.png'),
     buttons: [
       { label: 'Next', action: 'next', type: 'primary' },
-      { label: 'Skip', action: 'skip' },
+      { label: 'Skip Introduction', action: 'skip' },
     ],
   },
   {
@@ -22,7 +22,7 @@ const slides = [
     logo: require('./assets/logo.png'),
     buttons: [
       { label: 'Next', action: 'next', type: 'primary' },
-      { label: 'Skip', action: 'skip' },
+      { label: 'Skip Introduction', action: 'skip' },
     ],
   },
   {
