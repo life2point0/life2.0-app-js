@@ -1,7 +1,6 @@
 import React, { useReducer, useRef, useState } from 'react';
-import { View, Text, TextInput, StyleSheet, Image, TouchableOpacity, KeyboardAvoidingView, ScrollView, Button } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Image, TouchableOpacity, KeyboardAvoidingView, ScrollView, StatusBar } from 'react-native';
 import LoginIllustration from './assets/signup-illustration.png'; // Adjust the path as needed
-import Checkbox from './checkbox'; // Import your Checkbox component
 import { useAuth } from '../contexts/AuthContext';
 import { Banner, IconButton, RadioButton } from 'react-native-paper';
 import { PrimaryButton } from './PrimaryButton';
@@ -30,6 +29,7 @@ const Login = ({ navigation }) => {
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior="height">
+      <StatusBar backgroundColor="#fff" barStyle="light-content" />
       <View>
         <Text style={styles.title}>Log In</Text>
         <IconButton

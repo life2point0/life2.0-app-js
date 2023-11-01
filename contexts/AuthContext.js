@@ -117,10 +117,10 @@ export const AuthProvider = ({ children }) => {
   }, [accessToken])
   
   useEffect(() => {
-    if (profile) {
-        getChatToken()
+    if (isProfileCreated) {
+      getChatToken()
     }
-  }, [profile])
+  }, [profile, isProfileCreated])
 
   useEffect(() => {
     if (chatToken) {

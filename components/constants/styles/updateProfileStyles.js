@@ -14,9 +14,12 @@ const updateProfileStyles = StyleSheet.create({
     subTitle: {
       fontSize: 15, 
       fontWeight: '600', 
-      padding: 10, 
+      paddingHorizontal: 10, 
+      paddingTop: 0,
+      paddingBottom: 20,
       textAlign: 'center',
-      color: '#717171'
+      color: '#717171',
+      lineHeight: 28
     },
     username: {
       color: '#333',

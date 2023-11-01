@@ -47,7 +47,13 @@ const LocationSelect = ({ label, multiple, styles, onLocationSelect }) => {
         isRowScrollable={false}
         listViewDisplayed={false}
         fetchDetails={true}
-        textInputProps={{autoFocus: true}}
+        textInputProps={{
+          autoFocus: true,
+          style: {
+            elevation: 0,
+          },
+          selectTextOnFocus: true,
+        }}
         styles={styles.dropdown}
         
         query={{ key: KEYS.googleApiKey }}

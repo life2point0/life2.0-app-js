@@ -66,10 +66,8 @@ export default UpdateProfile = () => {
     <View style={updateProfileStyles.container}>
       <Text style={updateProfileStyles.title}>Complete Profile</Text>
       <Text style={updateProfileStyles.subTitle}>
-        Please complete your profile{'\n'}
-        <Text style={updateProfileStyles.username}>
-          {profile?.firstName} {profile?.lastName}
-        </Text>
+        Welcome onboard {profile?.firstName}! {"\n"}
+        Please complete your profile.
       </Text>
       {errorText && (
         <View style={{alignItems: 'center', justifyContent: 'center', flexDirection: 'row'}}>
