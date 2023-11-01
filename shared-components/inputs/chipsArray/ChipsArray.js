@@ -18,8 +18,6 @@ const ChipsArray = ({styles, label, options, selectedChips, onChipClick}) => {
     }
     onChipClick(updatedChips)
   }
-
-  const selectedFlags = options.map(option => selectedChips.includes(option));
   
   return (
       <View style={styles.container}>

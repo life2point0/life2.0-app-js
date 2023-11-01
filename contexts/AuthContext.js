@@ -87,8 +87,8 @@ export const AuthProvider = ({ children }) => {
     try {
       await client.connectUser(
         {
-          id: profile.id,
-          name: `${profile.firstName} ${profile.lastName}`,
+          id: profile?.id,
+          name: `${profile?.firstName} ${profile?.lastName}`,
         },
         chatToken.streamChat
       );

@@ -23,8 +23,8 @@ const Form = ({ initialValues, validationSchema, fields, styles, onSubmit, isLoa
             switch (formField.type) {
               case 'input': 
                 return (
-                  <>
-                    <Field name={formField.name} key={formField.name}>
+                  <React.Fragment key={formField.name}>
+                    <Field name={formField.name}>
                       {({ field }) => (
                         <TextField
                           label={formField.label || null}
@@ -46,41 +46,45 @@ const Form = ({ initialValues, validationSchema, fields, styles, onSubmit, isLoa
                     { touched[formField.name] && errors[formField.name] && (
                       <Text style={styles.errorText}>{errors[formField.name]}</Text>
                     )}
-                  </>
+                  </React.Fragment>
                 );
             
               case 'location':
                 return (
-                  <Field name={formField.name} key={formField.name}>
-                     {({ field }) => (
-                      <LocationSelect
-                        label={formField.label}
-                        multiple={formField.multiple}
-                        styles={styles.location}
-                        onLocationSelect={(selectedLocation) => {
-                          setTimeout(() => {
-                            setFieldTouched(formField.name)
-                          }, 0)
-                          setFieldValue(formField.name, selectedLocation)
-                        }}
-                      />
-                     )}
-                  </Field>
+                  <React.Fragment key={formField.name}>
+                    <Field name={formField.name}>
+                      {({ field }) => (
+                        <LocationSelect
+                          label={formField.label}
+                          multiple={formField.multiple}
+                          styles={styles.location}
+                          onLocationSelect={(selectedLocation) => {
+                            setTimeout(() => {
+                              setFieldTouched(formField.name)
+                            }, 0)
+                            setFieldValue(formField.name, selectedLocation)
+                          }}
+                        />
+                      )}
+                    </Field>
+                  </React.Fragment>
               );
               
               case 'chip':
                 return (
-                  <Field name={formField.name} key={formField.name}>
-                    {({ field }) => (
-                      <ChipsArray
-                        styles={styles.chip}
-                        label={formField.label}
-                        options={formField.options || []}
-                        selectedChips={values[field.name] || []}
-                        onChipClick={(value) => setFieldValue(formField.name, value)}
-                      />
-                    )}
-                  </Field>
+                  <React.Fragment key={formField.name}>
+                    <Field name={formField.name} key={formField.name}>
+                      {({ field }) => (
+                        <ChipsArray
+                          styles={styles.chip}
+                          label={formField.label}
+                          options={formField.options || []}
+                          selectedChips={values[field.name] || []}
+                          onChipClick={(value) => setFieldValue(formField.name, value)}
+                        />
+                      )}
+                    </Field>
+                  </React.Fragment>
                 );
               default:
                 return null

@@ -30,10 +30,9 @@ export default UpdateProfile = () => {
         }
         setFields(profileFields)
       } catch (error) {
-        setErrorText(error.response?.data?.detail?.msg)
+        setErrorText(error.response?.data?.detail?.msg || 'Unknown Error')
       }
     }
-  
     fetchData()
   }, [])
 

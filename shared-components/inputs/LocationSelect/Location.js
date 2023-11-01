@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { View, Text, ScrollView } from 'react-native'
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete'
 import { KEYS } from '../../constants'
@@ -10,6 +10,15 @@ const LocationSelect = ({ label, multiple, styles, onLocationSelect }) => {
   const [selectedPlaces, setSelectedPlaces] = useState([{}])
   const [selectedPlace, setSelectedPlace] = useState({})
   const [visible, setVisible] = useState(false)
+  const googlePlacesAutocompleteRef = useRef(null)
+
+
+  useEffect(() => {
+    if (visible && googlePlacesAutocompleteRef.current) {
+      googlePlacesAutocompleteRef.current.setAddressText('')
+      googlePlacesAutocompleteRef.current.focus()
+    }
+  }, [visible])
 
   const handleSinglePlaceSelection = (place) => {
     setSelectedPlace(place)
@@ -38,7 +47,9 @@ const LocationSelect = ({ label, multiple, styles, onLocationSelect }) => {
         isRowScrollable={false}
         listViewDisplayed={false}
         fetchDetails={true}
+        textInputProps={{autoFocus: true}}
         styles={styles.dropdown}
+        
         query={{ key: KEYS.googleApiKey }}
         onPress={(data, details) => {
           const place = { name: data.description, geolocation: details.geometry.location }
@@ -51,11 +62,11 @@ const LocationSelect = ({ label, multiple, styles, onLocationSelect }) => {
   }
 
   return (
-    <View style={styles.container} key={label}>
+    <View style={styles.container}>
       {label && <Text style={styles.label}>{label}</Text>}
       {multiple ? (
         selectedPlaces.map((place, index) => (
-          <>
+          <React.Fragment key={index}>
             <TextInput
               value={selectedPlaces[index]?.name}
               style={styles.textField}
@@ -65,16 +76,16 @@ const LocationSelect = ({ label, multiple, styles, onLocationSelect }) => {
             <Portal>
               <Modal visible={visible} onDismiss={() => setVisible(false)} contentContainerStyle={containerStyle}>
                 <ScrollView keyboardShouldPersistTaps='always'>
-                  <View style={styles.container} key={selectedPlaces[index]?.name || label}>
+                  <View style={styles.container}>
                     {renderGooglePlacesAutocomplete()}
                   </View>
                 </ScrollView>
               </Modal>
             </Portal>
-          </>
+          </React.Fragment>
         ))
       ) : (
-        <>
+        <React.Fragment key={label}>
           <TextInput
             value={selectedPlace?.name}
             style={styles.textField}
@@ -84,13 +95,13 @@ const LocationSelect = ({ label, multiple, styles, onLocationSelect }) => {
           <Portal>
             <Modal visible={visible} onDismiss={() => setVisible(false)} contentContainerStyle={containerStyle}>
               <ScrollView keyboardShouldPersistTaps='always'>
-                <View style={styles.container} key={label}>
+                <View style={styles.container}>
                   {renderGooglePlacesAutocomplete()}
                 </View>
               </ScrollView>
             </Modal>
           </Portal>
-        </>
+        </React.Fragment>
       )}
       {multiple && (
         <PrimaryButton mode="text" style={styles.addMoreButton} onPress={addMorePlace}> + Add More </PrimaryButton>

@@ -91,13 +91,12 @@ const updateProfileStyles = StyleSheet.create({
           dropdown: {
             textInput: {
               height: '100%',
-              borderWidth: 1,
-              borderColor: '#ccc'
+              borderWidth: 2,
+              borderColor: '#ccc',
             },
             textInputContainer: {
               height: 50,
               margin: 10,
-              elevation: 0
             }
           },
           addMoreButton: {
