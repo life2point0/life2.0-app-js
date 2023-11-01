@@ -79,7 +79,7 @@ const CommunityCard = ({ community, users = communityUsers }) => {
                   <Text style={{paddingVertical: 0, fontSize: 14}}>Join Conversation</Text>
                   <AvatarGroup users={communityUsers} />
                 </View>
-                <PrimaryButton onPress={() => navigateToChats(community.id)} mode="contained" textColor='#FFC003' loading={isNavigating} disabled={isNavigating}> Join Chat </PrimaryButton>
+                <PrimaryButton onPress={() => navigateToChats(community.id)} style={{ marginLeft: 'auto' }} mode="contained" textColor='#FFC003' loading={isNavigating} disabled={isNavigating}> Join Chat </PrimaryButton>
               </Card.Actions>
             </View>
         </Card>
