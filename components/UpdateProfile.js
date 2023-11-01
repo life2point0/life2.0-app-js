@@ -9,9 +9,8 @@ import { updateProfileFields, updateProfileSchema } from './constants/fields/upd
 import { updateProfileStyles } from './constants/styles/updateProfileStyles'
 
 export default UpdateProfile = () => {
-  const [profile, setProfile] = useState(null)
   const [isProfileSubmitting, setProfileSubmitting] = useState(false)
-  const { authCall, getProfile } = useAuth()
+  const { authCall, profile } = useAuth()
   const { navigate } = useNavigation()
   const [errorText, setErrorText] = useState('')
   const [fields, setFields] = useState([])
@@ -19,14 +18,11 @@ export default UpdateProfile = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const profileData = await getProfile()
-        setProfile(profileData)
-        
         const response = (await authCall({
           method: 'GET',
           url: `${CORE_SERVICE_BASE_URL}/occupations`
         }))?.data
-      
+
         const profileFields = updateProfileFields
         const occupationsField = profileFields.find(field => field.name === 'occupations')
         if (occupationsField) {

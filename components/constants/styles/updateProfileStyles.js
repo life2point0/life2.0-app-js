@@ -7,20 +7,20 @@ const updateProfileStyles = StyleSheet.create({
     },
     title: {
         fontSize: 24, 
-        fontWeight: 'bold', 
+        fontWeight: '600', 
         padding: 20, 
         textAlign: 'center'
     },
     subTitle: {
       fontSize: 15, 
-      fontWeight: 600, 
+      fontWeight: '600', 
       padding: 10, 
       textAlign: 'center',
       color: '#717171'
     },
     username: {
       color: '#333',
-      fontWeight: 'bold',
+      fontWeight: '600',
       lineHeight: 20
     },
     form: {
@@ -32,7 +32,7 @@ const updateProfileStyles = StyleSheet.create({
               marginBottom: 20
             },
             label: {
-              fontWeight: 500
+              fontWeight: '500'
             },
             textField: {
               height: 40,
@@ -68,7 +68,7 @@ const updateProfileStyles = StyleSheet.create({
             label: {
                 width: '100%',
                 marginBottom: 8,
-                fontWeight: 500
+                fontWeight: '500'
             }
         },
         location: {
@@ -77,7 +77,7 @@ const updateProfileStyles = StyleSheet.create({
           },
           label: {
               marginBottom: 5,
-              fontWeight: 500
+              fontWeight: '500'
           },
           textField: {
             height: 40,
