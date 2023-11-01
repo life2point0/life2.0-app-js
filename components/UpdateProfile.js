@@ -10,7 +10,7 @@ import { updateProfileStyles } from './constants/styles/updateProfileStyles'
 
 export default UpdateProfile = () => {
   const [isProfileSubmitting, setProfileSubmitting] = useState(false)
-  const { authCall, profile } = useAuth()
+  const { authCall, profile, getProfile } = useAuth()
   const { navigate } = useNavigation()
   const [errorText, setErrorText] = useState('')
   const [fields, setFields] = useState([])
