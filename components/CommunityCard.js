@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text } from 'react-native';
 import { Avatar, Card } from 'react-native-paper';
 import { PrimaryButton } from './PrimaryButton';
@@ -26,7 +26,9 @@ const communityUsers = [
 const CommunityCard = ({ community, users = communityUsers }) => {
     const navigation = useNavigation()
     const { client, setActiveChannel } = useChatContext()
-    const { authCall } = useAuth()
+    const { authCall, isProfileCreated, profile } = useAuth()
+    const [isNavigating, setIsNavigating] = useState(false)
+
 
     const icon= community.image ? {uri: community.image} : defaultCommunityIcon
 
@@ -37,17 +39,28 @@ const CommunityCard = ({ community, users = communityUsers }) => {
     }
 
     const navigateToChats = async (communityId) => {
-      try {
-        await authCall({
-          method: 'POST',
-          url: `${USER_SERVICE_BASE_URL}/users/me/communities`,
-          data: { communityId }
-        })
-        await createAndWatchChannel(community.id)
-        navigation.navigate('Conversations')
-      } catch (e) {
-        console.log(e)
+      setIsNavigating(true)
+      if(isProfileCreated) {
+        try {
+          await authCall({
+            method: 'POST',
+            url: `${USER_SERVICE_BASE_URL}/users/me/communities`,
+            data: { communityId }
+          })
+          await createAndWatchChannel(community.id)
+          setIsNavigating(false)
+          navigation.navigate('Conversations')
+        } catch (e) {
+          setIsNavigating(false)
+        }
+      } else if(profile?.firstName) {
+        navigation.navigate('UpdateProfile')
+        setIsNavigating(false)
+      } else {
+        navigation.navigate('Signup')
+        setIsNavigating(false)
       }
+
     }
 
     return (
@@ -66,7 +79,7 @@ const CommunityCard = ({ community, users = communityUsers }) => {
                   <Text style={{paddingVertical: 0, fontSize: 14}}>Join Conversation</Text>
                   <AvatarGroup users={communityUsers} />
                 </View>
-                <PrimaryButton onPress={() => navigateToChats(community.id)} style={{ marginLeft: 'auto' }} mode="contained" textColor='#FFC003'> Join Chat </PrimaryButton>
+                <PrimaryButton onPress={() => navigateToChats(community.id)} mode="contained" textColor='#FFC003' loading={isNavigating} disabled={isNavigating}> Join Chat </PrimaryButton>
               </Card.Actions>
             </View>
         </Card>

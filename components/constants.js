@@ -5,4 +5,5 @@ export const COMETCHAT_BASE_URL = "https://2462255fff8ef8e0.api-in.cometchat.io/
 export const COMET_CHAT_APP_ID = "2462255fff8ef8e0"
 export const COMET_CHAT_AUTH_KEY = "cfa7b0fee60f87d570fea94db8962848b5e37e06"
 export const USER_SERVICE_BASE_URL = "https://user-service.sandbox.life2point0.co"
+export const CORE_SERVICE_BASE_URL = "https://core-service.sandbox.life2point0.co"
 export const CHAT_URL = "https://dvx8xl8g8c6yx.cloudfront.net"

@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text } from 'react-native';
-import { ActivityIndicator, IconButton } from 'react-native-paper';
-import { USER_SERVICE_BASE_URL } from './constants';
-import { useAuth } from '../contexts/AuthContext';
-import { useNavigation } from '@react-navigation/native';
+import React, { useState, useEffect } from 'react'
+import { View, Text } from 'react-native'
+import { ActivityIndicator, IconButton } from 'react-native-paper'
+import { CORE_SERVICE_BASE_URL, USER_SERVICE_BASE_URL } from './constants'
+import { useAuth } from '../contexts/AuthContext'
+import { useNavigation } from '@react-navigation/native'
 import { Form } from '../shared-components/form/Form'
-import { updateProfileFields, updateProfileSchema } from './constants/fields/updateProfileFields';
-import { updateProfileStyles } from './constants/styles/updateProfileStyles';
+import { updateProfileFields, updateProfileSchema } from './constants/fields/updateProfileFields'
+import { updateProfileStyles } from './constants/styles/updateProfileStyles'
 
 export default UpdateProfile = () => {
   const [profile, setProfile] = useState(null)
@@ -14,10 +14,33 @@ export default UpdateProfile = () => {
   const { authCall, getProfile } = useAuth()
   const { navigate } = useNavigation()
   const [errorText, setErrorText] = useState('')
+  const [fields, setFields] = useState([])
 
   useEffect(() => {
-    getProfile().then(profile => setProfile(profile)).catch(() => null)
+    const fetchData = async () => {
+      try {
+        const profileData = await getProfile()
+        setProfile(profileData)
+        
+        const response = (await authCall({
+          method: 'GET',
+          url: `${CORE_SERVICE_BASE_URL}/occupations`
+        }))?.data
+      
+        const profileFields = updateProfileFields
+        const occupationsField = profileFields.find(field => field.name === 'occupations')
+        if (occupationsField) {
+          occupationsField.options = response.data
+        }
+        setFields(profileFields)
+      } catch (error) {
+        setErrorText(error.response?.data?.detail?.msg)
+      }
+    }
+  
+    fetchData()
   }, [])
+
 
   const updateProfileInitialValues = {
     firstName: profile?.firstName,
@@ -29,26 +52,25 @@ export default UpdateProfile = () => {
 
   const handleProfileSubmit = async (values) => {
     try {
-      setProfileSubmitting(true);
+      setProfileSubmitting(true)
       await authCall({
         method: 'PUT',
         url: `${USER_SERVICE_BASE_URL}/users/me`,
         data: values
-      });
-      await getProfile();
-      navigate('Main', { screen: 'Home' });
+      })
+      await getProfile()
+      navigate('Main', { screen: 'Home' })
     } catch (e) {
-      setErrorText(e?.response?.data?.detail?.msg || 'Unknown Error' );
-      console.log('API ERROR', e?.response?.data?.detail)
+      setErrorText(e?.response?.data?.detail?.msg || 'Unknown Error' )
     } finally {
-      setProfileSubmitting(false);
+      setProfileSubmitting(false)
     }
   }
 
   return (
     <View style={updateProfileStyles.container}>
       <Text style={updateProfileStyles.title}>Complete Profile</Text>
-      <Text style={{...updateProfileStyles.subTitle, name: undefined}}>
+      <Text style={updateProfileStyles.subTitle}>
         Please complete your profile{'\n'}
         <Text style={updateProfileStyles.username}>
           {profile?.firstName} {profile?.lastName}
@@ -64,11 +86,11 @@ export default UpdateProfile = () => {
           <Text style={{color: 'darkred'}}>{errorText}</Text>
         </View>
       )}
-      { profile ? (
+      { profile && fields.length ? (
           <Form
             initialValues={updateProfileInitialValues}
             validationSchema={updateProfileSchema}
-            fields={updateProfileFields}
+            fields={fields}
             styles={updateProfileStyles.form}
             onSubmit={handleProfileSubmit}
             isLoading={isProfileSubmitting}

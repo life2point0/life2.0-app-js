@@ -40,14 +40,16 @@ const Signup =  () => {
   const [isSubmitting, setSubmitting] = useState(false);
   const { login } = useAuth();
   const [errorText, setErrorText] = useState('');
-  const handleBlur = (field) => {
-    setTouched({ ...touched, [field]: true });
-    validateForm();
-  };
+
   const lastNameField = useRef();
   const emailField = useRef();
   const passwordField = useRef();
   const confirmPasswordField = useRef();
+
+  const handleBlur = (field) => {
+    setTouched({ ...touched, [field]: true });
+    validateForm();
+  };
 
   const validateForm = () => {
     let hasError = false;
@@ -88,7 +90,6 @@ const Signup =  () => {
       navigation.replace('UpdateProfile');
     } catch (e) {
       setErrorText(e?.response?.data?.detail?.msg || "Unknown Error");
-      console.log(e?.response?.data)
     } finally {
       setSubmitting(false)
     }
@@ -98,7 +99,6 @@ const Signup =  () => {
     return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
   }
   
-
   return (
     <KeyboardAvoidingView style={styles.container} behavior="height">
       <View>

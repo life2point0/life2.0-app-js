@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [refreshToken, setRefreshToken] = useState();
   const [accessToken, setAccessToken] = useState();
-  const [profile, setProfile] = useState();
+  const [profile, setProfile] = useState(null);
   const [chatToken, setChatToken] = useState();
   const { client } = useChatContext();
   const isProfileCreated = !!profile?.description;
@@ -36,9 +36,10 @@ export const AuthProvider = ({ children }) => {
       });
       const { access_token } = response.data;
       setAccessToken(access_token);
-      setIsAuthenticated(true);
-      return access_token; 
+      setIsAuthenticated(true)
+      return access_token
     } catch (error) {
+      setIsAuthenticated(false)
       throw error;
     }
   }
@@ -110,6 +111,8 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     if (accessToken) {
       getProfile()
+    } else {
+      setProfile(null)
     }
   }, [accessToken])
   
@@ -129,14 +132,15 @@ export const AuthProvider = ({ children }) => {
     (async () => {
       const storedRefreshToken = await AsyncStorage.getItem('refreshToken');
       if (storedRefreshToken) {
+        setIsAuthenticated(true)
         setRefreshToken(storedRefreshToken);
         try {
           await getNewToken(storedRefreshToken);
         } catch (e) {
+          setIsAuthenticated(false)
           console.log(e?.response?.data)
           AsyncStorage.removeItem('refreshToken')
         }
-        setIsAuthenticated(true);
       }
     })();
   }, []);

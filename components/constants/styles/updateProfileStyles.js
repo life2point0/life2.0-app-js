@@ -16,11 +16,12 @@ const updateProfileStyles = StyleSheet.create({
       fontWeight: 600, 
       padding: 10, 
       textAlign: 'center',
-      color: '#717171',
+      color: '#717171'
     },
     username: {
       color: '#333',
-      fontWeight: 700
+      fontWeight: 'bold',
+      lineHeight: 20
     },
     form: {
         container: {

@@ -25,7 +25,7 @@ export default function ChatScreen() {
     });
   }, []);
 
-  if (chatToken) {
+  if (chatToken && isProfileCreated) {
     return (
       <>
         <AppBar title="Conversations" />
