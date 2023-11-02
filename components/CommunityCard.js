@@ -74,9 +74,9 @@ const CommunityCard = ({ community, users = communityUsers }) => {
             </View>
   
             <View style={{ backgroundColor: '#F2FFF2',  borderRadius: 10 }}>
-              <Card.Actions style={{ paddingVertical: 5 }}>
+              <Card.Actions style={{ paddingVertical: 5, paddingHorizontal: 0 }}>
                 <View>
-                  <Text style={{paddingVertical: 0, fontSize: 14}}>Join Conversation</Text>
+                  <Text style={{paddingVertical: 0, fontSize: 12, fontWeight: '500'}}>Join Conversation</Text>
                   <AvatarGroup users={communityUsers} />
                 </View>
                 <PrimaryButton onPress={() => navigateToChats(community.id)} style={{ marginLeft: 'auto', transform: [{scale: 0.8}] }} mode="contained" textColor='#FFC003' loading={isNavigating} disabled={isNavigating}> Join Chat </PrimaryButton>
