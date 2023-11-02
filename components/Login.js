@@ -29,7 +29,7 @@ const Login = ({ navigation }) => {
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior="height">
-      <StatusBar backgroundColor="#fff" barStyle="light-content" />
+      <StatusBar backgroundColor="#fff" barStyle="dark-content" />
       <View>
         <Text style={styles.title}>Log In</Text>
         <IconButton

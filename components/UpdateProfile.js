@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, StatusBar } from 'react-native'
 import { ActivityIndicator, IconButton } from 'react-native-paper'
 import { CORE_SERVICE_BASE_URL, USER_SERVICE_BASE_URL } from './constants'
 import { useAuth } from '../contexts/AuthContext'
@@ -63,36 +63,39 @@ export default UpdateProfile = () => {
   }
 
   return (
-    <View style={updateProfileStyles.container}>
-      <Text style={updateProfileStyles.title}>Complete Profile</Text>
-      <Text style={updateProfileStyles.subTitle}>
-        Welcome onboard {profile?.firstName}! {"\n"}
-        Please complete your profile.
-      </Text>
-      {errorText && (
-        <View style={{alignItems: 'center', justifyContent: 'center', flexDirection: 'row'}}>
-          <IconButton
-            icon="alert-circle"
-            iconColor='darkred'
-            size={20}
-          />
-          <Text style={{color: 'darkred'}}>{errorText}</Text>
-        </View>
-      )}
-      { profile && fields.length ? (
-          <Form
-            initialValues={updateProfileInitialValues}
-            validationSchema={updateProfileSchema}
-            fields={fields}
-            styles={updateProfileStyles.form}
-            onSubmit={handleProfileSubmit}
-            isLoading={isProfileSubmitting}
-          />
-        ) : 
-        (
-          <ActivityIndicator style={{alignSelf: 'center'}} animating={true} color="black" />
-        )
-      }
-    </View>
+    <>
+      <StatusBar backgroundColor="#fff" barStyle="dark-content" />
+      <View style={updateProfileStyles.container}>
+        <Text style={updateProfileStyles.title}>Complete Profile</Text>
+        <Text style={updateProfileStyles.subTitle}>
+          Welcome onboard {profile?.firstName}! {"\n"}
+          Please complete your profile.
+        </Text>
+        {errorText && (
+          <View style={{alignItems: 'center', justifyContent: 'center', flexDirection: 'row'}}>
+            <IconButton
+              icon="alert-circle"
+              iconColor='darkred'
+              size={20}
+            />
+            <Text style={{color: 'darkred'}}>{errorText}</Text>
+          </View>
+        )}
+        { profile && fields.length ? (
+            <Form
+              initialValues={updateProfileInitialValues}
+              validationSchema={updateProfileSchema}
+              fields={fields}
+              styles={updateProfileStyles.form}
+              onSubmit={handleProfileSubmit}
+              isLoading={isProfileSubmitting}
+            />
+          ) : 
+          (
+            <ActivityIndicator style={{alignSelf: 'center'}} animating={true} color="black" />
+          )
+        }
+      </View>
+    </>
   )
 }

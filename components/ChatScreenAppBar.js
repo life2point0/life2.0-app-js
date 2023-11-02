@@ -9,7 +9,7 @@ const ChatScreenAppBar = ({ title, image }) => {
   const navigation = useNavigation();
   return (
     <Appbar.Header style={{ backgroundColor: '#FFC003', position: '' }}>
-      <StatusBar backgroundColor="#FFC003" barStyle="light-content" />
+      <StatusBar backgroundColor="#FFC003" barStyle="dark-content" />
       <Appbar.Action
         icon="arrow-left"
         onPress={() => {

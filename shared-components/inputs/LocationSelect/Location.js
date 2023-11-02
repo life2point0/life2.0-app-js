@@ -42,7 +42,7 @@ const LocationSelect = ({ label, multiple, styles, onLocationSelect }) => {
   const renderGooglePlacesAutocomplete = () => {
     return (
       <GooglePlacesAutocomplete
-        placeholder='Type'
+        placeholder='Search here'
         disableScroll={true}
         isRowScrollable={false}
         listViewDisplayed={false}
@@ -50,6 +50,15 @@ const LocationSelect = ({ label, multiple, styles, onLocationSelect }) => {
         textInputProps={{
           autoFocus: true,
           selectTextOnFocus: true,
+          style: {
+            alignSelf: 'center',
+            borderRadius: 28,
+            borderWidth: 1,
+            flex: 1,
+            marginRight: 10,
+            padding: 10,
+            borderColor: 'lightgrey'
+          }
         }}
         styles={styles.dropdown}
         query={{ key: KEYS.googleApiKey, type: '(cities)' }}
@@ -60,7 +69,15 @@ const LocationSelect = ({ label, multiple, styles, onLocationSelect }) => {
         onFail={(error) => console.log('MAP ERROR', error)}
         onNotFound={() => console.log('MAP', 'no results')}
         renderLeftButton={() => (
-          <IconButton icon="arrow-left" onPress={() => setVisible(false)}/>
+          <IconButton 
+            icon="arrow-left" 
+            size={26} 
+            onPress={() => setVisible(false)}
+            mode='contained'
+            style={{
+              alignSelf: 'center'
+            }}
+          />
         )}
       />
     )

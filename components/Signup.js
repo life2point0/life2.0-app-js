@@ -1,6 +1,6 @@
 // React and React Native core modules
 import React, { useRef, useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, KeyboardAvoidingView, ScrollView, TextInput } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, KeyboardAvoidingView, ScrollView, TextInput, StatusBar } from 'react-native';
 
 // External Libraries
 import axios from 'axios';
@@ -101,6 +101,7 @@ const Signup =  () => {
   
   return (
     <KeyboardAvoidingView style={styles.container} behavior="height">
+      <StatusBar backgroundColor="#fff" barStyle="dark-content" />
       <View>
         <Text style={styles.title}>Sign Up</Text>
         <IconButton
