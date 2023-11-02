@@ -3,7 +3,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { KEYCLOAK_CLIENT_ID, KEYCLOAK_REALM, KEYCLOAK_URL, USER_SERVICE_BASE_URL } from '../components/constants';
 import axios from 'axios';
 import qs from 'qs';
-import { CometChat } from '@cometchat-pro/react-native-chat';
 import { useChatContext } from 'stream-chat-expo';
 
 
@@ -95,17 +94,6 @@ export const AuthProvider = ({ children }) => {
     } catch (e) {
       console.log(e);
     }
-  }
-
-  const loginToCometchat = async () => {
-    CometChat.login('UID', 'API_KEY').then(
-      (user) => {
-        console.log('Login Successful', user);
-      },
-      (error) => {
-        console.log('Login failed with exception:', error);
-      }
-    );
   }
 
   useEffect(() => {
