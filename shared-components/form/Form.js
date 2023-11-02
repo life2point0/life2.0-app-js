@@ -50,7 +50,6 @@ const Form = ({ initialValues, validationSchema, fields, styles, onSubmit, isLoa
                 );
             
               case 'location':
-                console.log(formField)
                 return (
                   <React.Fragment key={formField.name}>
                     <Field name={formField.name}>
