@@ -12,7 +12,7 @@ const slides = [
     logo: require('./assets/logo.png'),
     buttons: [
       { label: 'Next', action: 'next', type: 'primary' },
-      { label: 'Skip', action: 'skip' },
+      { label: 'Skip Introduction', action: 'skip' },
     ],
   },
   {
@@ -22,7 +22,7 @@ const slides = [
     logo: require('./assets/logo.png'),
     buttons: [
       { label: 'Next', action: 'next', type: 'primary' },
-      { label: 'Skip', action: 'skip' },
+      { label: 'Skip Introduction', action: 'skip' },
     ],
   },
   {
@@ -38,10 +38,11 @@ const slides = [
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'white', // Change the background color if needed
+    backgroundColor: 'white',
+    paddingBottom: 50
   },
   backButton: {
     position: 'absolute',
@@ -53,14 +54,13 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   imageContainer: {
-    width: 300,
-    height: 300,
+    width: 200,
+    height: 200,
     alignItems: 'center',
     justifyContent: 'center',
   },
   image: {
-    width: '100%',
-    height: 200,
+    width: '100%'
   },
   logo: {
     width: 120,
@@ -89,26 +89,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   buttonContainer: {
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'center',
     width: '100%',
-    alignSelf: 'stretch',
     padding: 20
   },
   button: {
-    // backgroundColor: 'transparent',
-    // borderColor: 'black',
-    // borderWidth: 1,
-    // paddingVertical: 10,
-    // paddingHorizontal: 20,
-    // borderRadius: 5,
+    paddingVertical: 8,
     marginHorizontal: 10,
     marginVertical: 8,
-  },
-  buttonText: {
-    color: 'black',
-  },
+  }
 });
 
 
@@ -164,13 +152,13 @@ const IntroSlides = () => {
         </View>
         <View style={styles.buttonContainer}>
           {slide.buttons.map((button, buttonIndex) => (
-            <Fragment key={buttonIndex}>
+            <View key={buttonIndex}>
             {
               button.type === 'primary' 
-              ? <PrimaryButton style={styles.button} onPress={() => handleButtonPress(button.action)}>{button.label}</PrimaryButton>
+              ? <PrimaryButton textColor='#FFC003' mode='contained' style={styles.button}  onPress={() => handleButtonPress(button.action)}>{button.label}</PrimaryButton>
               : <Button mode="outlined" style={styles.button} onPress={() => handleButtonPress(button.action)}>{button.label}</Button>
             }
-            </Fragment>
+            </View>
           ))}
         </View>
       </View>

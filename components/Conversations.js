@@ -1,23 +1,35 @@
 import React from 'react';
-import { WebView } from 'react-native-webview';
-import { CHAT_URL } from './constants';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigation } from '@react-navigation/native';
-
+import { 
+  Channel, 
+  useChatContext,
+  MessageList,
+  MessageInput,
+  SendButton
+} from 'stream-chat-expo';
+import { View } from 'react-native';
+import ChatScreenAppBar from './ChatScreenAppBar';
+import defaultCommunityIcon from './assets/community.png'
 
 export default function Conversations() {
-  const { profile, isAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuth();
   const navigation = useNavigation();
+  const { channel } = useChatContext();
 
   if (!isAuthenticated) {
-    return navigation.navigate('Signup');
+    navigation.navigate('Signup');
   }
 
   return (
-    <WebView
-      style={{marginTop: 30}}
-      source={{ uri: `${CHAT_URL}/login?userId=${profile?.id}` }}
-      // injectedJavaScript={`window.localStorage.clear();`}
-    />
-  );
+    <>
+      <ChatScreenAppBar title={channel?.data?.name} image={channel?.data?.image ? {uri: channel?.data?.image} : defaultCommunityIcon} />
+      <View style={{flex: 1}}>
+        <Channel channel={channel} hasCommands={false} >
+          <MessageList />
+          <MessageInput />
+        </Channel>
+      </View>
+    </>
+  )
 }

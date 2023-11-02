@@ -1,6 +1,6 @@
 // React and React Native core modules
 import React, { useRef, useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, KeyboardAvoidingView, ScrollView, TextInput } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, KeyboardAvoidingView, ScrollView, TextInput, StatusBar } from 'react-native';
 
 // External Libraries
 import axios from 'axios';
@@ -40,14 +40,16 @@ const Signup =  () => {
   const [isSubmitting, setSubmitting] = useState(false);
   const { login } = useAuth();
   const [errorText, setErrorText] = useState('');
-  const handleBlur = (field) => {
-    setTouched({ ...touched, [field]: true });
-    validateForm();
-  };
+
   const lastNameField = useRef();
   const emailField = useRef();
   const passwordField = useRef();
   const confirmPasswordField = useRef();
+
+  const handleBlur = (field) => {
+    setTouched({ ...touched, [field]: true });
+    validateForm();
+  };
 
   const validateForm = () => {
     let hasError = false;
@@ -81,19 +83,25 @@ const Signup =  () => {
     }
     try {
       setSubmitting(true)
+      form.firstName = capitalizeName(form.firstName)
+      form.lastName = capitalizeName(form.lastName)
       const response = await axios.post(`${USER_SERVICE_BASE_URL}/users/signup`, _.omit(form, ['confirmPassword', 'terms']));
       await login(form.email, form.password);
       navigation.replace('UpdateProfile');
     } catch (e) {
-      setErrorText(e?.response?.data?.detail || "Unknown Error");
+      setErrorText(e?.response?.data?.detail?.msg || "Unknown Error");
     } finally {
       setSubmitting(false)
     }
   };
-  
 
+  const capitalizeName = (name) => {
+    return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+  }
+  
   return (
     <KeyboardAvoidingView style={styles.container} behavior="height">
+      <StatusBar backgroundColor="#fff" barStyle="dark-content" />
       <View>
         <Text style={styles.title}>Sign Up</Text>
         <IconButton
@@ -208,7 +216,7 @@ const Signup =  () => {
           {touched.terms && errors.terms && <Text>{errors.terms}</Text>}
         </View>
         <View>
-          <PrimaryButton mode="contained" onPress={handleSubmit} loading={isSubmitting} disabled={isSubmitting}>
+          <PrimaryButton mode="contained" textColor='#FFC003' onPress={handleSubmit} loading={isSubmitting} disabled={isSubmitting}>
             Sign Up
           </PrimaryButton>
         </View>

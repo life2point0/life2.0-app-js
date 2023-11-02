@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text } from 'react-native';
 import { Avatar, Card } from 'react-native-paper';
 import { PrimaryButton } from './PrimaryButton';
 import { useNavigation } from '@react-navigation/native';
@@ -11,6 +11,9 @@ import user3Image from './assets/user-3.png';
 import user4Image from './assets/user-4.png';
 import user5Image from './assets/user-5.png';
 import AvatarGroup from './AvatarGroup';
+import defaultCommunityIcon from './assets/community.png'
+import { useChatContext,  } from 'stream-chat-expo';
+import { USER_SERVICE_BASE_URL } from './constants';
 
 const communityUsers = [
     { icon: user1Image },
@@ -20,32 +23,64 @@ const communityUsers = [
     { icon: user5Image },
 ];
 
-const CommunityCard = ({ communityName, users = communityUsers, description, icon }) => {
-    const { navigate } = useNavigation();
+const CommunityCard = ({ community, users = communityUsers }) => {
+    const navigation = useNavigation()
+    const { client, setActiveChannel } = useChatContext()
+    const { authCall, isProfileCreated, profile } = useAuth()
+    const [isNavigating, setIsNavigating] = useState(false)
 
-    const navigateToChats = () => {
-        navigate('Main', {screen: 'Chats'});
+
+    const icon= community.image ? {uri: community.image} : defaultCommunityIcon
+
+    const createAndWatchChannel = async (id) => {
+      const newChannel = client.channel('community', id)
+      await newChannel.watch();
+      setActiveChannel(newChannel);
+    }
+
+    const navigateToChats = async (communityId) => {
+      setIsNavigating(true)
+      if(isProfileCreated) {
+        try {
+          await authCall({
+            method: 'POST',
+            url: `${USER_SERVICE_BASE_URL}/users/me/communities`,
+            data: { communityId }
+          })
+          await createAndWatchChannel(community.id)
+          setIsNavigating(false)
+          navigation.navigate('Conversations')
+        } catch (e) {
+          setIsNavigating(false)
+        }
+      } else if(profile?.firstName) {
+        navigation.navigate('UpdateProfile')
+        setIsNavigating(false)
+      } else {
+        navigation.navigate('Signup')
+        setIsNavigating(false)
+      }
+
     }
 
     return (
-        <Card style={{ margin: 8, width: 300, backgroundColor: '#fff' }}>
-            <Card.Title title={<Text style={{fontSize: 20}}>{communityName}</Text>} />
-            <Card.Content>
-            <View style={{ flexDirection: 'row', alignItems: 'center', width: "100%", paddingBottom: 20 }}>
+        <Card elevation={1} mode="elevated" style={{ margin: 8, width: 275, borderWidth: 0, backgroundColor: '#fff', borderRadius: 10 }}>
+            <Text ellipsizeMode='tail' numberOfLines={1} style={{fontSize: 14, fontWeight: 'bold', paddingHorizontal: 10, paddingVertical: 5 }}>{community.name}</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', width: "100%", paddingBottom: 5 }}>
                 <Avatar.Image source={icon} style={{ width: 64, height: 64, backgroundColor: '#fff' }} />
-                <View style={{ marginLeft: 8, alignItems: 'center', justifyContent: 'center', flex: 1 }}>
-                <Text style={{ fontSize: 17, overflow: "hidden", letterSpacing: 0.1, lineHeight: 25 }} numberOfLines={3} ellipsizeMode='tail'>{description}</Text>
+                <View ellipsizeMode='tail' numberOfLines={3} style={{ marginLeft: 8, alignItems: 'center', justifyContent: 'center', flex: 1 }}>
+                  <Text style={{ fontSize: 12, overflow: "hidden", letterSpacing: 0.1, lineHeight: 16 }} numberOfLines={3} ellipsizeMode='tail'>{community.description}</Text>
                 </View>
             </View>
-            </Card.Content>
-            <View style={{ backgroundColor: '#FFFCF2' }}>
-            <Card.Actions style={{borderRadius: 90, alignItems: 'flex-end'}}>
-            <View>
-                <Text style={{paddingVertical: 10, fontSize: 16}}>Join Conversation</Text>
-                <AvatarGroup users={users} />
-            </View>
-             <PrimaryButton onPress={navigateToChats} style={{ marginLeft: 'auto' }}>Join Chat</PrimaryButton>
-            </Card.Actions>
+  
+            <View style={{ backgroundColor: '#F2FFF2',  borderRadius: 10 }}>
+              <Card.Actions style={{ paddingVertical: 5, paddingHorizontal: 0 }}>
+                <View>
+                  <Text style={{paddingVertical: 0, fontSize: 12, fontWeight: '500'}}>Join Conversation</Text>
+                  <AvatarGroup users={communityUsers} />
+                </View>
+                <PrimaryButton onPress={() => navigateToChats(community.id)} style={{ marginLeft: 'auto', transform: [{scale: 0.8}] }} mode="contained" textColor='#FFC003' loading={isNavigating} disabled={isNavigating}> Join Chat </PrimaryButton>
+              </Card.Actions>
             </View>
         </Card>
     );

@@ -9,7 +9,6 @@ import axios from 'axios';
 import { USER_SERVICE_BASE_URL } from './constants';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigation } from '@react-navigation/native';
-import defaultCommunityIcon from './assets/community.png'
 
 const HomeScreen = () => {
   const [communities, setCommunities] = useState([]);
@@ -22,7 +21,7 @@ const HomeScreen = () => {
     try {
         setCommunitiesLoading(true);
         const res = (await axios.get(`${USER_SERVICE_BASE_URL}/communities`)).data;
-        setCommunities(res.data);
+        setCommunities(res);
     } catch (e) {
         setCommunities([]);
     } finally {
@@ -62,7 +61,7 @@ const HomeScreen = () => {
           {isCommunitiesLoading ? (
             <SkeletonCard />
           ) :  communities.map((community) => (
-            <CommunityCard key={community.guid} communityName={community.name} users={community.users} description={community.description} icon={community.icon ? {uri: community.icon} : defaultCommunityIcon}/>
+            <CommunityCard key={community.channel.id} community={community.channel} users={community.members}/>
           ))}
         </ScrollView>
         <View style={styles.subHeader}>
@@ -118,7 +117,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginTop: 10,
+    marginTop: 20,
     marginBottom: 5
   },
   communities: {

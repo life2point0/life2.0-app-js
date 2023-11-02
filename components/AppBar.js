@@ -9,7 +9,7 @@ import menuIcon from './assets/menu-slider-icon.png';
 const AppBar = ({ title }) => {
   return (
     <Appbar.Header style={{ backgroundColor: '#FFC003', position: '' }}>
-      <StatusBar backgroundColor="#FFC003" barStyle="light-content" />
+      <StatusBar backgroundColor="#FFC003" barStyle="dark-content" />
       <Appbar.Action
         icon={() => <Image source={menuIcon} style={{ width: 24, height: 24 }} />}
         onPress={() => {

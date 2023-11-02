@@ -4,6 +4,7 @@ import { KEYCLOAK_CLIENT_ID, KEYCLOAK_REALM, KEYCLOAK_URL, USER_SERVICE_BASE_URL
 import axios from 'axios';
 import qs from 'qs';
 import { CometChat } from '@cometchat-pro/react-native-chat';
+import { useChatContext } from 'stream-chat-expo';
 
 
 
@@ -14,8 +15,10 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [refreshToken, setRefreshToken] = useState();
   const [accessToken, setAccessToken] = useState();
-  const [profile, setProfile] = useState();
-  const isProfileCreated = profile?.description;
+  const [profile, setProfile] = useState(null);
+  const [chatToken, setChatToken] = useState();
+  const { client } = useChatContext();
+  const isProfileCreated = !!profile?.description;
 
   const getNewToken = async (refreshToken) => {
   
@@ -33,10 +36,10 @@ export const AuthProvider = ({ children }) => {
       });
       const { access_token } = response.data;
       setAccessToken(access_token);
-      setIsAuthenticated(true);
-      console.log({access_token})
-      return access_token; 
+      setIsAuthenticated(true)
+      return access_token
     } catch (error) {
+      setIsAuthenticated(false)
       throw error;
     }
   }
@@ -64,10 +67,40 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
+  const getChatToken = async () => {
+    if(chatToken) {
+      return chatToken
+    }
+    try {
+      const token = (await authCall({
+        method: 'GET',
+        url: `${USER_SERVICE_BASE_URL}/users/me/tokens`
+      }))?.data;
+      setChatToken(token);
+      return token;
+    } catch (e) {
+      logout();
+    }
+  }
+
+  const initChat = async () => {
+    try {
+      await client.connectUser(
+        {
+          id: profile?.id,
+          name: `${profile?.firstName} ${profile?.lastName}`,
+        },
+        chatToken.streamChat
+      );
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   const loginToCometchat = async () => {
     CometChat.login('UID', 'API_KEY').then(
       (user) => {
-        console.log('Login Successful:', user);
+        console.log('Login Successful', user);
       },
       (error) => {
         console.log('Login failed with exception:', error);
@@ -77,23 +110,37 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     if (accessToken) {
-      getProfile();
+      getProfile()
+    } else {
+      setProfile(null)
     }
-  }, [accessToken]);
+  }, [accessToken])
+  
+  useEffect(() => {
+    if (isProfileCreated) {
+      getChatToken()
+    }
+  }, [profile, isProfileCreated])
+
+  useEffect(() => {
+    if (chatToken) {
+      initChat()
+    }
+  }, [chatToken])
 
   useEffect(() => {
     (async () => {
       const storedRefreshToken = await AsyncStorage.getItem('refreshToken');
-      console.log({storedRefreshToken});
       if (storedRefreshToken) {
+        setIsAuthenticated(true)
         setRefreshToken(storedRefreshToken);
         try {
           await getNewToken(storedRefreshToken);
         } catch (e) {
+          setIsAuthenticated(false)
           console.log(e?.response?.data)
           AsyncStorage.removeItem('refreshToken')
         }
-        setIsAuthenticated(true);
       }
     })();
   }, []);
@@ -112,7 +159,6 @@ export const AuthProvider = ({ children }) => {
         }
       });
       const { access_token, refresh_token } = response.data;
-      console.log(response.data)
       setAccessToken(access_token);
       setRefreshToken(refresh_token);
       await AsyncStorage.setItem('refreshToken', refresh_token);
@@ -148,7 +194,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ login, logout, refreshToken, isLoggedIn, isAuthenticated, authCall, isProfileCreated, getProfile, profile }}>
+    <AuthContext.Provider value={{ login, logout, refreshToken, isLoggedIn, isAuthenticated, authCall, isProfileCreated, getProfile, getChatToken, initChat, profile, chatToken }}>
       {children}
     </AuthContext.Provider>
   );

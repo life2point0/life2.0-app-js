@@ -1,29 +1,44 @@
 import React, { useEffect } from 'react';
-import { WebView } from 'react-native-webview';
-import { CHAT_URL } from './constants';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigation } from '@react-navigation/native';
+import AppBar from './AppBar';
+import { ChannelList, useChatContext } from 'stream-chat-expo';
 
 
 export default function ChatScreen() {
-  const { profile, isAuthenticated, isProfileCreated } = useAuth();
+  const { isAuthenticated, isProfileCreated, chatToken, profile } = useAuth();
   const navigation = useNavigation();
+  const { setActiveChannel } = useChatContext();
 
   useEffect(() => {
     return navigation.addListener('focus', () => {
-      navigation.replace('Main', { screen: 'Home' })
       if (!isAuthenticated) {
+        navigation.replace('Main', { screen: 'Home' })
         navigation.navigate('Signup');
         return;
-      } 
+      }
       if (!isProfileCreated) {
+        navigation.replace('Main', { screen: 'Home' })
         navigation.navigate('UpdateProfile');
         return;
       }
-      navigation.navigate('Conversations')
     });
   }, []);
 
+  if (chatToken && isProfileCreated) {
+    return (
+      <>
+        <AppBar title="Conversations" />
+        <ChannelList 
+          onSelect={(channel) => {
+            setActiveChannel(channel);
+            navigation.navigate('Conversations')
+          }}
+          filters= {{ members: { '$in': [profile.id]}}}
+        />
+      </>
+    );
+  }
 
   return (
     <></>
