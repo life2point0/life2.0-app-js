@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import { View, Text, ScrollView } from 'react-native'
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete'
 import { KEYS } from '../../constants'
-import { Modal, Portal } from 'react-native-paper'
+import { IconButton, Modal, Portal } from 'react-native-paper'
 import { TextInput } from "react-native"
 import { PrimaryButton } from '../../../components/PrimaryButton'
 
@@ -49,13 +49,9 @@ const LocationSelect = ({ label, multiple, styles, onLocationSelect }) => {
         fetchDetails={true}
         textInputProps={{
           autoFocus: true,
-          style: {
-            elevation: 0,
-          },
           selectTextOnFocus: true,
         }}
         styles={styles.dropdown}
-        
         query={{ key: KEYS.googleApiKey }}
         onPress={(data, details) => {
           const place = { name: data.description, geolocation: details.geometry.location }
@@ -63,6 +59,9 @@ const LocationSelect = ({ label, multiple, styles, onLocationSelect }) => {
         }}
         onFail={(error) => console.log('MAP ERROR', error)}
         onNotFound={() => console.log('MAP', 'no results')}
+        renderLeftButton={() => (
+          <IconButton icon="arrow-left" onPress={() => setVisible(false)}/>
+        )}
       />
     )
   }

@@ -65,10 +65,10 @@ const CommunityCard = ({ community, users = communityUsers }) => {
 
     return (
         <Card elevation={1} mode="elevated" style={{ margin: 8, width: 275, borderWidth: 0, backgroundColor: '#fff', borderRadius: 10 }}>
-            <Text style={{fontSize: 14, fontWeight: 'bold', paddingHorizontal: 10, paddingVertical: 5 }}>{community.name}</Text>
+            <Text ellipsizeMode='tail' numberOfLines={1} style={{fontSize: 14, fontWeight: 'bold', paddingHorizontal: 10, paddingVertical: 5 }}>{community.name}</Text>
             <View style={{ flexDirection: 'row', alignItems: 'center', width: "100%", paddingBottom: 5 }}>
                 <Avatar.Image source={icon} style={{ width: 64, height: 64, backgroundColor: '#fff' }} />
-                <View style={{ marginLeft: 8, alignItems: 'center', justifyContent: 'center', flex: 1 }}>
+                <View ellipsizeMode='tail' numberOfLines={3} style={{ marginLeft: 8, alignItems: 'center', justifyContent: 'center', flex: 1 }}>
                   <Text style={{ fontSize: 12, overflow: "hidden", letterSpacing: 0.1, lineHeight: 16 }} numberOfLines={3} ellipsizeMode='tail'>{community.description}</Text>
                 </View>
             </View>

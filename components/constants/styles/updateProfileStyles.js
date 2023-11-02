@@ -95,10 +95,11 @@ const updateProfileStyles = StyleSheet.create({
             textInput: {
               height: '100%',
               borderWidth: 2,
-              borderColor: '#ccc',
+              borderRadius: 8,
+              borderColor: '#ccc'
             },
             textInputContainer: {
-              height: 50,
+              height: 40,
               margin: 10,
             }
           },
