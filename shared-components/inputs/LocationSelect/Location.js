@@ -52,7 +52,7 @@ const LocationSelect = ({ label, multiple, styles, onLocationSelect }) => {
           selectTextOnFocus: true,
         }}
         styles={styles.dropdown}
-        query={{ key: KEYS.googleApiKey }}
+        query={{ key: KEYS.googleApiKey, type: '(cities)' }}
         onPress={(data, details) => {
           const place = { name: data.description, geolocation: details.geometry.location }
           multiple ? handlePlaceSelection(place) : handleSinglePlaceSelection(place)
