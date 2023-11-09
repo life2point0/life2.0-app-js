@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { View, Text, ScrollView, SafeAreaView, StatusBar, TouchableOpacity, TextInput, Image, KeyboardAvoidingView } from 'react-native'
-import { Avatar, Card, IconButton, useTheme  } from 'react-native-paper'
+import { Avatar, Card, useTheme  } from 'react-native-paper'
 import { useNavigation } from '@react-navigation/native'
 import { useAuth } from '../contexts/AuthContext'
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder'
@@ -15,6 +15,7 @@ import { useChatContext,  } from 'stream-chat-expo'
 import { USER_SERVICE_BASE_URL } from './constants'
 import Button from '../shared-components/button/Button'
 import { useData } from '../contexts/DataContext'
+import AppBar from './AppBar'
 
 const communityUsers = [
     { icon: user1Image },
@@ -30,20 +31,12 @@ const Communities = ({isSliider}) => {
   const { communities } = useData()
 
   return (
+    <> 
+    { !isSliider && <AppBar title="Communities" /> }
     <SafeAreaView >
       <KeyboardAvoidingView behavior="height">
-        { !isSliider && <StatusBar backgroundColor="#fff" barStyle="dark-content" /> }
+        { !isSliider && <StatusBar barStyle='dark-content' backgroundColor="#FFC003"/> }
         <View style={!isSliider ? theme.spacing.communities.screen.container : null}>
-        { !isSliider && <View style={theme.spacing.onboarding.headerContainer}>
-          <Text style={theme.fonts.title}> Communities </Text>
-          <IconButton
-            icon="arrow-left"
-            style={theme.spacing.backButton}
-            onPress={() => navigation.goBack()}
-          />
-        </View>
-        }
-
         { !isSliider &&  <View style={theme.spacing.communities.screen.section}>
           <TextInput
             style={theme.components.inputs.textField}
@@ -70,6 +63,7 @@ const Communities = ({isSliider}) => {
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
+    </>
   )
 }
 

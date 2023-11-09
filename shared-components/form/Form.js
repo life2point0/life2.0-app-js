@@ -43,7 +43,13 @@ const Form = ({ initialValues, validationSchema, fields, styles, onSubmit, submi
                         />
                       )}
                     </Field>
-                    { formField.maxCharCount && formField.charCount && <Text style={styles.input.charCount}>{formField.maxCharCount - formField.charCount} chars left</Text>}
+                    
+                    { formField.maxCharCount && formField.charCount !== undefined && (
+                        <Text style={styles.input.charCount}>
+                          {String(formField.maxCharCount - (formField.charCount || 0))} chars left
+                        </Text>
+                    )}
+
                     { touched[formField.name] && errors[formField.name] && (
                       <Text style={styles.errorText}>{errors[formField.name]}</Text>
                     )}
