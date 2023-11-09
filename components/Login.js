@@ -34,19 +34,17 @@ const Login =  () => {
   };
   
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ flex: 1}}>
       <KeyboardAvoidingView behavior="height">
-        <StatusBar backgroundColor="#fff" barStyle="dark-content" />
+        <View style={theme.spacing.onboarding.headerContainer}>
+          <Text style={theme.fonts.title}>Log In</Text>
+          <IconButton
+            icon="arrow-left"
+            style={theme.spacing.backButton}
+            onPress={() => navigation.navigate('Main', { screen: 'Home' })}
+          />
+        </View>
         <ScrollView contentContainerStyle={theme.spacing.onboarding.container}>
-
-          <View style={theme.spacing.onboarding.headerContainer}>
-            <Text style={theme.fonts.title}>Log In</Text>
-            <IconButton
-              icon="arrow-left"
-              style={theme.spacing.backButton}
-              onPress={() => navigation.navigate('Main', { screen: 'Home' })}
-            />
-          </View>
             
           <Text style={{ ...theme.fonts.description, ...theme.spacing.onboarding.textContainer }}>
             Log In if you already have a Life 2.0 profile, or else Register and build your profile

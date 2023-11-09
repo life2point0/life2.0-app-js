@@ -125,7 +125,7 @@ const spacing = {
     },
     onboarding: {
         container: {
-            paddingHorizontal: 16,
+            paddingHorizontal: 20,
             paddingVertical: 20,
             alignItems: 'center',
             minHeight: '100%',
@@ -134,7 +134,6 @@ const spacing = {
             gap: 10
         },
         headerContainer: {
-            position: 'relative',
             width: '100%',
             alignItems: 'center',
             justifyContent: 'center',
@@ -152,7 +151,8 @@ const spacing = {
         loginLinkContainer: {
             alignItems: 'center',
             flexDirection: 'row',
-            gap: 5
+            gap: 5,
+            paddingBottom: 50
         }
     }
 } 

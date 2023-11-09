@@ -32,10 +32,8 @@ const Communities = ({isSliider}) => {
 
   return (
     <> 
-    { !isSliider && <AppBar title="Communities" /> }
-    <SafeAreaView >
-      <KeyboardAvoidingView behavior="height">
-        { !isSliider && <StatusBar barStyle='dark-content' backgroundColor="#FFC003"/> }
+    { !isSliider && <AppBar title="Communities" showBackButton /> }
+    <SafeAreaView style={{ flex: 1, marginBottom: 30 }}>
         <View style={!isSliider ? theme.spacing.communities.screen.container : null}>
         { !isSliider &&  <View style={theme.spacing.communities.screen.section}>
           <TextInput
@@ -61,7 +59,6 @@ const Communities = ({isSliider}) => {
             }
           </ScrollView> 
         </View>
-      </KeyboardAvoidingView>
     </SafeAreaView>
     </>
   )

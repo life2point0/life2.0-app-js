@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StatusBar, SafeAreaView, ScrollView } from 'react-native'
+import { View, Text, StatusBar, SafeAreaView, ScrollView, KeyboardAvoidingView } from 'react-native'
 import { ActivityIndicator, IconButton, useTheme } from 'react-native-paper'
 import { CORE_SERVICE_BASE_URL, USER_SERVICE_BASE_URL } from './constants'
 import { useAuth } from '../contexts/AuthContext'
@@ -66,11 +66,9 @@ export default UpdateProfile = () => {
   }
 
   return (
-    <SafeAreaView>
-      <StatusBar backgroundColor="#fff" barStyle="dark-content" />
-      <ScrollView contentContainerStyle={theme.spacing.onboarding.container}>
-        
-      <View style={theme.spacing.onboarding.headerContainer}>
+    <SafeAreaView style={{flex: 1 }}>
+      <KeyboardAvoidingView behavior="height">
+        <View style={theme.spacing.onboarding.headerContainer}>
           <Text style={theme.fonts.title}>Complete Profile</Text>
           <IconButton
             icon="arrow-left"
@@ -78,6 +76,7 @@ export default UpdateProfile = () => {
             onPress={() => navigate('Main', { screen: 'Home' })}
           />
        </View>
+      <ScrollView contentContainerStyle={theme.spacing.onboarding.container}>
       
       <Text style={theme.fonts.description}>
         Welcome onboard {profile?.firstName}! {"\n"}
@@ -109,6 +108,7 @@ export default UpdateProfile = () => {
           )
         }
       </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   )
 }

@@ -48,20 +48,17 @@ const Signup =  () => {
   }
   
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ flex: 1}}>
       <KeyboardAvoidingView behavior="height">
-        <StatusBar backgroundColor="#fff" barStyle="dark-content" />
-        <ScrollView contentContainerStyle={theme.spacing.onboarding.container}>
-
-          <View style={theme.spacing.onboarding.headerContainer}>
+        <View style={theme.spacing.onboarding.headerContainer}>
             <Text style={theme.fonts.title}>Sign Up</Text>
             <IconButton
               icon="arrow-left"
               style={theme.spacing.backButton}
               onPress={() => navigation.navigate('Main', { screen: 'Home' })}
             />
-          </View>
-            
+        </View>
+        <ScrollView contentContainerStyle={theme.spacing.onboarding.container}>            
           <Text style={{ ...theme.fonts.description, ...theme.spacing.onboarding.textContainer }}>
             Create a profile in minutes and you will then
             be matched with communities and
