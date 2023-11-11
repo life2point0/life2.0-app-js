@@ -1,14 +1,15 @@
 import React from 'react';
-import { Appbar, Avatar, Text } from 'react-native-paper';
+import { Appbar, Avatar, Text, useTheme } from 'react-native-paper';
 import logo from './assets/logo.png';
 import { Image, StatusBar, View } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 
 const ChatScreenAppBar = ({ title, image }) => {
-  const navigation = useNavigation();
+  const navigation = useNavigation()
+  const theme = useTheme()
   return (
-    <Appbar.Header style={{ backgroundColor: '#FFC003', position: '' }}>
+    <Appbar.Header style={{ backgroundColor:  theme.colors.primaryContainer , position: '' }}>
       <StatusBar backgroundColor="#FFC003" barStyle="dark-content" />
       <Appbar.Action
         icon="arrow-left"
@@ -20,7 +21,7 @@ const ChatScreenAppBar = ({ title, image }) => {
         title={
           <View style={{flexDirection: 'row', alignItems: 'center', gap: 8}}>
             <Avatar.Image size={36} style={{backgroundColor: '#fff'}} source={image} />
-            <Text style={{fontSize: 20}}>{title}</Text>
+            <Text style={theme.fonts.title}>{title}</Text>
           </View>
         }
       />

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StatusBar } from 'react-native'
-import { ActivityIndicator, IconButton } from 'react-native-paper'
+import { View, Text, StatusBar, SafeAreaView, ScrollView, KeyboardAvoidingView } from 'react-native'
+import { ActivityIndicator, IconButton, useTheme } from 'react-native-paper'
 import { CORE_SERVICE_BASE_URL, USER_SERVICE_BASE_URL } from './constants'
 import { useAuth } from '../contexts/AuthContext'
 import { useNavigation } from '@react-navigation/native'
@@ -9,11 +9,14 @@ import { updateProfileFields, updateProfileSchema } from './constants/fields/upd
 import { updateProfileStyles } from './constants/styles/updateProfileStyles'
 
 export default UpdateProfile = () => {
-  const [isProfileSubmitting, setProfileSubmitting] = useState(false)
+  
   const { authCall, profile, getProfile } = useAuth()
   const { navigate } = useNavigation()
+  const theme = useTheme()
+
   const [errorText, setErrorText] = useState('')
   const [fields, setFields] = useState([])
+  const [isProfileSubmitting, setProfileSubmitting] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -63,14 +66,23 @@ export default UpdateProfile = () => {
   }
 
   return (
-    <>
-      <StatusBar backgroundColor="#fff" barStyle="dark-content" />
-      <View style={updateProfileStyles.container}>
-        <Text style={updateProfileStyles.title}>Complete Profile</Text>
-        <Text style={updateProfileStyles.subTitle}>
-          Welcome onboard {profile?.firstName}! {"\n"}
-          Please complete your profile.
-        </Text>
+    <SafeAreaView style={{flex: 1 }}>
+      <KeyboardAvoidingView behavior="height">
+        <View style={theme.spacing.onboarding.headerContainer}>
+          <Text style={theme.fonts.title}>Complete Profile</Text>
+          <IconButton
+            icon="arrow-left"
+            style={theme.spacing.backButton}
+            onPress={() => navigate('Main', { screen: 'Home' })}
+          />
+       </View>
+      <ScrollView contentContainerStyle={theme.spacing.onboarding.container}>
+      
+      <Text style={theme.fonts.description}>
+        Welcome onboard {profile?.firstName}! {"\n"}
+        Please complete your profile.
+      </Text>
+
         {errorText && (
           <View style={{alignItems: 'center', justifyContent: 'center', flexDirection: 'row'}}>
             <IconButton
@@ -86,16 +98,17 @@ export default UpdateProfile = () => {
               initialValues={updateProfileInitialValues}
               validationSchema={updateProfileSchema}
               fields={fields}
-              styles={updateProfileStyles.form}
               onSubmit={handleProfileSubmit}
               isLoading={isProfileSubmitting}
+              submitButtonText='Create Profile'
             />
           ) : 
           (
             <ActivityIndicator style={{alignSelf: 'center'}} animating={true} color="black" />
           )
         }
-      </View>
-    </>
+      </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   )
 }

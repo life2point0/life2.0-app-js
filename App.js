@@ -20,6 +20,8 @@ import {
   OverlayProvider
 } from 'stream-chat-expo';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import Communities from './components/Communities';
+import { DataProvider } from './contexts/DataContext';
 
 
 
@@ -41,7 +43,7 @@ const getTabOptions = (iconName) => {
       fontWeight: 'normal',
     },
     tabBarIcon: ({ focused, color, size }) => (
-      <IconButton icon={iconName} color={focused ? 'gray': 'black'} size={focused ? 28 : 24} />
+      <IconButton icon={iconName} iconColor={focused ? 'black': 'grey'} size={focused ? 28 : 24} />
     ),
     headerShown: false
   };
@@ -53,22 +55,22 @@ function SharedTabs() {
       <Tab.Screen 
         name="Home" 
         component={HomeScreen} 
-        options={getTabOptions('home')}
+        options={getTabOptions('home-outline')}
       />
       <Tab.Screen 
         name="Chats" 
         component={ChatScreen} 
-        options={getTabOptions('chat')}
+        options={getTabOptions('message-outline')}
       />
       <Tab.Screen 
         name="Notifications" 
         component={ComingSoonScreen} 
-        options={getTabOptions('bell')}
+        options={getTabOptions('bell-outline')}
       />
       <Tab.Screen 
         name="Profile" 
         component={ComingSoonScreen} 
-        options={getTabOptions('account')}
+        options={getTabOptions('account-outline')}
       />
     </Tab.Navigator>
   );
@@ -79,20 +81,23 @@ const App = () => {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <OverlayProvider>
         <Chat client={chatClient}>
-          <AuthProvider>
-            <PaperProvider theme={theme}>
-              <NavigationContainer>
-                <Stack.Navigator screenOptions={{ headerShown: false }}>
-                  <Stack.Screen name="Root" component={Root} />
-                  <Stack.Screen name="Main" component={SharedTabs} options={{ headerShown: false }}/>
-                  <Stack.Screen name="Login" component={Login} />
-                  <Stack.Screen name="Signup" component={Signup} />
-                  <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
-                  <Stack.Screen name="Conversations" component={Conversations} />
-                </Stack.Navigator>
-              </NavigationContainer>
-            </PaperProvider>
-          </AuthProvider>
+          <DataProvider> 
+            <AuthProvider>
+              <PaperProvider theme={theme}>
+                <NavigationContainer>
+                  <Stack.Navigator screenOptions={{ headerShown: false }}>
+                    <Stack.Screen name="Root" component={Root} />
+                    <Stack.Screen name="Main" component={SharedTabs} options={{ headerShown: false }}/>
+                    <Stack.Screen name="Login" component={Login} />
+                    <Stack.Screen name="Signup" component={Signup} />
+                    <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
+                    <Stack.Screen name="Conversations" component={Conversations} />
+                    <Stack.Screen name="Communities" component={Communities} />
+                  </Stack.Navigator>
+                </NavigationContainer>
+              </PaperProvider>
+            </AuthProvider>
+          </DataProvider>
         </Chat>
       </OverlayProvider>
     </GestureHandlerRootView>

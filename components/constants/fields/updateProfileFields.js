@@ -1,12 +1,6 @@
 
 import * as Yup from 'yup'
 
-const occupations = [
-    'Tourist', 'Student', 'Entrepreneur', 'C-suite', 'Doctor', 'Lawyer', 'Entertainer',
-    'Artist', 'Nurse', 'Tutor', 'Teacher', 'Chef', 'Baker', 'Engineer', 'Hairdresser',
-    'Masseuse', 'Banker', 'Bartender', 'Handyman', 'Technician'
-]
-
 const updateProfileFields = [
     {
       name: 'firstName',
@@ -54,7 +48,7 @@ const updateProfileFields = [
       name: 'occupations',
       label: 'What I do for a living?',
       type: 'chip',
-      options: occupations
+      options: []
     },
     {
       name: 'description',

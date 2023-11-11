@@ -1,12 +1,13 @@
-import React from 'react';
-import { Text, ScrollView, StyleSheet } from 'react-native';
-import { PrimaryButton } from '../../components/PrimaryButton';
-import { Formik, Field } from 'formik';
-import { LocationSelect } from '../inputs/LocationSelect/Location.js';
-import { TextField } from '../inputs/textField/TextField';
-import { ChipsArray } from '../inputs/chipsArray/ChipsArray';
+import React from 'react'
+import { Text, ScrollView, StyleSheet } from 'react-native'
+import { Formik, Field } from 'formik'
+import { LocationSelect } from '../inputs/LocationSelect/Location.js'
+import { TextField } from '../inputs/textField/TextField'
+import { ChipsArray } from '../inputs/chipsArray/ChipsArray'
+import { CheckBox } from '../inputs/checkbox/Checkbox'
+import Button from '../button/Button'
 
-const Form = ({ initialValues, validationSchema, fields, styles, onSubmit, isLoading }) => {
+const Form = ({ initialValues, validationSchema, fields, styles, onSubmit, submitButtonText, isLoading }) => {
 
   styles = styles || defaultStyles
 
@@ -36,18 +37,24 @@ const Form = ({ initialValues, validationSchema, fields, styles, onSubmit, isLoa
                           hidden={formField.hidden || null}
                           styles={styles.input}
                           onChange={text => {
-                            handleChange(formField.name)(text);
+                            handleChange(formField.name)(text)
                             formField.maxCharCount ? formField.charCount = text.length : null
                           }}
                         />
                       )}
                     </Field>
-                    { formField.maxCharCount && formField.charCount && <Text style={styles.charCount}>{formField.maxCharCount - formField.charCount} chars left</Text>}
+                    
+                    { formField.maxCharCount && formField.charCount !== undefined && (
+                        <Text style={styles.input.charCount}>
+                          {String(formField.maxCharCount - (formField.charCount || 0))} chars left
+                        </Text>
+                    )}
+
                     { touched[formField.name] && errors[formField.name] && (
                       <Text style={styles.errorText}>{errors[formField.name]}</Text>
                     )}
                   </React.Fragment>
-                );
+                )
             
               case 'location':
                 return (
@@ -68,7 +75,7 @@ const Form = ({ initialValues, validationSchema, fields, styles, onSubmit, isLoa
                       )}
                     </Field>
                   </React.Fragment>
-              );
+              )
               
               case 'chip':
                 return (
@@ -85,71 +92,147 @@ const Form = ({ initialValues, validationSchema, fields, styles, onSubmit, isLoa
                       )}
                     </Field>
                   </React.Fragment>
-                );
+                )
+                case 'checkbox':
+                  return (
+                    <React.Fragment key={formField.name}>
+                      <Field name={formField.name} key={formField.name}>
+                        {({ field }) => (
+                          <CheckBox
+                            styles={styles.checkbox}
+                            label={formField.label}
+                            value={field.value || null}
+                            onChange={(value) => setFieldValue(formField.name, value)}
+                          />
+                        )}
+                      </Field>
+                    </React.Fragment>
+                  )
               default:
                 return null
             }
           })}
         </ScrollView>
-        <PrimaryButton mode="contained" textColor='#FFC003' onPress={handleSubmit} loading={isLoading} disabled={isLoading}>
-            Submit
-        </PrimaryButton>
+        <Button style={styles.submitButton} mode="contained" onPress={handleSubmit} loading={isLoading} disabled={isLoading}>
+            {submitButtonText}
+        </Button>
         </>
       )}
     </Formik>
-  );
-};
+  )
+}
 
 export { Form }
 
 const defaultStyles = StyleSheet.create({
-  container: {
-    padding: 0
-  },
-  input: {
     container: {
-      marginBottom: 20
+        padding: 0
     },
-    textField: {
-      height: 100,
-      borderWidth: 1,
-      borderColor: 'gray',
-      padding: 8
+    input: {
+        container: {
+          marginTop: 20,
+          marginBottom: 5
+        },
+        label: {
+          fontWeight: '500'
+        },
+        textField: {
+          height: 40,
+          borderWidth: 1.4,
+          borderRadius: 5,
+          borderColor: '#ccc',
+          marginTop: 5,
+          paddingHorizontal: 10,
+          justifyContent: 'center'
+        },
+        textarea: {
+          height: 100,
+          marginTop: 5,
+          padding: 10,
+          textAlignVertical: 'top',
+          borderWidth: 1.4,
+          borderColor: '#ccc',
+          borderRadius: 5
+        },
+        charCount: {
+          fontSize: 12,
+          textAlign: 'right'
+        }
     },
-    textarea: {
-      height: 400,
-      padding: 8,
-      borderWidth: 1,
-      borderColor: 'gray'
-    }
-  },
-  chip: {
-    container: {
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      marginBottom: 20,
-      gap: 8
-    }
-  },
-  location: {
-    label: {
-        marginBottom: 8 
+    chip: {
+        container: {
+            display: 'flex',
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            marginTop: 20,
+            gap: 8,
+        },
+        label: {
+            width: '100%',
+            fontWeight: '500'
+        }
     },
-    dropdown: {
+    location: {
+      container: {
+       marginTop: 20,
+      },
+      label: {
+          marginBottom: 5,
+          fontWeight: '500'
+      },
+      textField: {
+        height: 40,
+        paddingHorizontal: 10,
+        justifyContent: 'center',
+        borderColor: '#ccc',
+        borderWidth: 1.4,
+        borderRadius: 5
+      },
+      dropdown: {
         textInput: {
-        borderWidth: 1,
-        borderBottomEndRadius: 10,
-        borderBottomLeftRadius: 10,
-        borderBottomRightRadius: 10,
-        borderBottomStartRadius: 10,
-        borderTopEndRadius: 10,
-        borderTopLeftRadius: 10,
-        borderTopRightRadius: 10,
-        borderTopStartRadius: 10
+          alignSelf: 'center',
+          borderRadius: 28,
+          borderWidth: 1,
+          flex: 1,
+          marginRight: 10,
+          padding: 10,
+          borderColor: 'lightgrey'
+        },
+        textInputContainer: {
+          autoFocus: true,
+          selectTextOnFocus: true,
+          style: {
+            alignSelf: 'center',
+            borderRadius: 28,
+            borderWidth: 1,
+            flex: 1,
+            marginRight: 10,
+            padding: 10,
+            borderColor: 'lightgrey'
+          }
+        }
+      },
+      addMoreButton: {
+        marginLeft: 'auto'
       }
+    },
+    checkbox: {
+      container: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8,
+        marginTop: 20
+      },
+      label: {
+        color: '#717171',
+        fontWeight: '500'
+      }
+    },
+    errorText: {
+      color: 'red',
+    },
+    submitButton: {
+      marginTop: 20,
+      width: '100%'
     }
-  },
-  errorText: {
-    color: 'red'
-  }
 })

@@ -1,32 +1,32 @@
-import React, { Fragment, useState } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { PrimaryButton } from './PrimaryButton';
-import { Button, IconButton } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
+import React, { useState } from 'react'
+import { View, Image, StyleSheet, SafeAreaView } from 'react-native'
+import { IconButton, Text, useTheme } from 'react-native-paper'
+import { useNavigation } from '@react-navigation/native'
+import Button from '../shared-components/button/Button'
 
 const slides = [
   {
-    title: 'Welcome to Life 2.0',
+    subtitle: 'Welcome to Life!',
     description: 'Moving to a new city or new country? Now immediately find like-minded people who will help you settle in!',
     image: require('./assets/intro-1.png'),
     logo: require('./assets/logo.png'),
     buttons: [
-      { label: 'Next', action: 'next', type: 'primary' },
       { label: 'Skip Introduction', action: 'skip' },
+      { label: 'Next', action: 'next', type: 'primary' }
     ],
   },
   {
-    title: 'Introduce yourself to people in your city!',
+    subtitle: 'Introduce yourself to people in your city!',
     description: 'Setup your profile and connect with people with similar interests and backgrounds in your new city.',
     image: require('./assets/intro-2.png'),
     logo: require('./assets/logo.png'),
     buttons: [
-      { label: 'Next', action: 'next', type: 'primary' },
       { label: 'Skip Introduction', action: 'skip' },
+      { label: 'Next', action: 'next', type: 'primary' }
     ],
   },
   {
-    title: 'Explore opportunities in your new city!',
+    subtitle: 'Explore opportunities in your new city!',
     description: 'Life 2.0 will match you with communities, meetups & jobs in your new community. Offer help when you can, seek help when you need.',
     image: require('./assets/intro-3.png'),
     logo: require('./assets/logo.png'),
@@ -34,15 +34,12 @@ const slides = [
       { label: 'Start Exploring', action: 'home', type: 'primary' },
     ],
   },
-];
+]
 
 const styles = StyleSheet.create({
   container: {
-    height: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'white',
-    paddingBottom: 50
+    flex: 1,
+    backgroundColor: 'white'
   },
   backButton: {
     position: 'absolute',
@@ -50,90 +47,68 @@ const styles = StyleSheet.create({
     left: 10,
     zIndex: 1,
   },
-  backButtonText: {
-    color: 'black',
-  },
-  imageContainer: {
+  image: {
     width: 200,
     height: 200,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  image: {
-    width: '100%'
-  },
-  logo: {
-    width: 120,
-    height: 120,
-    resizeMode: 'contain',
-    marginBottom: 20,
+    resizeMode: 'contain'
   },
   slide: {
+    display: 'flex',
+    flexDirection: 'column',
     alignItems: 'center',
-    flex: 1,
-    justifyContent: 'center',
-    width: '100%'
+    justifyContent: 'space-between',
+    margin: 10,
+    padding: 20,
+    gap: 20,
+    height: '100%'
   },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: 'black',
-    marginBottom: 10,
-    textAlign: 'center',
-  },
-  description: {
-    fontSize: 16,
-    color: 'black',
-    marginBottom: 20,
-    textAlign: 'center',
-    paddingHorizontal: 20,
+  contentContainer: {
+    width: '80%',
+    gap: 10
   },
   buttonContainer: {
     width: '100%',
-    padding: 20
-  },
-  button: {
-    paddingVertical: 8,
-    marginHorizontal: 10,
-    marginVertical: 8,
+    gap: 10
   }
-});
+})
 
 
 const IntroSlides = () => {
-  const [currentScreen, setCurrentScreen] = useState(0);
-  const navigation = useNavigation();
+  const [currentScreen, setCurrentScreen] = useState(0)
+  const navigation = useNavigation()
+  const theme = useTheme()
 
   const handleButtonPress = (action) => {
     switch (action) {
       case 'next':
         if (currentScreen < slides.length - 1) {
-          setCurrentScreen(currentScreen + 1);
+          setCurrentScreen(currentScreen + 1)
         }
-        break;
+        break
       case 'skip':
-        setCurrentScreen(2);
-        break;
+        setCurrentScreen(2)
+        break
       case 'back':
         if (currentScreen > 0) {
-          setCurrentScreen(currentScreen - 1);
+          setCurrentScreen(currentScreen - 1)
         }
-        break;
+        break
       case 'login':
-        navigation.navigate('Login');
-        break;
+        navigation.navigate('Login')
+        break
       case 'home':
-        navigation.navigate('Main', { screen: 'Home' });
-        break;
+        navigation.navigate('Main', { screen: 'Home' })
+        break
       default:
-        break;
+        break
     }
-  };
+  }
 
-  const slide = slides[currentScreen];
+  const slide = slides[currentScreen]
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.slide}>
       {currentScreen > 0 && (
         <IconButton
           style={styles.backButton}
@@ -141,28 +116,19 @@ const IntroSlides = () => {
           icon="arrow-left"
         />
       )}
-      <View style={styles.slide}>
-        <Image source={slide.logo} style={styles.logo}/>
-        <View style={styles.imageContainer}>
-          <Image source={slide.image} style={styles.image} resizeMode="contain" />
-        </View>
-        <View style={{flex: 1, justifyContent: 'center', padding: 20}}>
-          <Text style={styles.title}>{slide.title}</Text>
-          <Text style={styles.description}>{slide.description}</Text>
+        <Image source={slide.logo} style={theme.spacing.logo}/>
+        <Image source={slide.image} style={styles.image} resizeMode="contain" />
+        <View style={styles.contentContainer}>
+          <Text style={{...theme.fonts.subtitle, textAlign: 'center'}}>{slide.subtitle}</Text>
+          <Text style={{...theme.fonts.description, textAlign: 'center'}}>{slide.description}</Text>
         </View>
         <View style={styles.buttonContainer}>
           {slide.buttons.map((button, buttonIndex) => (
-            <View key={buttonIndex}>
-            {
-              button.type === 'primary' 
-              ? <PrimaryButton textColor='#FFC003' mode='contained' style={styles.button}  onPress={() => handleButtonPress(button.action)}>{button.label}</PrimaryButton>
-              : <Button mode="outlined" style={styles.button} onPress={() => handleButtonPress(button.action)}>{button.label}</Button>
-            }
-            </View>
+            <Button key={buttonIndex} mode={ button.type === 'primary' ? 'contained' : 'outlined'} onPress={() => handleButtonPress(button.action)}>{button.label}</Button>  
           ))}
         </View>
       </View>
-    </ScrollView>
-  );
-};
-export default IntroSlides;
+    </SafeAreaView>
+  )
+}
+export default IntroSlides

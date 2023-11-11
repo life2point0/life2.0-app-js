@@ -4,7 +4,7 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 import { KEYS } from '../../constants'
 import { IconButton, Modal, Portal } from 'react-native-paper'
 import { TextInput } from "react-native"
-import { PrimaryButton } from '../../../components/PrimaryButton'
+import Button from '../../button/Button'
 
 const LocationSelect = ({ label, multiple, styles, onLocationSelect }) => {
   const [selectedPlaces, setSelectedPlaces] = useState([{}])
@@ -49,16 +49,7 @@ const LocationSelect = ({ label, multiple, styles, onLocationSelect }) => {
         fetchDetails={true}
         textInputProps={{
           autoFocus: true,
-          selectTextOnFocus: true,
-          style: {
-            alignSelf: 'center',
-            borderRadius: 28,
-            borderWidth: 1,
-            flex: 1,
-            marginRight: 10,
-            padding: 10,
-            borderColor: 'lightgrey'
-          }
+          selectTextOnFocus: true
         }}
         styles={styles.dropdown}
         query={{ key: KEYS.googleApiKey, type: '(cities)' }}
@@ -91,7 +82,7 @@ const LocationSelect = ({ label, multiple, styles, onLocationSelect }) => {
           <React.Fragment key={index}>
             <TextInput
               value={selectedPlaces[index]?.name}
-              style={styles.textField}
+              style={{ ...styles.textField, marginBottom: 8 }}
               placeholder='Select'
               onFocus={() => setVisible(true)}
             />
@@ -126,7 +117,7 @@ const LocationSelect = ({ label, multiple, styles, onLocationSelect }) => {
         </React.Fragment>
       )}
       {multiple && (
-        <PrimaryButton mode="text" style={styles.addMoreButton} onPress={addMorePlace}> + Add More </PrimaryButton>
+        <Button mode="text" compact style={styles.addMoreButton} onPress={addMorePlace}> + Add More </Button>
       )}
     </View>
   )

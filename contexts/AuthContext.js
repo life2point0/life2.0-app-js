@@ -126,7 +126,6 @@ export const AuthProvider = ({ children }) => {
           await getNewToken(storedRefreshToken);
         } catch (e) {
           setIsAuthenticated(false)
-          console.log(e?.response?.data)
           AsyncStorage.removeItem('refreshToken')
         }
       }
