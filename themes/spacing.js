@@ -131,7 +131,7 @@ const spacing = {
             minHeight: '100%',
             overflowY: 'auto',
             position: 'relative',
-            gap: 10
+            gap: 20
         },
         headerContainer: {
             width: '100%',

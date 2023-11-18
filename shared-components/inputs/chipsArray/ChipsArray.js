@@ -26,8 +26,8 @@ const ChipsArray = ({styles, label, options, selectedChips, onChipClick}) => {
           <Chip 
             key={option.name}
             label={option.name}
-            selected={selectedChips.some(item => isEqualObjects(option, item))}
-            onChipClick={() => handleChipClick(option)}
+            selected={selectedChips.includes(option.id)}
+            onChipClick={() => handleChipClick(option.id)}
           />
         ))}
     </View>

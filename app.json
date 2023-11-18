@@ -32,6 +32,14 @@
         "projectId": "1d060702-94ac-4b54-8dfb-ed4bac06cbe2"
       }
     },
-    "owner": "life2point0"
+    "owner": "life2point0",
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Life 2.0 needs access to your photos to upload a profile image."
+        }
+      ]
+    ]
   }
 }

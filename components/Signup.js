@@ -28,7 +28,6 @@ const Signup =  () => {
   }
 
   const handleSignUpSubmit = async (values) => {
-    console.log('Reached')
     try {
       setSubmitting(true)
       values.firstName = capitalizeName(values.firstName)

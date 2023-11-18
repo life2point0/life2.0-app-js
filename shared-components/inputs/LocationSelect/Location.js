@@ -6,11 +6,12 @@ import { IconButton, Modal, Portal } from 'react-native-paper'
 import { TextInput } from "react-native"
 import Button from '../../button/Button'
 
-const LocationSelect = ({ label, multiple, styles, onLocationSelect }) => {
+const LocationSelect = ({ label, multiple, styles, preSelectedLocation, onLocationSelect }) => {
   const [selectedPlaces, setSelectedPlaces] = useState([{}])
   const [selectedPlace, setSelectedPlace] = useState({})
   const [visible, setVisible] = useState(false)
   const googlePlacesAutocompleteRef = useRef(null)
+
 
 
   useEffect(() => {
@@ -20,16 +21,24 @@ const LocationSelect = ({ label, multiple, styles, onLocationSelect }) => {
     }
   }, [visible])
 
+  // useEffect(() => {
+  //   if(!!preSelectedLocation) {
+  //     multiple ? setSelectedPlaces(preSelectedLocation) : setSelectedPlace(preSelectedLocation)
+  //   } 
+  // }, [])
+
   const handleSinglePlaceSelection = (place) => {
     setSelectedPlace(place)
-    onLocationSelect(place)
+    onLocationSelect(place.placeId)
     setVisible(false)
   }
 
   const handlePlaceSelection = (newPlace) => {
     const updatedPlaces = [...selectedPlaces, newPlace].filter((place) => Object.keys(place).length !== 0)
     setSelectedPlaces(updatedPlaces)
-    onLocationSelect(updatedPlaces)
+    const updatedPlaceIds = updatedPlaces.map((place) => place.placeId)
+    console.log('updatedPlaceids', updatedPlaceIds)
+    onLocationSelect(updatedPlaceIds)
     setVisible(false)
   }
 
@@ -51,14 +60,15 @@ const LocationSelect = ({ label, multiple, styles, onLocationSelect }) => {
           autoFocus: true,
           selectTextOnFocus: true
         }}
+        // predefinedPlaces={ preSelectedPlaceId ?  [{ place_id: preSelectedPlaceId }] : []}
         styles={styles.dropdown}
         query={{ key: KEYS.googleApiKey, type: '(cities)' }}
-        onPress={(data, details) => {
-          const place = { name: data.description, geolocation: details.geometry.location }
+        onPress={(data) => {
+          const place = { name: data.description, placeId: data.place_id }
           multiple ? handlePlaceSelection(place) : handleSinglePlaceSelection(place)
         }}
-        onFail={(error) => console.log('MAP ERROR', error)}
-        onNotFound={() => console.log('MAP', 'no results')}
+        // onFail={(error) => console.log('MAP ERROR', error)}
+        // onNotFound={() => console.log('MAP', 'no results')}
         renderLeftButton={() => (
           <IconButton 
             icon="arrow-left" 

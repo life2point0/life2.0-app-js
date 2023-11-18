@@ -10,8 +10,8 @@ import { updateProfileStyles } from './constants/styles/updateProfileStyles'
 
 export default UpdateProfile = () => {
   
-  const { authCall, profile, getProfile } = useAuth()
-  const { navigate } = useNavigation()
+  const { authCall, profile, isProfileCreated, getProfile } = useAuth()
+  const navigation = useNavigation()
   const theme = useTheme()
 
   const [errorText, setErrorText] = useState('')
@@ -23,7 +23,7 @@ export default UpdateProfile = () => {
       try {
         const response = (await authCall({
           method: 'GET',
-          url: `${CORE_SERVICE_BASE_URL}/occupations`
+          url: `${USER_SERVICE_BASE_URL}/occupations`
         }))?.data
 
         const profileFields = updateProfileFields
@@ -37,27 +37,41 @@ export default UpdateProfile = () => {
       }
     }
     fetchData()
+    if(isProfileCreated) {
+      updateProfileFields[0].hidden = false
+      updateProfileFields[1].hidden = false
+    } else {
+      updateProfileFields[0].hidden = true
+      updateProfileFields[1].hidden = true
+    }
   }, [])
 
+  const selectedOccupations = profile?.occupations.map(occupation => occupation.id)
+  const preSelectedPastLocations = profile?.pastLocations.map(location =>  ( {place_id: location.googlePlaceId, name: location.name}))
+  const preselectedPlaceOfOrigin = {place_id: profile?.placeOfOrigin?.googlePlaceId, name: profile?.placeOfOrigin?.name}
+  const preselectedCurrentPlace = {place_id: profile?.currentPlace?.googlePlaceId, name: profile?.currentPlace?.name}
 
   const updateProfileInitialValues = {
-    firstName: profile?.firstName,
-    lastName: profile?.lastName,
-    email: profile?.email,
-    description: '',
-    occupations: []
+    firstName: profile?.firstName || '',
+    lastName: profile?.lastName || '',
+    email: profile?.email || '',
+    placeOfOrigin: preselectedPlaceOfOrigin || '',
+    pastLocations: preSelectedPastLocations || [],
+    currentPlace: preselectedCurrentPlace || '',
+    description: profile?.description || '',
+    occupations: selectedOccupations || []
   }
 
   const handleProfileSubmit = async (values) => {
     try {
       setProfileSubmitting(true)
       await authCall({
-        method: 'PUT',
+        method: 'PATCH',
         url: `${USER_SERVICE_BASE_URL}/users/me`,
         data: values
       })
       await getProfile()
-      navigate('Main', { screen: 'Home' })
+      navigation.replace('ProfileImageUpload')
     } catch (e) {
       setErrorText(e?.response?.data?.detail?.msg || 'Unknown Error' )
     } finally {
@@ -69,21 +83,17 @@ export default UpdateProfile = () => {
     <SafeAreaView style={{flex: 1 }}>
       <KeyboardAvoidingView behavior="height">
         <View style={theme.spacing.onboarding.headerContainer}>
-          <Text style={theme.fonts.title}>Complete Profile</Text>
+        { !isProfileCreated && <Text style={theme.fonts.title}>Complete Profile</Text> }
+        { isProfileCreated && <Text style={theme.fonts.title}>Update Profile</Text> }
           <IconButton
             icon="arrow-left"
             style={theme.spacing.backButton}
-            onPress={() => navigate('Main', { screen: 'Home' })}
+            onPress={() => navigation.navigate('Main', { screen: 'Home' })}
           />
        </View>
       <ScrollView contentContainerStyle={theme.spacing.onboarding.container}>
       
-      <Text style={theme.fonts.description}>
-        Welcome onboard {profile?.firstName}! {"\n"}
-        Please complete your profile.
-      </Text>
-
-        {errorText && (
+      {errorText && (
           <View style={{alignItems: 'center', justifyContent: 'center', flexDirection: 'row'}}>
             <IconButton
               icon="alert-circle"
@@ -93,6 +103,13 @@ export default UpdateProfile = () => {
             <Text style={{color: 'darkred'}}>{errorText}</Text>
           </View>
         )}
+
+      { !isProfileCreated && <Text style={theme.fonts.description}>
+          Welcome onboard {profile?.firstName}! {"\n"}
+          Please complete your profile.
+        </Text> 
+      }
+
         { profile && fields.length ? (
             <Form
               initialValues={updateProfileInitialValues}

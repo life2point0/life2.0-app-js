@@ -39,7 +39,7 @@ const updateProfileFields = [
       placeholder: 'Select where you have been'
     },
     {
-      name: 'currentLocation',
+      name: 'currentPlace',
       label: 'Where am I now',
       placeholder: 'Select where you are now',
       type: 'location'

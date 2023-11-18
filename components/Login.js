@@ -21,10 +21,10 @@ const Login =  () => {
     password: ''
   }
 
-  const handleLoginSubmit = async () => {
+  const handleLoginSubmit = async (values) => {
     try {
       setSubmitting(true)
-      await login(email, password);
+      await login(values.email, values.password);
       navigation.navigate('Main', { screen: 'Home' })
     } catch (e) {
       setErrorText(e?.response?.data?.error_description || 'Unknown Error');

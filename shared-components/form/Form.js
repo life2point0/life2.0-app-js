@@ -65,6 +65,7 @@ const Form = ({ initialValues, validationSchema, fields, styles, onSubmit, submi
                           label={formField.label}
                           multiple={formField.multiple}
                           styles={styles.location}
+                          preSelectedLocation={values[field.name] || null}
                           onLocationSelect={(selectedLocation) => {
                             setTimeout(() => {
                               setFieldTouched(formField.name)

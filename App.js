@@ -22,6 +22,8 @@ import {
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Communities from './components/Communities';
 import { DataProvider } from './contexts/DataContext';
+import ProfileImageUpload from './components/ProfileImageUpload';
+import { NavigationMenu } from './components/AppBar';
 
 
 
@@ -91,9 +93,11 @@ const App = () => {
                     <Stack.Screen name="Login" component={Login} />
                     <Stack.Screen name="Signup" component={Signup} />
                     <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
+                    <Stack.Screen name="ProfileImageUpload" component={ProfileImageUpload} />
                     <Stack.Screen name="Conversations" component={Conversations} />
                     <Stack.Screen name="Communities" component={Communities} />
                   </Stack.Navigator>
+                  <Stack.Screen name="NavigationMenu" component={NavigationMenu} />
                 </NavigationContainer>
               </PaperProvider>
             </AuthProvider>
