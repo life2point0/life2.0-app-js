@@ -8,7 +8,7 @@ import { useAuth } from '../contexts/AuthContext'
 
 const AppBar = ({ title, showBackButton }) => {
   const navigation = useNavigation()
-  const { isProfileCreated } = useAuth()
+  const { isProfileCreated, profile } = useAuth()
   const theme = useTheme()
   const [isMenuVisible, setMenuVisible] = useState(false)
 
@@ -24,7 +24,7 @@ const AppBar = ({ title, showBackButton }) => {
   return (
     <Appbar.Header style={{ backgroundColor: !isMenuVisible ? theme.colors.primaryContainer : '#fff' }}>
       <StatusBar backgroundColor= {!isMenuVisible ? theme.colors.primaryContainer : '#fff'} barStyle="dark-content" />
-      { !showBackButton && isProfileCreated &&
+      { !showBackButton &&
         <Appbar.Action
           icon={() => <Image source={menuIcon} style={theme.spacing.appBar.menuIcon} />}
         />
@@ -37,7 +37,14 @@ const AppBar = ({ title, showBackButton }) => {
       /> }
       <Appbar.Content style={{ alignItems: 'center' }} title={title || <Image source={logo} style={theme.spacing.logo} />} />
       <Appbar.Action
-        icon={() => <Avatar.Icon size={theme.spacing.appBar.avatar.size} icon="account" />}
+        icon={
+          () => (
+            <Avatar.Image 
+              size={theme.spacing.appBar.avatar.size} 
+              source={{uri: profile?.photos?.[0]?.url}} 
+            />
+          )
+        }
         onPress={() => {
           /* Implement profile logic here */
         }}
