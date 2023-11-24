@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/native'
 import { Form } from '../shared-components/form/Form'
 import { updateProfileFields, updateProfileSchema } from './constants/fields/updateProfileFields'
 import { updateProfileStyles } from './constants/styles/updateProfileStyles'
+import Button from '../shared-components/button/Button'
 
 export default UpdateProfile = () => {
   
@@ -46,8 +47,8 @@ export default UpdateProfile = () => {
     }
   }, [])
 
-  const selectedOccupations = profile?.occupations.map(occupation => occupation.id)
-  const preSelectedPastLocations = profile?.pastLocations.map(location =>  ( {place_id: location.googlePlaceId, name: location.name}))
+  const selectedOccupations = profile?.occupations?.map(occupation => occupation.id)
+  const preSelectedPastPlaces = profile?.pastPlaces?.map(location =>  ( {place_id: location.googlePlaceId, name: location.name}))
   const preselectedPlaceOfOrigin = {place_id: profile?.placeOfOrigin?.googlePlaceId, name: profile?.placeOfOrigin?.name}
   const preselectedCurrentPlace = {place_id: profile?.currentPlace?.googlePlaceId, name: profile?.currentPlace?.name}
 
@@ -56,11 +57,13 @@ export default UpdateProfile = () => {
     lastName: profile?.lastName || '',
     email: profile?.email || '',
     placeOfOrigin: preselectedPlaceOfOrigin || '',
-    pastLocations: preSelectedPastLocations || [],
+    pastPlaces: preSelectedPastPlaces || [],
     currentPlace: preselectedCurrentPlace || '',
     description: profile?.description || '',
     occupations: selectedOccupations || []
   }
+
+  console.log(profile)
 
   const handleProfileSubmit = async (values) => {
     try {
@@ -88,7 +91,7 @@ export default UpdateProfile = () => {
           <IconButton
             icon="arrow-left"
             style={theme.spacing.backButton}
-            onPress={() => navigation.navigate('Main', { screen: 'Home' })}
+            onPress={() => navigation.navigate('Main', { screen: 'UpdateProfile' })}
           />
        </View>
       <ScrollView contentContainerStyle={theme.spacing.onboarding.container}>
@@ -117,13 +120,14 @@ export default UpdateProfile = () => {
               fields={fields}
               onSubmit={handleProfileSubmit}
               isLoading={isProfileSubmitting}
-              submitButtonText='Create Profile'
+              submitButtonText='Next'
             />
           ) : 
           (
             <ActivityIndicator style={{alignSelf: 'center'}} animating={true} color="black" />
           )
         }
+
       </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>

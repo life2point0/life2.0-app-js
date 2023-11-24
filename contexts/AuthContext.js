@@ -63,7 +63,7 @@ export const AuthProvider = ({ children }) => {
       setProfile(profile);
       return profile;
     } catch (e) {
-      logout();
+      console.log(e);
     }
   }
 
@@ -79,7 +79,7 @@ export const AuthProvider = ({ children }) => {
       setChatToken(token);
       return token;
     } catch (e) {
-      logout();
+      console.log(e);
     }
   }
 
@@ -135,21 +135,15 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (username, password) => {
     try {
-      const data = qs.stringify({
-        'grant_type': 'password',
-        'client_id': KEYCLOAK_CLIENT_ID, 
+      const data = {
         'username': username,
         'password': password
-      })
-      const response = await axios.post(TOKEN_URL, data, {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        }
-      });
-      const { access_token, refresh_token } = response.data;
-      setAccessToken(access_token);
-      setRefreshToken(refresh_token);
-      await AsyncStorage.setItem('refreshToken', refresh_token);
+      }
+      const response = await axios.post(`${USER_SERVICE_BASE_URL}/sessions`, data )
+      const { accessToken, refreshToken } = response.data;
+      setAccessToken(accessToken);
+      setRefreshToken(refreshToken);
+      await AsyncStorage.setItem('refreshToken', refreshToken);
       setIsAuthenticated(true);
     } catch (e) {
       await AsyncStorage.removeItem('refreshToken');
@@ -160,11 +154,22 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = async () => {
-    setIsAuthenticated(false);
-    setRefreshToken('');
-    setAccessToken('');
-    // TODO: call keycloak to invalidate refresh token
-  };
+    const config = {
+      data: {
+        'refreshToken': refreshToken
+      }
+    }
+
+    try {
+      await axios.delete(`${USER_SERVICE_BASE_URL}/sessions`, config )
+      setIsAuthenticated(false)
+      setRefreshToken('')
+      setAccessToken('')
+    } catch (e) {
+      console.log(e)
+      throw e
+    }
+  }
 
   const isLoggedIn = async () => {
     if (accessToken) {

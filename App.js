@@ -24,6 +24,7 @@ import Communities from './components/Communities';
 import { DataProvider } from './contexts/DataContext';
 import ProfileImageUpload from './components/ProfileImageUpload';
 import { NavigationMenu } from './components/AppBar';
+import ViewProfile from './components/ViewProfile';
 
 
 
@@ -71,7 +72,7 @@ function SharedTabs() {
       />
       <Tab.Screen 
         name="Profile" 
-        component={ComingSoonScreen} 
+        component={ViewProfile} 
         options={getTabOptions('account-outline')}
       />
     </Tab.Navigator>

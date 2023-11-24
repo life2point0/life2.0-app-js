@@ -21,26 +21,35 @@ const LocationSelect = ({ label, multiple, styles, preSelectedLocation, onLocati
     }
   }, [visible])
 
-  // useEffect(() => {
-  //   if(!!preSelectedLocation) {
-  //     multiple ? setSelectedPlaces(preSelectedLocation) : setSelectedPlace(preSelectedLocation)
-  //   } 
-  // }, [])
+  useEffect(() => {
+    if(!!preSelectedLocation) {
+      if(multiple) {
+        const updatedPlaceIds = preSelectedLocation.map((place) => place.place_id)
+        onLocationSelect(updatedPlaceIds)
+        setSelectedPlaces(preSelectedLocation) 
+      } else {
+        setSelectedPlace(preSelectedLocation)
+        onLocationSelect(selectedPlace?.place_id)
+      }
+    } 
+  }, [])
 
   const handleSinglePlaceSelection = (place) => {
     setSelectedPlace(place)
-    onLocationSelect(place.placeId)
+    onLocationSelect(place.place_id)
     setVisible(false)
   }
 
   const handlePlaceSelection = (newPlace) => {
-    const updatedPlaces = [...selectedPlaces, newPlace].filter((place) => Object.keys(place).length !== 0)
-    setSelectedPlaces(updatedPlaces)
-    const updatedPlaceIds = updatedPlaces.map((place) => place.placeId)
-    console.log('updatedPlaceids', updatedPlaceIds)
-    onLocationSelect(updatedPlaceIds)
+    if (!selectedPlaces.some(place => place.place_id === newPlace.place_id)) {
+      const updatedPlaces = [...selectedPlaces, newPlace].filter((place) => Object.keys(place).length !== 0)
+      setSelectedPlaces(updatedPlaces)
+      const updatedPlaceIds = updatedPlaces.map((place) => place.place_id)
+      onLocationSelect(updatedPlaceIds)
+    }
     setVisible(false)
   }
+  
 
   const addMorePlace = () => {
     setSelectedPlaces([...selectedPlaces, {}])
@@ -48,7 +57,8 @@ const LocationSelect = ({ label, multiple, styles, preSelectedLocation, onLocati
 
   const containerStyle = { backgroundColor: 'white', flex: 1 }
 
-  const renderGooglePlacesAutocomplete = () => {
+  const renderGooglePlacesAutocomplete = (preSelectedPlaceId) => {
+
     return (
       <GooglePlacesAutocomplete
         placeholder='Search here'
@@ -60,13 +70,13 @@ const LocationSelect = ({ label, multiple, styles, preSelectedLocation, onLocati
           autoFocus: true,
           selectTextOnFocus: true
         }}
-        // predefinedPlaces={ preSelectedPlaceId ?  [{ place_id: preSelectedPlaceId }] : []}
         styles={styles.dropdown}
         query={{ key: KEYS.googleApiKey, type: '(cities)' }}
         onPress={(data) => {
-          const place = { name: data.description, placeId: data.place_id }
+          const place = { name: data.description, place_id: data.place_id }
           multiple ? handlePlaceSelection(place) : handleSinglePlaceSelection(place)
         }}
+        // predefinedPlaces={ [{ place_id: preSelectedPlaceId }]}
         // onFail={(error) => console.log('MAP ERROR', error)}
         // onNotFound={() => console.log('MAP', 'no results')}
         renderLeftButton={() => (
@@ -100,7 +110,7 @@ const LocationSelect = ({ label, multiple, styles, preSelectedLocation, onLocati
               <Modal visible={visible} onDismiss={() => setVisible(false)} contentContainerStyle={containerStyle}>
                 <ScrollView keyboardShouldPersistTaps='always'>
                   <View style={styles.container}>
-                    {renderGooglePlacesAutocomplete()}
+                    {renderGooglePlacesAutocomplete(place?.place_id || undefined)}
                   </View>
                 </ScrollView>
               </Modal>
@@ -119,7 +129,7 @@ const LocationSelect = ({ label, multiple, styles, preSelectedLocation, onLocati
             <Modal visible={visible} onDismiss={() => setVisible(false)} contentContainerStyle={containerStyle}>
               <ScrollView keyboardShouldPersistTaps='always'>
                 <View style={styles.container}>
-                  {renderGooglePlacesAutocomplete()}
+                  {renderGooglePlacesAutocomplete(selectedPlace.place_id || null)}
                 </View>
               </ScrollView>
             </Modal>

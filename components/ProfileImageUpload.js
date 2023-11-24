@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, Text, SafeAreaView, ScrollView, Image, KeyboardAvoidingView } from 'react-native'
 import { ActivityIndicator, IconButton, useTheme } from 'react-native-paper'
 import {  USER_SERVICE_BASE_URL } from './constants'
@@ -18,6 +18,15 @@ export default ProfileImageUpload = () => {
   const [images, setImages] = useState([{}, {}, {}, {}, {}])
   const [isImageSubmitting, setImageSubmitting] = useState(false)
 
+
+  useEffect(() => {
+    if (profile?.photos.length) {
+      const filledImages = profile.photos.concat(Array(5 - profile.photos.length).fill(null).map(() => ({})))
+      console.log('filled images', filledImages)
+      setImages(filledImages);
+    }    
+  }, [])
+
   const pickImage = async (index) => {
     images[index].uploading = true
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -32,7 +41,7 @@ export default ProfileImageUpload = () => {
       const updatedImageList = [...images]
       const s3Info = await getSignedURL()
       updatedImageList[index].uploadInfo = s3Info[0]
-      updatedImageList[index].uri = newImage
+      updatedImageList[index].url = newImage
       await handleImageUpload(index, updatedImageList)
     }
   }
@@ -48,7 +57,7 @@ export default ProfileImageUpload = () => {
 
   const handleImageUpload = async (index, updatedImages) => {
     const presignedS3Url = updatedImages[index].uploadInfo.url
-    const file = await convertUriToFormData(updatedImages[index].uri)
+    const file = await convertUriToFormData(updatedImages[index].url)
     try {
       await axios.put(presignedS3Url,file
       ,{
@@ -90,7 +99,7 @@ export default ProfileImageUpload = () => {
   }
 
   const updateProfile = async () => {
-    const imageIds = images.map(item => item.uploadInfo ? item.uploadInfo.id : null).filter(id => id !== null)
+    const imageIds = images.map(item => item.uploadInfo ? item.uploadInfo.id : (item.id ? item.id : null)).filter(id => id !== null)
     const data = { photos : imageIds }
     try {
         setImageSubmitting(true)
@@ -116,7 +125,7 @@ export default ProfileImageUpload = () => {
           <IconButton
             icon="arrow-left"
             style={theme.spacing.backButton}
-            onPress={() => navigate('Main', { screen: 'Home' })}
+            onPress={() => navigate('Main', { screen: 'UpdateProfile' })}
           />
        </View>
       <ScrollView contentContainerStyle={{ ...theme.spacing.onboarding.container }}>
@@ -139,13 +148,13 @@ export default ProfileImageUpload = () => {
         <View style={{ flexDirection: 'row', gap: 10, flexWrap: 'wrap', width: '100%' }}>
             {images.map((image, index) => (
               <View key={index} style={{ backgroundColor: '#F6F6F6', borderColor: '#C6C6C6', borderStyle: 'dashed', borderRadius: 4, borderWidth: 1, width: 100, height: 100, position: 'relative' }}>
-                {image.uri && (
+                {image.url && (
                 <>
-                 <Image source={{ uri: image.uri }} style={{ width: '100%', height: '100%' }} />
+                 <Image source={{ uri: image.url }} style={{ width: '100%', height: '100%' }} />
                   <IconButton onPress={() => removeImage(index)} style={{ position: 'absolute', top: -5, right: -5, zIndex: 2 }} icon="close-circle" iconColor='black' size={20} />
                 </>
                 )}
-                {!image.uri && <IconButton onPress={() => pickImage(index)} style={{ position: 'absolute', bottom: -5, right: -5, zIndex: 2 }} icon="plus-circle" iconColor='black' size={20} />}
+                {!image.url && <IconButton onPress={() => pickImage(index)} style={{ position: 'absolute', bottom: -5, right: -5, zIndex: 2 }} icon="plus-circle" iconColor='black' size={20} />}
                 {image.uploading && <ActivityIndicator style={{alignSelf: 'center', width: '100%', position: 'absolute', margin: 'auto', top: 0, bottom: 0, left: 0, right: 0,  zIndex: 100}} animating={true} color="black" /> }
               </View>
             ))}

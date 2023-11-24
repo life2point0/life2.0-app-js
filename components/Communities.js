@@ -17,18 +17,13 @@ import Button from '../shared-components/button/Button'
 import { useData } from '../contexts/DataContext'
 import AppBar from './AppBar'
 
-const communityUsers = [
-    { icon: user1Image },
-    { icon: user2Image },
-    { icon: user3Image },
-    { icon: user4Image },
-    { icon: user5Image },
-]
 
 const Communities = ({isSliider}) => {
   const navigation = useNavigation()
   const theme = useTheme()
   const { communities } = useData()
+
+  console.log('communities', communities)
 
   return (
     <> 
@@ -53,7 +48,7 @@ const Communities = ({isSliider}) => {
           <ScrollView style={theme.spacing.home.sliderContainer} showsHorizontalScrollIndicator={false} horizontal={isSliider ? true: false}>
             {communities.length > 0 ? 
               communities.map((community) => (
-                <CommunityCard styles={ isSliider ? theme.spacing.communities.slider.card : theme.spacing.communities.screen.card} isSliider={isSliider} key={community.channel.id} community={community.channel} users={community.members}/>
+                <CommunityCard styles={ isSliider ? theme.spacing.communities.slider.card : theme.spacing.communities.screen.card} isSliider={isSliider} key={community.id} community={community} members={community.members}/>
               )) :
               <SkeletonCard />
             }
@@ -65,7 +60,8 @@ const Communities = ({isSliider}) => {
 }
 
 
-const CommunityCard = ({ community, users = communityUsers, isSliider, styles }) => {
+const CommunityCard = ({ community, members, isSliider, styles }) => {
+  console.log('community', community)
     const navigation = useNavigation()
     const { client, setActiveChannel } = useChatContext()
     const { authCall, isProfileCreated, profile } = useAuth()
@@ -104,6 +100,8 @@ const CommunityCard = ({ community, users = communityUsers, isSliider, styles })
       }
     }
 
+    const communityMemberAvatars = members.map(member => ({ icon: member.profilePhoto }))
+
     return (
         <Card mode="contained" style={{...styles.container, width: isSliider ? 275 : '100%' }} >
             <Text ellipsizeMode='tail' numberOfLines={1} style={{...theme.fonts.subtitle, paddingHorizontal: 8}}> {community.name} </Text>
@@ -115,7 +113,7 @@ const CommunityCard = ({ community, users = communityUsers, isSliider, styles })
             <View style={styles.footer}>
                 <View>
                   <Text style={theme.fonts.small}> Join Conversation </Text>
-                  <AvatarGroup users={communityUsers} />
+                  <AvatarGroup users={communityMemberAvatars} />
                 </View>
                 <Button compact labelStyle={styles.footerButton} onPress={() => handleNavigation(community.id)} mode="contained" loading={isNavigating} disabled={isNavigating}> Join Chat </Button>
             </View>

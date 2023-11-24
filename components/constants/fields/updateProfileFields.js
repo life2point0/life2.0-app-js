@@ -32,7 +32,7 @@ const updateProfileFields = [
       placeholder: 'Select where you are from'
     },
     {
-      name: 'pastLocations',
+      name: 'pastPlaces',
       label: 'Places I have lived in',
       type: 'location',
       multiple: true,

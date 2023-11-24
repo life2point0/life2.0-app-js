@@ -15,7 +15,7 @@ export const DataProvider = ({ children }) => {
   const getCommunities = async () => {
     try {
         const res = (await axios.get(`${USER_SERVICE_BASE_URL}/communities`)).data
-        setCommunities(res)
+        setCommunities(res.data)
     } catch (e) {
         setCommunities([])
     }
