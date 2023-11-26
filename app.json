@@ -15,14 +15,18 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "co.life2point0.ios"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./components/assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "co.life2point0.android"
+      "package": "co.life2point0.android",
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "favicon": "./components/assets/favicon.png"
