@@ -1,14 +1,9 @@
 import React, { useState } from 'react'
-import { View, Text, ScrollView, SafeAreaView, StatusBar, TouchableOpacity, TextInput, Image, KeyboardAvoidingView } from 'react-native'
+import { View, Text, ScrollView, SafeAreaView, TouchableOpacity, TextInput, Image } from 'react-native'
 import { Avatar, Card, useTheme  } from 'react-native-paper'
 import { useNavigation } from '@react-navigation/native'
 import { useAuth } from '../contexts/AuthContext'
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder'
-import user1Image from './assets/user-1.png'
-import user2Image from './assets/user-2.png'
-import user3Image from './assets/user-3.png'
-import user4Image from './assets/user-4.png'
-import user5Image from './assets/user-5.png'
 import AvatarGroup from './AvatarGroup'
 import defaultCommunityIcon from './assets/community.png'
 import { useChatContext,  } from 'stream-chat-expo'
@@ -22,8 +17,6 @@ const Communities = ({isSliider}) => {
   const navigation = useNavigation()
   const theme = useTheme()
   const { communities } = useData()
-
-  console.log('communities', communities)
 
   return (
     <> 
@@ -45,10 +38,10 @@ const Communities = ({isSliider}) => {
           </View>
         }
 
-          <ScrollView style={theme.spacing.home.sliderContainer} showsHorizontalScrollIndicator={false} horizontal={isSliider ? true: false}>
+          <ScrollView style={theme.spacing.home.sliderContainer} showsHorizontalScrollIndicator={false}>
             {communities.length > 0 ? 
               communities.map((community) => (
-                <CommunityCard styles={ isSliider ? theme.spacing.communities.slider.card : theme.spacing.communities.screen.card} isSliider={isSliider} key={community.id} community={community} members={community.members}/>
+                <CommunityCard styles={theme.spacing.communities.screen.card} key={community.id} community={community} members={community.members}/>
               )) :
               <SkeletonCard />
             }
@@ -61,15 +54,13 @@ const Communities = ({isSliider}) => {
 
 
 const CommunityCard = ({ community, members, isSliider, styles }) => {
-  console.log('community', community)
     const navigation = useNavigation()
     const { client, setActiveChannel } = useChatContext()
     const { authCall, isProfileCreated, profile } = useAuth()
     const [isNavigating, setIsNavigating] = useState(false)
     const theme = useTheme()
 
-    const icon= community.image ? {uri: community.image} : defaultCommunityIcon
-
+    const icon= community.photo.url ? {uri: community.photo.url} : defaultCommunityIcon
     const createAndWatchChannel = async (id) => {
       const newChannel = client.channel('community', id)
       await newChannel.watch()

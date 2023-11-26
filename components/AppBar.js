@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { Appbar, Avatar, useTheme, Modal, Portal, Icon } from 'react-native-paper'
-import { Image, StatusBar, ScrollView, View, StyleSheet, TouchableOpacity, Text } from 'react-native'
+import { Appbar, Avatar, useTheme, Modal, Portal } from 'react-native-paper'
+import { Image, StatusBar, ScrollView, View, StyleSheet, Text } from 'react-native'
 import menuIcon from './assets/menu-slider-icon.png'
 import { useNavigation } from '@react-navigation/native'
 import { useAuth } from '../contexts/AuthContext'
@@ -32,9 +32,9 @@ const AppBar = ({ title, showBackButton }) => {
 
   return (
     <>
-      <Appbar.Header style={{ backgroundColor: !isMenuVisible ? theme.colors.primaryContainer : '#fff' }}>
-        <StatusBar backgroundColor={!isMenuVisible ? theme.colors.primaryContainer : '#fff'} barStyle="dark-content" />
-        { profile && (
+      <Appbar.Header style={{ justifyContent: 'center', backgroundColor: !isMenuVisible ? theme.colors.primaryContainer : '#fff' }}>
+        {/* <StatusBar backgroundColor={!isMenuVisible ? theme.colors.primaryContainer : '#fff'} barStyle="dark-content" /> */}
+        { profile && !showBackButton && (
           <Appbar.Action
             icon={() => <Image source={menuIcon} style={theme.spacing.appBar.menuIcon} />}
             onPress={toggleMenu}
@@ -48,13 +48,13 @@ const AppBar = ({ title, showBackButton }) => {
             }}
           />
         )}
-        <Appbar.Content style={{ alignItems: 'center' }} title={title || ''} />
+        <Appbar.Content style={{  flex: 1, alignItems: 'center' }} title={title || ''} />
         <Appbar.Action
           icon={() => (
             <Avatar.Image size={theme.spacing.appBar.avatar.size} source={{ uri: profile?.photos?.[0]?.url }} />
           )}
           onPress={() => {
-            /* Implement profile logic here */
+            navigation.navigate('ViewProfile')
           }}
         />
       </Appbar.Header>

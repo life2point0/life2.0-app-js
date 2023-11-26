@@ -22,7 +22,6 @@ export default ProfileImageUpload = () => {
   useEffect(() => {
     if (profile?.photos.length) {
       const filledImages = profile.photos.concat(Array(5 - profile.photos.length).fill(null).map(() => ({})))
-      console.log('filled images', filledImages)
       setImages(filledImages);
     }    
   }, [])
@@ -118,8 +117,7 @@ export default ProfileImageUpload = () => {
   }
 
   return (
-    <SafeAreaView style={{flex: 1 }}>
-      <KeyboardAvoidingView behavior="height">
+    <SafeAreaView style={{flex: 1, height: '100%', justifyContent: 'space-between' }}>
         <View style={theme.spacing.onboarding.headerContainer}>
           <Text style={theme.fonts.title}> Add Profile Pics </Text>
           <IconButton
@@ -128,50 +126,49 @@ export default ProfileImageUpload = () => {
             onPress={() => navigate('Main', { screen: 'UpdateProfile' })}
           />
        </View>
-      <ScrollView contentContainerStyle={{ ...theme.spacing.onboarding.container }}>
+        <View style={{ ...theme.spacing.onboarding.container }}>
 
-        {errorText && (
-          <View style={{alignItems: 'center', justifyContent: 'center', flexDirection: 'row'}}>
-            <IconButton
-              icon="alert-circle"
-              iconColor='darkred'
-              size={20}
-            />
-            <Text style={{color: 'darkred'}}>{errorText}</Text>
+          {errorText && (
+            <View style={{alignItems: 'center', justifyContent: 'center', flexDirection: 'row'}}>
+              <IconButton
+                icon="alert-circle"
+                iconColor='darkred'
+                size={20}
+              />
+              <Text style={{color: 'darkred'}}>{errorText}</Text>
+            </View>
+          )}
+
+          <Text style={{ ...theme.spacing.onboarding.textContainer, ...theme.fonts.description }}>
+              Add pictures that show your lifestyle. And people who matter in your life!
+          </Text>
+
+          <View style={{ flexDirection: 'row', gap: 10, flexWrap: 'wrap', width: '100%' }}>
+              {images.map((image, index) => (
+                <View key={index} style={{ backgroundColor: '#F6F6F6', borderColor: '#C6C6C6', borderStyle: 'dashed', borderWidth: image.url ? 0 : 1, width: 100, height: 100, position: 'relative' }}>
+                  {image.url && (
+                  <>
+                  <Image source={{ uri: image.url }} style={{  borderRadius: 8, width: '100%', height: '100%' }} />
+                    <IconButton onPress={() => removeImage(index)} style={{ position: 'absolute', top: -5, right: -5, zIndex: 2 }} icon="close-circle" iconColor='black' size={20} />
+                  </>
+                  )}
+                  {!image.url && <IconButton onPress={() => pickImage(index)} style={{ position: 'absolute', bottom: -5, right: -5, zIndex: 2 }} icon="plus-circle" iconColor='black' size={20} />}
+                  {image.uploading && <ActivityIndicator style={{alignSelf: 'center', width: '100%', position: 'absolute', margin: 'auto', top: 0, bottom: 0, left: 0, right: 0,  zIndex: 100}} animating={true} color="black" /> }
+                </View>
+              ))}
           </View>
-        )}
 
-        <Text style={{ ...theme.spacing.onboarding.textContainer, ...theme.fonts.description }}>
-            Add pictures that show your lifestyle. And people who matter in your life!
-        </Text>
-
-        <View style={{ flexDirection: 'row', gap: 10, flexWrap: 'wrap', width: '100%' }}>
-            {images.map((image, index) => (
-              <View key={index} style={{ backgroundColor: '#F6F6F6', borderColor: '#C6C6C6', borderStyle: 'dashed', borderRadius: 4, borderWidth: 1, width: 100, height: 100, position: 'relative' }}>
-                {image.url && (
-                <>
-                 <Image source={{ uri: image.url }} style={{ width: '100%', height: '100%' }} />
-                  <IconButton onPress={() => removeImage(index)} style={{ position: 'absolute', top: -5, right: -5, zIndex: 2 }} icon="close-circle" iconColor='black' size={20} />
-                </>
-                )}
-                {!image.url && <IconButton onPress={() => pickImage(index)} style={{ position: 'absolute', bottom: -5, right: -5, zIndex: 2 }} icon="plus-circle" iconColor='black' size={20} />}
-                {image.uploading && <ActivityIndicator style={{alignSelf: 'center', width: '100%', position: 'absolute', margin: 'auto', top: 0, bottom: 0, left: 0, right: 0,  zIndex: 100}} animating={true} color="black" /> }
-              </View>
-            ))}
-        </View>
-
-        <View style={{ width: '100%', flexDirection: 'column', gap: 10, position: 'absolute', bottom: 100 }} >
-            { !profile?.photos?.length && <Button mode="outlined" onPress={() => navigate('Main', { screen: 'Home' })}>
-                Complete Later
+          <View style={{ width: '100%', flexDirection: 'column', gap: 10, position: 'absolute', bottom: 150 }} >
+              { !profile?.photos?.length && <Button mode="outlined" onPress={() => navigate('Main', { screen: 'Home' })}>
+                  Complete Later
+                </Button>   
+              }
+              <Button mode="contained" onPress={updateProfile} loading={isImageSubmitting} disabled={isImageSubmitting}>
+                  Next
               </Button>   
-            }
-            <Button mode="contained" onPress={updateProfile} loading={isImageSubmitting} disabled={isImageSubmitting}>
-                Next
-            </Button>   
+          </View>
+          
         </View>
-        
-      </ScrollView>
-      </KeyboardAvoidingView>
     </SafeAreaView>
   )
 }

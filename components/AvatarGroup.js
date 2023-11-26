@@ -14,9 +14,11 @@ const AvatarGroup = ({ users }) => {
           />
         </View>
       ))}
-    <View style={styles.extraUsers}>
-        <Text style={styles.extraUsersText}>+{parseInt(Math.random()*100)}</Text>
-    </View>
+    { users.length > 5 && 
+      <View style={styles.extraUsers}>
+        <Text style={styles.extraUsersText}> + {users.length - 5 }</Text>
+      </View>
+    }
     </View>
   );
 };

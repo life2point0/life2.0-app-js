@@ -18,10 +18,10 @@ const HomeScreen = () => {
       <View style={theme.spacing.home.container}>
        
         <View style={theme.spacing.home.section}>
-          <Text style={theme.fonts.title}> {profile && `Hey ${profile?.firstName}, `} Welcome to Dubai!</Text>
+          <Text style={theme.fonts.title}> {profile && `Hey ${profile?.firstName}, `}Welcome to Dubai!</Text>
         </View>
         
-        <View style={theme.spacing.home.section}>
+        {/* <View style={theme.spacing.home.section}>
           <TextInput
             style={theme.components.inputs.textField}
             placeholder="Search communities"
@@ -33,7 +33,7 @@ const HomeScreen = () => {
               style={theme.spacing.home.searchIcon}
             />
           </TouchableOpacity>
-        </View>
+        </View> */}
         
         <View> 
           <View style={theme.spacing.home.section}>
@@ -42,7 +42,9 @@ const HomeScreen = () => {
               <Text>View all &gt;</Text>
             </TouchableOpacity>
           </View>
-          <Communities isSliider={true}/>
+          <View style={theme.spacing.home.section}> 
+            <Communities isSliider={true}/>
+          </View>
         </View>
         {/* <View style={styles.subHeader}>
           <Text style={styles.events}>Events for You</Text>
