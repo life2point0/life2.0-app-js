@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, Text, ScrollView, SafeAreaView, TouchableOpacity, TextInput, Image } from 'react-native'
 import { Avatar, Card, useTheme  } from 'react-native-paper'
 import { useNavigation } from '@react-navigation/native'
@@ -14,9 +14,19 @@ import AppBar from './AppBar'
 
 
 const Communities = ({isSliider}) => {
-  const navigation = useNavigation()
   const theme = useTheme()
-  const { communities } = useData()
+  const { communities, filteredCommunities, filterCommunities, filterQuery } = useData()
+  const [searchQueryText, setSearchQueryText ] = useState()
+
+  const communityList = isSliider ? communities : filteredCommunities
+
+  useEffect(() => {
+    setSearchQueryText(filterQuery)
+  }, [])
+
+  const getFilteredCommunities = () => {
+    filterCommunities(searchQueryText)
+  }
 
   return (
     <> 
@@ -28,8 +38,10 @@ const Communities = ({isSliider}) => {
             style={theme.components.inputs.textField}
             placeholder="Search communities"
             placeholderTextColor="#888"
-          />
-          <TouchableOpacity onPress={() => undefined}>
+            defaultValue={searchQueryText}
+            onChangeText={(value) => setSearchQueryText(value)}
+            />
+          <TouchableOpacity onPress={() => getFilteredCommunities()}>
             <Image
               source={require('./assets/icons/searchicon.png')}
               style={theme.spacing.home.searchIcon}
@@ -39,8 +51,8 @@ const Communities = ({isSliider}) => {
         }
 
           <ScrollView style={theme.spacing.home.sliderContainer} showsHorizontalScrollIndicator={false}>
-            {communities.length > 0 ? 
-              communities.map((community) => (
+            {communityList.length > 0 ? 
+              communityList.map((community) => (
                 <CommunityCard styles={theme.spacing.communities.screen.card} key={community.id} community={community} members={community.members}/>
               )) :
               <SkeletonCard />

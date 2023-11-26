@@ -24,7 +24,7 @@ export default UpdateProfile = () => {
       try {
         const response = (await authCall({
           method: 'GET',
-          url: `${USER_SERVICE_BASE_URL}/occupations`
+          url: `${USER_SERVICE_BASE_URL}/occupations?perPage=100`
         }))?.data
 
         const profileFields = updateProfileFields
@@ -62,8 +62,6 @@ export default UpdateProfile = () => {
     description: profile?.description || '',
     occupations: selectedOccupations || []
   }
-
-  console.log(profile)
 
   const handleProfileSubmit = async (values) => {
     try {
