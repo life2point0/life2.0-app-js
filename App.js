@@ -94,6 +94,7 @@ const App = () => {
                     <Stack.Screen name="Login" component={Login} />
                     <Stack.Screen name="Signup" component={Signup} />
                     <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
+                    <Stack.Screen name="ViewProfile" component={ViewProfile} />
                     <Stack.Screen name="ProfileImageUpload" component={ProfileImageUpload} />
                     <Stack.Screen name="Conversations" component={Conversations} />
                     <Stack.Screen name="Communities" component={Communities} />

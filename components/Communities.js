@@ -38,6 +38,7 @@ const Communities = ({isSliider}) => {
             style={theme.components.inputs.textField}
             placeholder="Search communities"
             placeholderTextColor="#888"
+            autoFocus= {true}
             defaultValue={searchQueryText}
             onChangeText={(value) => setSearchQueryText(value)}
             />
@@ -103,8 +104,11 @@ const CommunityCard = ({ community, members, isSliider, styles }) => {
       }
     }
 
-    const communityMemberAvatars = members.map(member => ({ icon: member.profilePhoto }))
-
+    const communityMemberAvatars = members.map(member => ({
+      icon: member.profilePhoto,
+      initials: `${member.firstName.charAt(0)}${member.lastName.charAt(0)}`
+    }))
+    
     return (
         <Card mode="contained" style={{...styles.container, width: isSliider ? 275 : '100%' }} >
             <Text ellipsizeMode='tail' numberOfLines={1} style={{...theme.fonts.subtitle, paddingHorizontal: 8}}> {community.name} </Text>
@@ -114,8 +118,8 @@ const CommunityCard = ({ community, members, isSliider, styles }) => {
             </View>
   
             <View style={styles.footer}>
-                <View>
-                  <Text style={theme.fonts.small}> Join Conversation </Text>
+                <View style={{ gap: 5 }}>
+                  <Text style={theme.fonts.small}> Join the conversation </Text>
                   <AvatarGroup users={communityMemberAvatars} />
                 </View>
                 <Button compact labelStyle={styles.footerButton} onPress={() => handleNavigation(community.id)} mode="contained" loading={isNavigating} disabled={isNavigating}> Join Chat </Button>

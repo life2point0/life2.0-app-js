@@ -7,11 +7,15 @@ const AvatarGroup = ({ users }) => {
     <View style={styles.avatarGroup}>
       {users.slice(0, 5).map((user, index) => (
         <View key={index} style={[styles.avatarContainer, { zIndex: users.length - index }]}>
-          <Avatar.Image 
-            key={index}
+          {user.icon && <Avatar.Image 
             size={35}
             source={user.icon}
-          />
+          />}
+          {!user.icon && 
+            <View style={{ width: 35, height: 35, alignItems: 'center', justifyContent: 'center', borderRadius: 35, borderWidth: 1, borderColor: '#fff', backgroundColor: '#333' }}> 
+              <Text style={{ color: '#fff' }}> {user.initials} </Text> 
+            </View>
+          }
         </View>
       ))}
     { users.length > 5 && 
@@ -29,7 +33,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   avatarContainer: {
-    marginRight: -20,
+    marginRight: -10,
   },
   extraUsers: {
     marginLeft: 22,

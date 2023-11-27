@@ -32,7 +32,7 @@ const AppBar = ({ title, showBackButton }) => {
 
   return (
     <>
-      <Appbar.Header style={{ justifyContent: 'center', backgroundColor: !isMenuVisible ? theme.colors.primaryContainer : '#fff' }}>
+      <Appbar.Header style={{ alignItems: 'center', justifyContent: 'center', backgroundColor: !isMenuVisible ? theme.colors.primaryContainer : '#fff' }}>
         {/* <StatusBar backgroundColor={!isMenuVisible ? theme.colors.primaryContainer : '#fff'} barStyle="dark-content" /> */}
         { profile && !showBackButton && (
           <Appbar.Action
@@ -49,14 +49,15 @@ const AppBar = ({ title, showBackButton }) => {
           />
         )}
         <Appbar.Content style={{  flex: 1, alignItems: 'center' }} title={title || ''} />
-        <Appbar.Action
+        { profile?.photos?.[0]?.url && <Appbar.Action
           icon={() => (
             <Avatar.Image size={theme.spacing.appBar.avatar.size} source={{ uri: profile?.photos?.[0]?.url }} />
           )}
           onPress={() => {
             navigation.navigate('ViewProfile')
           }}
-        />
+          />
+          }
       </Appbar.Header>
       <Portal> 
         <Modal visible={isMenuVisible} transparent={true} onDismiss={toggleMenu} contentContainerStyle={styles.drawerContainer} animationType="slide">

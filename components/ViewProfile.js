@@ -40,8 +40,8 @@ const ViewProfile = () => {
         <>
             <AppBar/>
             <SafeAreaView style={{flex: 1 }}>
-              <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: -50 }}>
-                <Image style={{ borderRadius: 100, borderWidth: 3, borderColor: '#fff' }} source={{ uri: profile?.photos[0].url, width: 100, height: 100  }} />
+              <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                <Image style={{ borderRadius: 100, borderWidth: 3, borderColor: '#fff', marginTop: -50 }} source={{ uri: profile?.photos[0].url, width: 100, height: 100  }} />
               </View>
 
               <ScrollView contentContainerStyle={{ gap: 10, paddingBottom: 100 }}>
