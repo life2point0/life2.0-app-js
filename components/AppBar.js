@@ -50,11 +50,12 @@ const AppBar = ({ title, showBackButton }) => {
         )}
         <Appbar.Content style={{  flex: 1, alignItems: 'center' }} title={title || ''} />
         { profile?.photos?.[0]?.url && <Appbar.Action
+          animated={false}
           icon={() => (
             <Avatar.Image size={theme.spacing.appBar.avatar.size} source={{ uri: profile?.photos?.[0]?.url }} />
           )}
           onPress={() => {
-            navigation.navigate('ViewProfile')
+            navigation.navigate('Profile')
           }}
           />
           }
