@@ -84,6 +84,9 @@ export const AuthProvider = ({ children }) => {
   }
 
   const initChat = async () => {
+    if (client?.userID && client.wsConnection?.isHealthy) {
+      return;
+    }
     try {
       await client.connectUser(
         {
