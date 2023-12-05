@@ -6,7 +6,7 @@ const SplashScreen = () => {
     return (
         <>
             <StatusBar backgroundColor="#FFC003" barStyle="dark-content" />
-            <View 
+            <View
                 style={{
                     height: '100%',
                     width: '100%',

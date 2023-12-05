@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "life2point0",
+    "name": "Life 2.0",
     "slug": "life2point0",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -8,8 +8,8 @@
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./components/assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "resizeMode": "center",
+      "backgroundColor": "#FFC003"
     },
     "assetBundlePatterns": [
       "**/*"
