@@ -165,6 +165,7 @@ export const AuthProvider = ({ children }) => {
       setIsAuthenticated(false)
       setRefreshToken('')
       setAccessToken('')
+      setProfile(null)
     } catch (e) {
       console.log(e)
       throw e

@@ -9,6 +9,7 @@ import { useAuth } from '../contexts/AuthContext'
 import { useNavigation } from '@react-navigation/native'
 import { Form } from '../shared-components/form/Form'
 import { signUpFields, signUpSchema } from './constants/fields/signUpFields'
+import { signUpStyles } from './constants/styles/signUpStyles'
 
 
 const Signup =  () => {
@@ -84,6 +85,7 @@ const Signup =  () => {
               onSubmit={handleSignUpSubmit}
               isLoading={isSubmitting}
               submitButtonText='Sign Up'
+              styles={signUpStyles}
             />
           </View>
 

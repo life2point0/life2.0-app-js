@@ -234,6 +234,7 @@ const defaultStyles = StyleSheet.create({
     },
     submitButton: {
       marginTop: 20,
-      width: '100%'
+      width: '100%',
+      marginBottom: 50
     }
 })

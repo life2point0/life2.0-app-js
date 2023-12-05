@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/native'
 import { Form } from '../shared-components/form/Form'
 import { loginFields, loginSchema } from './constants/fields/loginFields'
 import LoginIllustration from './assets/signup-illustration.png'
+import { logInStyles } from './constants/styles/loginStyles'
 
 
 const Login =  () => {
@@ -70,6 +71,7 @@ const Login =  () => {
               onSubmit={handleLoginSubmit}
               isLoading={isSubmitting}
               submitButtonText='Login'
+              styles={logInStyles}
             />
           </View>
 
