@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { SafeAreaView, ScrollView, KeyboardAvoidingView, Image, View } from 'react-native'
-import { Text, useTheme } from 'react-native-paper'
+import { Text, useTheme, IconButton } from 'react-native-paper'
 import { useAuth } from '../contexts/AuthContext'
 import { useNavigation } from '@react-navigation/native'
 import AppBar from './AppBar'
@@ -40,59 +40,53 @@ const ViewProfile = () => {
         <>
             <AppBar/>
             <SafeAreaView style={{flex: 1 }}>
-              <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                <Image style={{ borderRadius: 100, borderWidth: 3, borderColor: '#fff', marginTop: -50 }} source={{ uri: profile?.photos[0].url, width: 100, height: 100  }} />
-              </View>
+             { profile?.photos[0]?.url && <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                <Image style={{ borderRadius: 100, borderWidth: 4, borderColor: '#fff', marginTop: -50 }} source={{ uri: profile?.photos[0].url, width: 150, height: 150  }} />
+              </View> }
 
-              <ScrollView contentContainerStyle={{ gap: 10, paddingBottom: 100 }}>
-              <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: 5, padding: 20 }}>
-                  <Text style={theme.fonts.title}> {profile?.firstName } { profile?.lastName }  </Text>
-                  <Text style={{...theme.fonts.description,  textAlign: 'center'}}> Joined { formattedJoinedDate }  </Text>
-                  <Text style={{...theme.fonts.description,  textAlign: 'center'}}> { profile?.description }  </Text>
-              </View>
-                <View style={{ flexDirection: 'column', justifyContent: 'center', gap: 10, padding: 20, backgroundColor: 'white' }}>
-                  <Text style={theme.fonts.title}> Your Images  </Text>
-                  <ScrollView horizontal removeClippedSubviews contentContainerStyle={{ width: '100%', flexDirection: 'row', marginRight: 50, gap: 10, justifyContent: 'flex-start', alignItems: 'center' }}>
-                    {profile?.photos?.map((photo, index) => renderImage(photo, index))}
-                  </ScrollView>
+              <ScrollView contentContainerStyle={{ gap: 10 }}>
+                <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: 5, padding: 20 }}>
+                    <Text style={theme.fonts.title}> {profile?.firstName } { profile?.lastName }  </Text>
+                    <Text style={{...theme.fonts.description,  textAlign: 'center'}}> Joined { formattedJoinedDate }  </Text>
+                    <Text style={{...theme.fonts.description,  textAlign: 'center'}}> { profile?.description }  </Text>
                 </View>
-                <View style={{ flexDirection: 'row', gap: 30, padding: 20, backgroundColor: 'white' }}>
-                  <View style={{ flexDirection: 'column', gap: 10 }}>
-                    <View>
-                      <Text style={theme.fonts.subtitle}> Where Am I From  </Text>
-                      <Text style={theme.fonts.description }> {profile?.placeOfOrigin.name} </Text>
-                    </View>
-                    <View>
-                      <Text style={theme.fonts.subtitle}> My New Home  </Text>
-                      <Text style={theme.fonts.description }> {profile?.currentPlace.name}  </Text>
-                    </View>
-                    <View>
-                      <Text style={theme.fonts.subtitle}> What I do  </Text>
-                      <Text style={theme.fonts.description }> {profile?.occupations[0].name }  </Text>
-                    </View>
+                { profile?.photos[0]?.url && <View style={{ flexDirection: 'column', justifyContent: 'center', gap: 10, padding: 20, backgroundColor: 'white' }}>
+                  <Text style={theme.fonts.title}> Your Images  </Text>
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ flexDirection: 'row', gap: 10, justifyContent: 'flex-start', alignItems: 'center' }}>
+                      {profile?.photos?.map((photo, index) => renderImage(photo, index))}
+                    </ScrollView>
                   </View>
-                  <View style={{ flexDirection: 'column', gap: 10 }}>
-                    <View>
-                      <Text style={theme.fonts.subtitle}> Places I have lived in  </Text>
-                      <Text style={theme.fonts.description}>
-                        { ` ${profile?.pastPlaces[0]?.name} + ${profile?.pastPlaces?.length - 1} more` }
-                        {/* {profile?.pastPlaces?.map((place, index, array) => (
-
-                          <React.Fragment key={index}>
-                            {place.name}
-                            {index < array.length - 1 && ', '}
-                          </React.Fragment>
-                        ))} */}
-                      </Text>
-                    </View>
-                    {/* <View>
-                      <Text style={theme.fonts.subtitle}> Language i Speak  </Text>
-                      <Text style={theme.fonts.description }> English  </Text>
-                    </View>
-                    <View>
-                      <Text style={theme.fonts.subtitle}> My Interest  </Text>
-                      <Text style={theme.fonts.description }>  </Text>
-                    </View> */}
+                }
+                <View style={{ flexDirection: 'column', gap: 8, paddingHorizontal: 20, paddingVertical: 8, backgroundColor: 'white'  }}>
+                  <View style={{ borderColor: '#efefef', flexDirection: 'row', paddingBottom: 8, borderBottomWidth: 1 }}>
+                    <IconButton icon="location-exit"/> 
+                    <View style={{ flexDirection: 'column', justifyContent: 'center' }}> 
+                        <Text style={theme.fonts.subtitle}> Where Am I From  </Text> 
+                        <Text style={theme.fonts.description }> {profile?.placeOfOrigin.name} </Text>
+                    </View> 
+                  </View>
+                  <View style={{ borderColor: '#efefef', flexDirection: 'row', paddingBottom: 8, borderBottomWidth: 1 }}>
+                    <IconButton icon="location-enter"/> 
+                    <View style={{ flexDirection: 'column', justifyContent: 'center' }}> 
+                        <Text style={theme.fonts.subtitle}> My New Home   </Text> 
+                        <Text style={theme.fonts.description }> {profile?.currentPlace.name}  </Text>
+                    </View> 
+                  </View>
+                  <View style={{ borderColor: '#efefef', flexDirection: 'row', alignItems: 'center', paddingBottom: 8, borderBottomWidth: 1 }}>
+                    <IconButton icon="briefcase-outline"/> 
+                    <View style={{ flexDirection: 'column', justifyContent: 'center' }}> 
+                        <Text style={theme.fonts.subtitle}> What I do   </Text> 
+                        <Text style={theme.fonts.description }> {profile?.occupations[0].name }  </Text>
+                    </View> 
+                  </View>
+                  <View style={{ flexDirection: 'row' }}>
+                    <IconButton icon="map-marker-check-outline"/> 
+                    <View style={{ flexDirection: 'column', justifyContent: 'center' }}> 
+                        <Text style={theme.fonts.subtitle}> Places I have lived in   </Text> 
+                        <Text style={theme.fonts.description}>
+                          { ` ${profile?.pastPlaces[0]?.name} + ${profile?.pastPlaces?.length - 1} more` }
+                        </Text>
+                    </View> 
                   </View>
                 </View>
               </ScrollView>
