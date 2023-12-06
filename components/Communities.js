@@ -13,7 +13,8 @@ import { useData } from '../contexts/DataContext'
 import AppBar from './AppBar'
 
 
-const Communities = ({isSliider}) => {
+const Communities = ({isSliider, route}) => {
+  const { isTextInputFocused } = route?.params || {}
   const theme = useTheme()
   const { communities, filteredCommunities, filterCommunities, filterQuery } = useData()
   const [searchQueryText, setSearchQueryText ] = useState()
@@ -38,7 +39,7 @@ const Communities = ({isSliider}) => {
             style={theme.components.inputs.textField}
             placeholder="Search communities"
             placeholderTextColor="#888"
-            autoFocus= {true}
+            autoFocus= {isTextInputFocused ? true : false}
             defaultValue={searchQueryText}
             onChangeText={(value) => setSearchQueryText(value)}
             />

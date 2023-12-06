@@ -36,12 +36,19 @@ const ViewProfile = () => {
 
   return (
         <>
-            {/* <AppBar/> */}
             <SafeAreaView style={{flex: 1 }}>
             <View>
-              { profile?.photos[0]?.url && <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+              { profile?.photos[0]?.url && <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 30 }}>
                   <Image style={{ borderRadius: 100, borderWidth: 5, borderColor: '#fff' }} source={{ uri: profile?.photos[0].url, width: 200, height: 200  }} />
                 </View> }
+
+                <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: 5, padding: 20 }}>
+                    <Text style={theme.fonts.title}> {profile?.firstName } { profile?.lastName }  </Text>
+                    <Text style={{...theme.fonts.description,  textAlign: 'center'}}> Joined { formattedJoinedDate }  </Text>
+                    <Text style={{...theme.fonts.description,  textAlign: 'center'}}> { profile?.description }  </Text>
+                </View>
+
+
                 <IconButton
                   icon="arrow-left"
                   style={theme.spacing.backButton}
@@ -51,11 +58,6 @@ const ViewProfile = () => {
 
 
               <ScrollView contentContainerStyle={{ gap: 10 }}>
-                <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: 5, padding: 20 }}>
-                    <Text style={theme.fonts.title}> {profile?.firstName } { profile?.lastName }  </Text>
-                    <Text style={{...theme.fonts.description,  textAlign: 'center'}}> Joined { formattedJoinedDate }  </Text>
-                    <Text style={{...theme.fonts.description,  textAlign: 'center'}}> { profile?.description }  </Text>
-                </View>
                 { profile?.photos[0]?.url && <View style={{ flexDirection: 'column', justifyContent: 'center', gap: 10, padding: 20, backgroundColor: 'white' }}>
                   <Text style={theme.fonts.title}> Your Images  </Text>
                     <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ flexDirection: 'row', gap: 10, justifyContent: 'flex-start', alignItems: 'center' }}>
@@ -82,7 +84,14 @@ const ViewProfile = () => {
                     <IconButton icon="briefcase-outline"/> 
                     <View style={{ flexDirection: 'column', justifyContent: 'center' }}> 
                         <Text style={theme.fonts.subtitle}>What I do   </Text> 
-                        <Text style={theme.fonts.description }>{profile?.occupations[0].name }  </Text>
+                        <Text style={theme.fonts.description}>
+                          {profile?.occupations.map((place, index) => (
+                             <React.Fragment key={place.name}>
+                              {index > 0 && ', '}
+                               { place.name }
+                            </React.Fragment>
+                           ))}
+                        </Text>
                     </View> 
                   </View>
                   <View style={{ flexDirection: 'row' }}>

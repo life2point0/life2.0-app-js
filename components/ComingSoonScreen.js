@@ -1,4 +1,4 @@
-import { View, Text, Image, StatusBar } from "react-native";
+import { View, Text, Image } from "react-native";
 import SplashLogo from './assets/splash-logo.png';
 import AppBar from "./AppBar";
 
