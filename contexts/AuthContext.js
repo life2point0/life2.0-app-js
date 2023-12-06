@@ -100,8 +100,6 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     if (accessToken) {
       getProfile()
-    } else {
-      setProfile(null)
     }
   }, [accessToken])
   

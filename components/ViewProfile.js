@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { SafeAreaView, ScrollView, KeyboardAvoidingView, Image, View } from 'react-native'
+import { SafeAreaView, ScrollView, Image, View } from 'react-native'
 import { Text, useTheme, IconButton } from 'react-native-paper'
 import { useAuth } from '../contexts/AuthContext'
 import { useNavigation } from '@react-navigation/native'
@@ -21,7 +21,7 @@ const ViewProfile = () => {
         navigation.navigate('Signup')
         return
       }
-      if (!isProfileCreated) {
+      if (!profile.description) {
         navigation.replace('Main', { screen: 'Home' })
         navigation.navigate('UpdateProfile')
         return
@@ -40,9 +40,17 @@ const ViewProfile = () => {
         <>
             {/* <AppBar/> */}
             <SafeAreaView style={{flex: 1 }}>
-             { profile?.photos[0]?.url && <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                <Image style={{ borderRadius: 100, borderWidth: 4, borderColor: '#fff', marginTop: 30 }} source={{ uri: profile?.photos[0].url, width: 200, height: 200  }} />
-              </View> }
+            <View>
+              { profile?.photos[0]?.url && <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                  <Image style={{ borderRadius: 100, borderWidth: 5, borderColor: '#fff' }} source={{ uri: profile?.photos[0].url, width: 200, height: 200  }} />
+                </View> }
+                <IconButton
+                  icon="arrow-left"
+                  style={theme.spacing.backButton}
+                  onPress={() => navigation.goBack()}
+                />
+             </View>
+
 
               <ScrollView contentContainerStyle={{ gap: 10 }}>
                 <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: 5, padding: 20 }}>
@@ -61,30 +69,35 @@ const ViewProfile = () => {
                   <View style={{ borderColor: '#efefef', flexDirection: 'row', paddingBottom: 8, borderBottomWidth: 1 }}>
                     <IconButton icon="location-exit"/> 
                     <View style={{ flexDirection: 'column', justifyContent: 'center' }}> 
-                        <Text style={theme.fonts.subtitle}> Where Am I From  </Text> 
-                        <Text style={theme.fonts.description }> {profile?.placeOfOrigin.name} </Text>
+                        <Text style={theme.fonts.subtitle}>Where Am I From  </Text> 
+                        <Text style={theme.fonts.description }>{profile?.placeOfOrigin.name} </Text>
                     </View> 
                   </View>
                   <View style={{ borderColor: '#efefef', flexDirection: 'row', paddingBottom: 8, borderBottomWidth: 1 }}>
                     <IconButton icon="location-enter"/> 
                     <View style={{ flexDirection: 'column', justifyContent: 'center' }}> 
-                        <Text style={theme.fonts.subtitle}> My New Home   </Text> 
-                        <Text style={theme.fonts.description }> {profile?.currentPlace.name}  </Text>
+                        <Text style={theme.fonts.subtitle}>My New Home   </Text> 
+                        <Text style={theme.fonts.description }>{profile?.currentPlace.name}  </Text>
                     </View> 
                   </View>
                   <View style={{ borderColor: '#efefef', flexDirection: 'row', alignItems: 'center', paddingBottom: 8, borderBottomWidth: 1 }}>
                     <IconButton icon="briefcase-outline"/> 
                     <View style={{ flexDirection: 'column', justifyContent: 'center' }}> 
-                        <Text style={theme.fonts.subtitle}> What I do   </Text> 
-                        <Text style={theme.fonts.description }> {profile?.occupations[0].name }  </Text>
+                        <Text style={theme.fonts.subtitle}>What I do   </Text> 
+                        <Text style={theme.fonts.description }>{profile?.occupations[0].name }  </Text>
                     </View> 
                   </View>
                   <View style={{ flexDirection: 'row' }}>
                     <IconButton icon="map-marker-check-outline"/> 
                     <View style={{ flexDirection: 'column', justifyContent: 'center' }}> 
-                        <Text style={theme.fonts.subtitle}> Places I have lived in   </Text> 
+                        <Text style={theme.fonts.subtitle}>Places I have lived in   </Text> 
                         <Text style={theme.fonts.description}>
-                          { ` ${profile?.pastPlaces[0]?.name} + ${profile?.pastPlaces?.length - 1} more` }
+                          {profile?.pastPlaces.map((place, index) => (
+                             <React.Fragment key={place.id}>
+                              {index > 0 && ', '}
+                               { place.name }
+                            </React.Fragment>
+                           ))}
                         </Text>
                     </View> 
                   </View>
