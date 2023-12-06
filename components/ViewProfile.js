@@ -21,7 +21,7 @@ const ViewProfile = () => {
         navigation.navigate('Signup')
         return
       }
-      if (!profile.description) {
+      if (!profile?.description) {
         navigation.replace('Main', { screen: 'Home' })
         navigation.navigate('UpdateProfile')
         return
@@ -93,7 +93,7 @@ const ViewProfile = () => {
                         <Text style={theme.fonts.subtitle}>Places I have lived in   </Text> 
                         <Text style={theme.fonts.description}>
                           {profile?.pastPlaces.map((place, index) => (
-                             <React.Fragment key={place.id}>
+                             <React.Fragment key={place.name}>
                               {index > 0 && ', '}
                                { place.name }
                             </React.Fragment>

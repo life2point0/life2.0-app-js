@@ -39,7 +39,7 @@ export const AuthProvider = ({ children }) => {
       setIsAuthenticated(true)
       return access_token
     } catch (error) {
-      setIsAuthenticated(false)
+      // setIsAuthenticated(false)
       throw error;
     }
   }
