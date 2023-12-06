@@ -91,7 +91,7 @@ export const AuthProvider = ({ children }) => {
           id: profile?.id,
           name: `${profile?.firstName} ${profile?.lastName}`,
         },
-        chatToken.streamChat
+        chatToken?.streamChat
       );
     } catch (e) {
       console.log(e);
