@@ -3,31 +3,29 @@ import { SafeAreaView, ScrollView, Image, View } from 'react-native'
 import { Text, useTheme, IconButton } from 'react-native-paper'
 import { useAuth } from '../contexts/AuthContext'
 import { useNavigation } from '@react-navigation/native'
-import AppBar from './AppBar'
-import user1Image from './assets/user-1.png'
 
 const ViewProfile = () => {
   
-  const { profile, isAuthenticated, isProfileCreated } = useAuth()
+  const { profile, isAuthenticated } = useAuth()
   const navigation = useNavigation()
   const theme = useTheme()
   const joinedDate = new Date(profile?.joinedAt)
   const formattedJoinedDate = joinedDate?.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
   
   useEffect(() => {
-    return navigation.addListener('focus', () => {
-      if (!isAuthenticated) {
-        navigation.replace('Main', { screen: 'Home' })
-        navigation.navigate('Signup')
-        return
-      }
-      if (!profile?.description) {
-        navigation.replace('Main', { screen: 'Home' })
-        navigation.navigate('UpdateProfile')
-        return
-      }
-    })
-  }, [])
+    console.log('isAuthenticated', isAuthenticated)
+    console.log('profile', profile)
+    if (!isAuthenticated) {
+      navigation.replace('Main', { screen: 'Home' })
+      navigation.navigate('Signup')
+      return
+    }
+    if (!profile?.description) {
+      navigation.replace('Main', { screen: 'Home' })
+      navigation.navigate('UpdateProfile')
+      return
+    }
+  }, [isAuthenticated, profile])
 
   const renderImage = (photo, index) => (
     ( index <= 4) ? (

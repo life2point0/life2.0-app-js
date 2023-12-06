@@ -11,7 +11,7 @@ import Button from '../shared-components/button/Button'
 
 export default UpdateProfile = () => {
   
-  const { authCall, profile, isProfileCreated, getProfile } = useAuth()
+  const { authCall, profile, getProfile } = useAuth()
   const navigation = useNavigation()
   const theme = useTheme()
 
@@ -38,7 +38,7 @@ export default UpdateProfile = () => {
       }
     }
     fetchData()
-    if(isProfileCreated) {
+    if(profile?.description) {
       updateProfileFields[0].hidden = false
       updateProfileFields[1].hidden = false
     } else {
@@ -84,8 +84,8 @@ export default UpdateProfile = () => {
     <SafeAreaView style={{flex: 1 }}>
       <KeyboardAvoidingView behavior="height">
         <View style={theme.spacing.onboarding.headerContainer}>
-        { !isProfileCreated && <Text style={theme.fonts.title}>Complete Profile</Text> }
-        { isProfileCreated && <Text style={theme.fonts.title}>Update Profile</Text> }
+        { !profile?.description && <Text style={theme.fonts.title}>Complete Profile</Text> }
+        { profile?.description && <Text style={theme.fonts.title}>Update Profile</Text> }
           <IconButton
             icon="arrow-left"
             style={theme.spacing.backButton}
@@ -105,7 +105,7 @@ export default UpdateProfile = () => {
           </View>
         )}
 
-      { !isProfileCreated && <Text style={theme.fonts.description}>
+      { !profile?.description && <Text style={theme.fonts.description}>
           Welcome onboard {profile?.firstName}! {"\n"}
           Please complete your profile.
         </Text> 

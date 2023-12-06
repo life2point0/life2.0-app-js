@@ -8,7 +8,7 @@ import Button from '../shared-components/button/Button'
 
 const AppBar = ({ title, showBackButton }) => {
   const navigation = useNavigation()
-  const { isProfileCreated, profile, logout } = useAuth()
+  const { isAuthenticated, profile, logout } = useAuth()
   const theme = useTheme()
   const [isMenuVisible, setMenuVisible] = useState(false)
 
@@ -34,7 +34,7 @@ const AppBar = ({ title, showBackButton }) => {
     <>
       <Appbar.Header style={{ alignItems: 'center', justifyContent: 'center', backgroundColor: !isMenuVisible ? theme.colors.primaryContainer : '#fff' }}>
         {/* <StatusBar backgroundColor={!isMenuVisible ? theme.colors.primaryContainer : '#fff'} barStyle="dark-content" /> */}
-        { profile && !showBackButton && (
+        { isAuthenticated && !showBackButton && (
           <Appbar.Action
             icon={() => <Image source={menuIcon} style={theme.spacing.appBar.menuIcon} />}
             onPress={toggleMenu}
@@ -75,7 +75,7 @@ const AppBar = ({ title, showBackButton }) => {
                 </View>
               </View>
               <View>
-                { isProfileCreated && <Button size='small' compact mode='text' contentStyle={styles.menuItem} onPress={() => handleNavigation('UpdateProfile')} icon="account-outline"> Edit profile </Button> }
+                { profile?.description && <Button size='small' compact mode='text' contentStyle={styles.menuItem} onPress={() => handleNavigation('UpdateProfile')} icon="account-outline"> Edit profile </Button> }
                 <Button size='small' compact  mode='text'  contentStyle={styles.menuItem} onPress={() => handleLogout()} icon="logout"> Logout </Button>
               </View>
             </ScrollView>
