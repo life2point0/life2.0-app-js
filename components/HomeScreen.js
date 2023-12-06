@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native'
 import { useTheme } from 'react-native-paper'
 import Communities from './Communities';
 import logo from './assets/logo.png'
+import { UserCommunities } from './UserCommunities'
 
 const HomeScreen = () => {
   const { profile } = useAuth()
@@ -15,6 +16,7 @@ const HomeScreen = () => {
   return (
     <ScrollView style={theme.colors.background} stickyHeaderIndices={[0]}>
       <AppBar title={<Image source={logo} style={theme.spacing.logo} />}/>
+      <UserCommunities />
       <View style={theme.spacing.home.container}>
        
         <View style={theme.spacing.home.section}>
