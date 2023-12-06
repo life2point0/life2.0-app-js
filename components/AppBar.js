@@ -95,9 +95,10 @@ const styles = StyleSheet.create({
   },
   drawerSection: {
     flexDirection: 'row',
-    alignContent: 'center',
+    alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
+    height: 50,
     borderBottomWidth: 1,
     paddingBottom: 16,
     marginBottom: 16,
