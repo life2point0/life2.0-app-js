@@ -5,7 +5,7 @@ import { Avatar, Badge } from 'react-native-paper';
 import { useChatContext } from 'stream-chat-expo';
 
 export const UserCommunities = () => {
-    const { initChat } = useAuth();
+    const { initChat, profile } = useAuth();
     const [channels, setChannels] = useState([]);
     const { client } = useChatContext();
 
@@ -31,9 +31,10 @@ export const UserCommunities = () => {
     }
 
     useEffect(() => {
-      console.log('initializing')
-      initialize();
-    }, [client, client?.userID, client?.wsConnection?.isHealthy]);
+      if(profile?.id) {
+        initialize();
+      }
+    }, [client, client?.userID, client?.wsConnection?.isHealthy, profile]);
   
     return (
       <ScrollView horizontal style={{padding: 12}}>
