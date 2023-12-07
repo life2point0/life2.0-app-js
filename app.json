@@ -15,7 +15,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "package": "co.life2point0.ios"
     },
     "android": {
       "adaptiveIcon": {
