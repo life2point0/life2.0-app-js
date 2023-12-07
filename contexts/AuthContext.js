@@ -22,22 +22,19 @@ export const AuthProvider = ({ children }) => {
 
   const getNewToken = async (refreshToken) => {
   
-    const data = qs.stringify({
-      'grant_type': 'refresh_token',
-      'client_id': KEYCLOAK_CLIENT_ID, 
-      'refresh_token': refreshToken,
-    });
+    const data = {
+      'refreshToken': refreshToken
+    }
 
     try {
-      const response = await axios.post(TOKEN_URL, data, {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        }
-      });
-      const { access_token } = response.data;
-      setAccessToken(access_token);
-      return access_token
+      const response = await axios.post(`${USER_SERVICE_BASE_URL}/sessions/token`, data);
+      console.log('accessToken', response.data);
+      const { accessToken } = response.data;
+      setAccessToken(accessToken);
+      setIsAuthenticated(true)
+      return accessToken
     } catch (error) {
+      setIsAuthenticated(false)
       throw error;
     }
   }
@@ -61,7 +58,8 @@ export const AuthProvider = ({ children }) => {
       setProfile(profile);
       return profile;
     } catch (e) {
-      console.log(e);
+      logout()
+      console.log(e)
     }
   }
 
@@ -119,11 +117,14 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     (async () => {
       const storedRefreshToken = await AsyncStorage.getItem('refreshToken');
+      console.log('storedRefreshToken', storedRefreshToken)
       if (storedRefreshToken) {
+        setIsAuthenticated(true)
         setRefreshToken(storedRefreshToken);
         try {
           await getNewToken(storedRefreshToken);
         } catch (e) {
+          setIsAuthenticated(false)
           AsyncStorage.removeItem('refreshToken')
         }
       }
