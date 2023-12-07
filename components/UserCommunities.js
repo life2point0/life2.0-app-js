@@ -5,7 +5,7 @@ import { Avatar, Badge } from 'react-native-paper';
 import { useChatContext } from 'stream-chat-expo';
 
 export const UserCommunities = () => {
-    const { initChat, profile } = useAuth();
+    const { initChat, profile, isAuthenticated } = useAuth();
     const [channels, setChannels] = useState([]);
     const { client } = useChatContext();
 
@@ -36,31 +36,36 @@ export const UserCommunities = () => {
       }
     }, [client, client?.userID, client?.wsConnection?.isHealthy, profile]);
   
-    return (
-      <ScrollView horizontal style={{padding: 12}}>
-        {channels.map(channel => (
-          <View style={{alignItems: 'center', width: 110, paddingRight: 10}}>
-            <View style={[styles.avatarContainer]}>
-              <Avatar.Image 
-                key={channel.id}
-                source={{ uri: channel.data.image }}
-                size={80}
-                style={{ marginHorizontal: 5, borderWidth: channel.countUnread() > 0 ? 2 : 0 }}
-              />
-              {channel.countUnread() > 0 && (
-                <Badge
-                  size={20}
-                  style={styles.badge}
-                >
-                  {channel.countUnread()}
-                </Badge>
-              )}
+    if(isAuthenticated) {
+      return (
+        <ScrollView horizontal style={{padding: 12}}>
+          {channels.map(channel => (
+            <View style={{alignItems: 'center', width: 110, paddingRight: 10}} key={channel.id}>
+              <View style={[styles.avatarContainer]}>
+                <Avatar.Image 
+                  source={{ uri: channel.data.image }}
+                  size={80}
+                  style={{ marginHorizontal: 5, borderWidth: channel.countUnread() > 0 ? 2 : 0 }}
+                />
+                {channel.countUnread() > 0 && (
+                  <Badge
+                    size={20}
+                    style={styles.badge}
+                  >
+                    {channel.countUnread()}
+                  </Badge>
+                )}
+              </View>
+              <Text style={{fontSize: 12, textAlign: 'center'}} numberOfLines={2} ellipsizeMode="tail">{channel.data.name}</Text>
             </View>
-            <Text style={{fontSize: 12, textAlign: 'center'}} numberOfLines={2} ellipsizeMode="tail">{channel.data.name}</Text>
-          </View>
-        ))}
-      </ScrollView>
-    );
+          ))}
+        </ScrollView>
+      )
+    }
+    return (
+      <></>
+    )
+
   };
 
   const styles = StyleSheet.create({
