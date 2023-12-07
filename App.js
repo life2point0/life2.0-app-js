@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -25,6 +25,9 @@ import { DataProvider } from './contexts/DataContext';
 import ProfileImageUpload from './components/ProfileImageUpload';
 import { NavigationMenu } from './components/AppBar';
 import ViewProfile from './components/ViewProfile';
+import * as SystemUI from 'expo-system-ui';
+
+SystemUI.setBackgroundColorAsync('#FFFFFF');
 
 
 
