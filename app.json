@@ -20,8 +20,8 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./components/assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./components/assets/app-icon.png",
+        "backgroundColor": "#FFC003"
       },
       "package": "co.life2point0.android",
       "permissions": [
