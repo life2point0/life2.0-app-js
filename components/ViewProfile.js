@@ -13,8 +13,6 @@ const ViewProfile = () => {
   const formattedJoinedDate = joinedDate?.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
   
   useEffect(() => {
-    console.log('isAuthenticated', isAuthenticated)
-    console.log('profile', profile)
     if (!isAuthenticated) {
       navigation.replace('Main', { screen: 'Home' })
       navigation.navigate('Signup')

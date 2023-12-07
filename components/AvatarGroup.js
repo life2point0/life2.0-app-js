@@ -9,7 +9,7 @@ const AvatarGroup = ({ users }) => {
         <View key={index} style={[styles.avatarContainer, { zIndex: users.length - index }]}>
           {user.icon && <Avatar.Image 
             size={35}
-            source={user.icon}
+            source={{uri: user.icon.url}}
           />}
           {!user.icon && 
             <View style={{ width: 35, height: 35, alignItems: 'center', justifyContent: 'center', borderRadius: 35, borderWidth: 1, borderColor: '#fff', backgroundColor: '#333' }}> 
