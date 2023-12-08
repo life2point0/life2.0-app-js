@@ -87,12 +87,16 @@ const ViewProfile = () => {
                   <View style={{ flexDirection: 'column', justifyContent: 'center' }}> 
                       <Text style={theme.fonts.subtitle}>What I do   </Text> 
                       <Text style={theme.fonts.description}>
-                        {profile?.occupations?.map((place, index) => (
-                           <React.Fragment key={place?.name}>
-                            {index > 0 && ', '}
-                             { place?.name }
-                          </React.Fragment>
-                         ))}
+                        {profile?.occupations?.length > 0 ? (
+                          profile.occupations.map((place, index) => (
+                            <React.Fragment key={place?.name}>
+                              {index > 0 && ', '}
+                              {place?.name}
+                            </React.Fragment>
+                          ))
+                        ) : (
+                          '-'
+                        )}
                       </Text>
                   </View> 
                 </View>
@@ -101,12 +105,16 @@ const ViewProfile = () => {
                   <View style={{ flexDirection: 'column', justifyContent: 'center' }}> 
                       <Text style={theme.fonts.subtitle}>Places I have lived in   </Text> 
                       <Text style={theme.fonts.description}>
-                        {profile?.pastPlaces?.map((place, index) => (
-                           <React.Fragment key={place?.name}>
-                            {index > 0 && ', '}
-                             { place?.name }
-                          </React.Fragment>
-                         ))}
+                        {profile?.pastPlaces?.length > 0 ? (
+                          profile.pastPlaces.map((place, index) => (
+                            <React.Fragment key={place?.name}>
+                              {index > 0 && ', '}
+                              {place?.name}
+                            </React.Fragment>
+                          ))
+                        ) : (
+                          '-'
+                        )}
                       </Text>
                   </View> 
                 </View>

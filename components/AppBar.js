@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Appbar, Avatar, useTheme, Modal, Portal } from 'react-native-paper'
+import { Appbar, Avatar, useTheme, Modal, Portal, IconButton } from 'react-native-paper'
 import { Image, StatusBar, ScrollView, View, StyleSheet, Text } from 'react-native'
 import menuIcon from './assets/menu-slider-icon.png'
 import { useNavigation } from '@react-navigation/native'
@@ -75,14 +75,16 @@ const AppBar = ({ title, showBackButton, statusBarColor }) => {
                 onPress={toggleMenu}
               />
               <View style={styles.drawerSection}>
-                {  profile?.photos?.[0]?.url && <Avatar.Image size={theme.spacing.appBar.avatar.size} source={{ uri: profile?.photos?.[0]?.url }} /> }
+                {  profile?.photos?.[0]?.url ? <Avatar.Image size={theme.spacing.appBar.avatar.size} source={{ uri: profile?.photos?.[0]?.url }} /> :
+                  <IconButton iconColor='#ccc' size={20} style={{ size: 30, width: 30, height: 30, borderRadius: 100, borderWidth: 2, borderColor: '#ccc' }} icon='account-outline'></IconButton>                 
+                }
                 <View>
                   <Text style={theme.fonts.subtitle}> { profile?.firstName} { profile?.lastName } </Text>
                   <Text style={theme.fonts.description}> { profile?.email } </Text>
                 </View>
               </View>
               <View>
-                { profile?.description && <Button size='small' compact mode='text' contentStyle={styles.menuItem} onPress={() => handleNavigation('UpdateProfile')} icon="account-outline"> Edit profile </Button> }
+                <Button size='small' compact mode='text' contentStyle={styles.menuItem} onPress={() => handleNavigation('UpdateProfile')} icon="account-outline"> Edit profile </Button>
                 <Button size='small' compact  mode='text'  contentStyle={styles.menuItem} onPress={() => handleLogout()} icon="logout"> Logout </Button>
               </View>
             </ScrollView>
