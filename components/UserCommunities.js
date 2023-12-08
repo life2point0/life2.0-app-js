@@ -8,8 +8,8 @@ import { useChatContext } from 'stream-chat-expo';
 export const UserCommunities = () => {
     const { initChat, profile, isAuthenticated } = useAuth();
     const [channels, setChannels] = useState([]);
-    const { client } = useChatContext();
-    const { navigate } = useNavigation()
+    const { client, setActiveChannel } = useChatContext();
+    const { navigate } = useNavigation();
 
     const fetchChannels = async () => {
         const filter = {
@@ -37,17 +37,22 @@ export const UserCommunities = () => {
         initialize();
       }
     }, [client, client?.userID, client?.wsConnection?.isHealthy, profile]);
+
+    const navigateToCommunityChat = (channel) => {
+      setActiveChannel(channel);
+      navigate('Conversations');
+    }
   
     if(isAuthenticated) {
       return (
         <ScrollView horizontal style={{padding: 12}}>
           {channels.map(channel => (
-            <TouchableOpacity style={{alignItems: 'center', width: 110, paddingRight: 10}} key={channel.id}>
+            <TouchableOpacity style={{alignItems: 'center', width: 110, paddingRight: 10}} key={channel.id} onPress={() => navigateToCommunityChat(channel)}>
               <View style={[styles.avatarContainer]}>
                 <Avatar.Image 
                   source={{ uri: channel.data.image }}
                   size={80}
-                  style={{ marginHorizontal: 5, borderWidth: channel.countUnread() > 0 ? 2 : 0 }}
+                  style={{ marginHorizontal: 5 }}
                 />
                 {channel.countUnread() > 0 && (
                   <Badge
