@@ -74,8 +74,10 @@ const Communities = ({isSliider, route}) => {
                 <CommunityCard styles={theme.spacing.communities.screen.card} key={community.id} community={community} members={community.members}/>
               )) :
               <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-                <IconButton icon="information-outline" size={150} />
-                <Text style={{textAlign: 'center', fontSize: 18, paddingHorizontal: 40}}>Oops! We couldn't find a community for that search term.</Text>
+                <IconButton icon="information-outline" size={50} />
+                <Text style={{...theme.fonts.subtitle, textAlign: 'center'}}>Oops! No Communities Found.</Text>
+                <Text style={{...theme.fonts.description, textAlign: 'center', marginTop: 5}}>It appears there are no communities that match your search criteria.</Text>
+                <Text style={{...theme.fonts.description, textAlign: 'center', marginTop: 5}}>Feel free to refine your search or explore our existing communities for alternative choices.</Text>
               </View>
             }
           </ScrollView> 
