@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, Image, ScrollView, SafeAreaView, TouchableOpacity, KeyboardAvoidingView } from 'react-native'
+import { View, Text, Image, ScrollView, SafeAreaView, TouchableOpacity, KeyboardAvoidingView, StatusBar } from 'react-native'
 import axios from 'axios'
 import { IconButton, useTheme } from 'react-native-paper'
 import SignupIllustration from './assets/signup-illustration.png'
@@ -49,6 +49,7 @@ const Signup =  () => {
   
   return (
     <SafeAreaView style={{ flex: 1}}>
+      <StatusBar backgroundColor='#fbfbfb' barStyle="dark-content" />
       <KeyboardAvoidingView behavior="height">
         <View style={theme.spacing.onboarding.headerContainer}>
             <Text style={theme.fonts.title}>Sign Up</Text>

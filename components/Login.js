@@ -36,6 +36,7 @@ const Login =  () => {
   
   return (
     <SafeAreaView style={{ flex: 1}}>
+      <StatusBar backgroundColor='#fbfbfb' barStyle="dark-content" />
       <KeyboardAvoidingView behavior="height">
         <View style={theme.spacing.onboarding.headerContainer}>
           <Text style={theme.fonts.title}>Log In</Text>

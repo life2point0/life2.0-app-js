@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { SafeAreaView, ScrollView, Image, View } from 'react-native'
+import { SafeAreaView, ScrollView, Image, View, StatusBar } from 'react-native'
 import { Text, useTheme, IconButton } from 'react-native-paper'
 import { useAuth } from '../contexts/AuthContext'
 import { useNavigation } from '@react-navigation/native'
@@ -35,13 +35,14 @@ const ViewProfile = () => {
     return (
       <>
           <SafeAreaView style={{flex: 1 }}>
+          <StatusBar backgroundColor='#fbfbfb' barStyle="dark-content" />
           <View>
             { profile?.photos[0]?.url && <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 30 }}>
                 <Image style={{ borderRadius: 100, borderWidth: 5, borderColor: '#fff' }} source={{ uri: profile?.photos[0].url, width: 200, height: 200  }} />
               </View> }
 
               <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: 5, padding: 20 }}>
-                  <Text style={theme.fonts.title}> {profile?.firstName } { profile?.lastName }  </Text>
+                  <Text style={theme.fonts.title}> {profile?.firstName || '-' } { profile?.lastName || '-' }  </Text>
                   <Text style={{...theme.fonts.description,  textAlign: 'center'}}> Joined { formattedJoinedDate }  </Text>
                   <Text style={{...theme.fonts.description,  textAlign: 'center'}}> { profile?.description }  </Text>
               </View>
@@ -68,14 +69,14 @@ const ViewProfile = () => {
                   <IconButton icon="location-exit"/> 
                   <View style={{ flexDirection: 'column', justifyContent: 'center' }}> 
                       <Text style={theme.fonts.subtitle}>Where Am I From  </Text> 
-                      <Text style={theme.fonts.description }>{profile?.placeOfOrigin.name} </Text>
+                      <Text style={theme.fonts.description }>{profile?.placeOfOrigin?.name || '-'} </Text>
                   </View> 
                 </View>
                 <View style={{ borderColor: '#efefef', flexDirection: 'row', paddingBottom: 8, borderBottomWidth: 1 }}>
                   <IconButton icon="location-enter"/> 
                   <View style={{ flexDirection: 'column', justifyContent: 'center' }}> 
                       <Text style={theme.fonts.subtitle}>My New Home   </Text> 
-                      <Text style={theme.fonts.description }>{profile?.currentPlace.name}  </Text>
+                      <Text style={theme.fonts.description }>{profile?.currentPlace?.name || '-'}  </Text>
                   </View> 
                 </View>
                 <View style={{ borderColor: '#efefef', flexDirection: 'row', alignItems: 'center', paddingBottom: 8, borderBottomWidth: 1 }}>

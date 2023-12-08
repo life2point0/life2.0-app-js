@@ -52,14 +52,20 @@ const Communities = ({isSliider, route}) => {
           </View>
         }
 
-          <ScrollView style={theme.spacing.home.sliderContainer} showsHorizontalScrollIndicator={false}>
-            {communityList.length > 0 ? 
-              communityList.map((community) => (
-                <CommunityCard styles={theme.spacing.communities.screen.card} key={community.id} community={community} members={community.members}/>
-              )) :
+        <ScrollView style={theme.spacing.home.sliderContainer} showsHorizontalScrollIndicator={false}>
+          {communityList.length > 0 ? 
+            communityList.map((community) => (
+              <CommunityCard styles={theme.spacing.communities.screen.card} key={community.id} community={community} members={community.members}/>
+            )) :
+            communities.length > 0 ? 
+              <View>
+                <Text style={{...theme.fonts.subtitle, textAlign: 'center'}}> Oops! No Communities Found.   </Text>
+                <Text style={{...theme.fonts.description, textAlign: 'center'}}> It appears there are no communities that match your search criteria. Feel free to refine your search or explore our existing communities for alternative choices. </Text>
+              </View> : 
               <SkeletonCard />
-            }
-          </ScrollView> 
+          }
+        </ScrollView>
+
         </View>
     </SafeAreaView>
     </>

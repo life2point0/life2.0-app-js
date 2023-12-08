@@ -6,11 +6,13 @@ import { useNavigation } from '@react-navigation/native'
 import { useAuth } from '../contexts/AuthContext'
 import Button from '../shared-components/button/Button'
 
-const AppBar = ({ title, showBackButton }) => {
+const AppBar = ({ title, showBackButton, statusBarColor }) => {
   const navigation = useNavigation()
   const { isAuthenticated, profile, logout } = useAuth()
   const theme = useTheme()
   const [isMenuVisible, setMenuVisible] = useState(false)
+
+  const statusBarBgColor = statusBarColor || theme.colors.primaryContainer
 
   const toggleMenu = () => {
     setMenuVisible(!isMenuVisible)
@@ -33,7 +35,7 @@ const AppBar = ({ title, showBackButton }) => {
   return (
     <>
       <Appbar.Header style={{ alignItems: 'center', justifyContent: 'center', backgroundColor: !isMenuVisible ? theme.colors.primaryContainer : '#fff' }}>
-        <StatusBar backgroundColor={!isMenuVisible ? theme.colors.primaryContainer : '#fff'} barStyle="dark-content" />
+        <StatusBar backgroundColor={!isMenuVisible ? statusBarBgColor : '#fff'} barStyle="dark-content" />
         { isAuthenticated && !showBackButton && (
           <Appbar.Action
             icon={() => <Image source={menuIcon} style={theme.spacing.appBar.menuIcon} />}
@@ -68,7 +70,7 @@ const AppBar = ({ title, showBackButton }) => {
                 onPress={toggleMenu}
               />
               <View style={styles.drawerSection}>
-                <Avatar.Image size={theme.spacing.appBar.avatar.size} source={{ uri: profile?.photos?.[0]?.url }} />
+                {  profile?.photos?.[0]?.url && <Avatar.Image size={theme.spacing.appBar.avatar.size} source={{ uri: profile?.photos?.[0]?.url }} /> }
                 <View>
                   <Text style={theme.fonts.subtitle}> { profile?.firstName} { profile?.lastName } </Text>
                   <Text style={theme.fonts.description}> { profile?.email } </Text>
