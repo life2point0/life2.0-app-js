@@ -84,10 +84,10 @@ const ViewProfile = () => {
                   <View style={{ flexDirection: 'column', justifyContent: 'center' }}> 
                       <Text style={theme.fonts.subtitle}>What I do   </Text> 
                       <Text style={theme.fonts.description}>
-                        {profile?.occupations.map((place, index) => (
-                           <React.Fragment key={place.name}>
+                        {profile?.occupations?.map((place, index) => (
+                           <React.Fragment key={place?.name}>
                             {index > 0 && ', '}
-                             { place.name }
+                             { place?.name }
                           </React.Fragment>
                          ))}
                       </Text>
@@ -98,10 +98,10 @@ const ViewProfile = () => {
                   <View style={{ flexDirection: 'column', justifyContent: 'center' }}> 
                       <Text style={theme.fonts.subtitle}>Places I have lived in   </Text> 
                       <Text style={theme.fonts.description}>
-                        {profile?.pastPlaces.map((place, index) => (
-                           <React.Fragment key={place.name}>
+                        {profile?.pastPlaces?.map((place, index) => (
+                           <React.Fragment key={place?.name}>
                             {index > 0 && ', '}
-                             { place.name }
+                             { place?.name }
                           </React.Fragment>
                          ))}
                       </Text>

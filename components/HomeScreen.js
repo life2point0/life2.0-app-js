@@ -22,20 +22,31 @@ const HomeScreen = () => {
         <View style={theme.spacing.home.section}>
           <Text style={theme.fonts.title}> {profile && `Hey ${profile?.firstName}, `}Welcome to Dubai!</Text>
         </View>
-        
         <View style={theme.spacing.home.section}>
-          <TextInput
-            style={theme.components.inputs.textField}
-            placeholder="Search communities"
-            placeholderTextColor="#888"
-            onFocus={() => navigation.navigate('Communities', { isTextInputFocused: true })}
+          <TouchableOpacity 
+            onPress={() => navigation.navigate('Communities', { isTextInputFocused: true })}
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              zIndex: 1000, // Ensure it's above other content
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
           />
-          <TouchableOpacity onPress={() => undefined}>
-            <Image
-              source={require('./assets/icons/searchicon.png')}
-              style={theme.spacing.home.searchIcon}
+            <TextInput
+              style={theme.components.inputs.textField}
+              placeholder="Search communities"
+              placeholderTextColor="#888"
             />
-          </TouchableOpacity>
+            <TouchableOpacity onPress={() => undefined}>
+              <Image
+                source={require('./assets/icons/searchicon.png')}
+                style={theme.spacing.home.searchIcon}
+              />
+            </TouchableOpacity>
         </View>
         
         <View> 
