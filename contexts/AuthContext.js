@@ -160,6 +160,7 @@ export const AuthProvider = ({ children }) => {
 
     try {
       await axios.delete(`${USER_SERVICE_BASE_URL}/sessions`, config )
+      client.disconnectUser()
       setIsAuthenticated(false)
       setRefreshToken('')
       setAccessToken('')
