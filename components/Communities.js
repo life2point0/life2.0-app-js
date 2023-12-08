@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import { View, Text, ScrollView, SafeAreaView, TouchableOpacity, TextInput, Image } from 'react-native'
-import { Avatar, Card, useTheme  } from 'react-native-paper'
+import { Avatar, Card, IconButton, useTheme  } from 'react-native-paper'
 import { useNavigation } from '@react-navigation/native'
 import { useAuth } from '../contexts/AuthContext'
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder'
@@ -11,28 +11,38 @@ import { USER_SERVICE_BASE_URL } from './constants'
 import Button from '../shared-components/button/Button'
 import { useData } from '../contexts/DataContext'
 import AppBar from './AppBar'
+import * as _ from 'lodash';
 
 
 const Communities = ({isSliider, route}) => {
   const { isTextInputFocused } = route?.params || {}
-  const theme = useTheme()
-  const { communities, filteredCommunities, filterCommunities, filterQuery } = useData()
-  const [searchQueryText, setSearchQueryText ] = useState()
-
+  const theme = useTheme();
+  const [isLoading, setLoading] = useState(false);
+  const { communities, filteredCommunities, filterCommunities, filterQuery } = useData();
+  const [searchQueryText, setSearchQueryText ] = useState();
   const communityList = isSliider ? communities : filteredCommunities
 
-  useEffect(() => {
-    setSearchQueryText(filterQuery)
-  }, [])
-
-  const getFilteredCommunities = () => {
-    filterCommunities(searchQueryText)
+  const getFilteredCommunities = async () => {
+    setLoading(true);
+    await filterCommunities(searchQueryText);
+    setLoading(false);
   }
+
+  const debouncedGetFilteredCommunities = useMemo(() => _.debounce(() => getFilteredCommunities(searchQueryText), 300), [searchQueryText]);
+
+  useEffect(() => {
+    setSearchQueryText(filterQuery);
+  }, []);
+
+  useEffect(() => {
+    debouncedGetFilteredCommunities();
+    return () => debouncedGetFilteredCommunities.cancel();
+  }, [searchQueryText]);
 
   return (
     <> 
     { !isSliider && <AppBar title="Communities" showBackButton /> }
-    <SafeAreaView style={{ flex: 1, marginBottom: 30 }}>
+      <SafeAreaView style={{ flex: 1, marginBottom: 30 }}>
         <View style={!isSliider ? theme.spacing.communities.screen.container : null}>
         { !isSliider &&  <View style={theme.spacing.communities.screen.section}>
           <TextInput
@@ -52,14 +62,24 @@ const Communities = ({isSliider, route}) => {
           </View>
         }
 
+        {isLoading ? (
+          <View>
+            <SkeletonCard />
+            <SkeletonCard />
+          </View>
+        ): (
           <ScrollView style={theme.spacing.home.sliderContainer} showsHorizontalScrollIndicator={false}>
             {communityList.length > 0 ? 
               communityList.map((community) => (
                 <CommunityCard styles={theme.spacing.communities.screen.card} key={community.id} community={community} members={community.members}/>
               )) :
-              <SkeletonCard />
+              <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+                <IconButton icon="information-outline" size={150} />
+                <Text style={{textAlign: 'center', fontSize: 18, paddingHorizontal: 40}}>Oops! We couldn't find a community for that search term.</Text>
+              </View>
             }
           </ScrollView> 
+        )}
         </View>
     </SafeAreaView>
     </>
