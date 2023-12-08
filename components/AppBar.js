@@ -52,7 +52,7 @@ const AppBar = ({ title, showBackButton, statusBarColor }) => {
             style={{ position: 'absolute', left: 0 }}
           />
         )}
-        <Appbar.Content mode='center-aligned' style={{ position: 'absolute', width: '100%' }} title={title || ''}/>
+        <Appbar.Content mode='center-aligned' style={{ position: 'absolute', alignItems: 'center', width: '100%' }} title={title || ''}/>
 
         { profile?.photos?.[0]?.url && <Appbar.Action
           animated={false}
