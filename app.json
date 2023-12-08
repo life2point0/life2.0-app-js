@@ -9,7 +9,7 @@
     "splash": {
       "image": "./components/assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#FFC003"
+      "backgroundColor": "#FFF2CB"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -21,7 +21,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./components/assets/app-icon.png",
-        "backgroundColor": "#FFC003"
+        "backgroundColor": "#FFF2CB"
       },
       "package": "co.life2point0.android",
       "permissions": [

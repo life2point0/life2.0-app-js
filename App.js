@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -26,6 +26,7 @@ import ProfileImageUpload from './components/ProfileImageUpload';
 import { NavigationMenu } from './components/AppBar';
 import ViewProfile from './components/ViewProfile';
 import * as SystemUI from 'expo-system-ui';
+import RenderIfConnected from './components/RenderIfConnected';
 
 SystemUI.setBackgroundColorAsync('#FFFFFF');
 
@@ -82,32 +83,34 @@ function SharedTabs() {
   );
 }
 
-const App = () => {
+const App = () => {  
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <OverlayProvider>
-        <Chat client={chatClient}>
-          <DataProvider> 
-            <AuthProvider>
-              <PaperProvider theme={theme}>
-                <NavigationContainer>
-                  <Stack.Navigator screenOptions={{ headerShown: false }}>
-                    <Stack.Screen name="Root" component={Root} />
-                    <Stack.Screen name="Main" component={SharedTabs} options={{ headerShown: false }}/>
-                    <Stack.Screen name="Login" component={Login} />
-                    <Stack.Screen name="Signup" component={Signup} />
-                    <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
-                    {/* <Stack.Screen name="ViewProfile" component={ViewProfile} /> */}
-                    <Stack.Screen name="ProfileImageUpload" component={ProfileImageUpload} />
-                    <Stack.Screen name="Conversations" component={Conversations} />
-                    <Stack.Screen name="Communities" component={Communities} />
-                  </Stack.Navigator>
-                  <Stack.Screen name="NavigationMenu" component={NavigationMenu} />
-                </NavigationContainer>
-              </PaperProvider>
-            </AuthProvider>
-          </DataProvider>
-        </Chat>
+        <PaperProvider theme={theme}>
+          <RenderIfConnected>
+            <Chat client={chatClient}>
+              <DataProvider> 
+                <AuthProvider>
+                  <NavigationContainer>
+                    <Stack.Navigator screenOptions={{ headerShown: false }}>
+                      <Stack.Screen name="Root" component={Root} />
+                      <Stack.Screen name="Main" component={SharedTabs} options={{ headerShown: false }}/>
+                      <Stack.Screen name="Login" component={Login} />
+                      <Stack.Screen name="Signup" component={Signup} />
+                      <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
+                      {/* <Stack.Screen name="ViewProfile" component={ViewProfile} /> */}
+                      <Stack.Screen name="ProfileImageUpload" component={ProfileImageUpload} />
+                      <Stack.Screen name="Conversations" component={Conversations} />
+                      <Stack.Screen name="Communities" component={Communities} />
+                    </Stack.Navigator>
+                    <Stack.Screen name="NavigationMenu" component={NavigationMenu} />
+                  </NavigationContainer>
+                </AuthProvider>
+              </DataProvider>
+            </Chat>
+          </RenderIfConnected>
+        </PaperProvider>
       </OverlayProvider>
     </GestureHandlerRootView>
   );

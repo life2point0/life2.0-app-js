@@ -5,7 +5,7 @@ import { Image } from 'react-native';
 const SplashScreen = () => {
     return (
         <>
-            <StatusBar backgroundColor="#FFC003" barStyle="dark-content" />
+            <StatusBar backgroundColor="#FFF2CB" barStyle="dark-content" />
             <View
                 style={{
                     height: '100%',
@@ -13,10 +13,12 @@ const SplashScreen = () => {
                     flex: 1,
                     alignItems: 'center',
                     justifyContent: 'center',
-                    backgroundColor: '#FFC003'
+                    backgroundColor: '#FFF2CB',
+                    padding: 0,
+                    margin: 0
                 }}
             >
-            <Image source={SplashLogo} style={{maxWidth: '50%', resizeMode: 'contain'}} />
+            <Image source={SplashLogo} style={{width: '100%', resizeMode: 'contain'}} />
             </View>
         </>
     );

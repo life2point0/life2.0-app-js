@@ -33,7 +33,7 @@ const AppBar = ({ title, showBackButton }) => {
   return (
     <>
       <Appbar.Header style={{ alignItems: 'center', justifyContent: 'center', backgroundColor: !isMenuVisible ? theme.colors.primaryContainer : '#fff' }}>
-        {/* <StatusBar backgroundColor={!isMenuVisible ? theme.colors.primaryContainer : '#fff'} barStyle="dark-content" /> */}
+        <StatusBar backgroundColor={!isMenuVisible ? theme.colors.primaryContainer : '#fff'} barStyle="dark-content" />
         { isAuthenticated && !showBackButton && (
           <Appbar.Action
             icon={() => <Image source={menuIcon} style={theme.spacing.appBar.menuIcon} />}

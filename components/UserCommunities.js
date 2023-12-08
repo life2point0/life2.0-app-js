@@ -1,6 +1,7 @@
+import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../contexts/AuthContext";
 import React, { useState, useEffect } from 'react';
-import { ScrollView, Text, View, StyleSheet } from 'react-native';
+import { ScrollView, Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Avatar, Badge } from 'react-native-paper';
 import { useChatContext } from 'stream-chat-expo';
 
@@ -8,6 +9,7 @@ export const UserCommunities = () => {
     const { initChat, profile, isAuthenticated } = useAuth();
     const [channels, setChannels] = useState([]);
     const { client } = useChatContext();
+    const { navigate } = useNavigation()
 
     const fetchChannels = async () => {
         const filter = {
@@ -40,7 +42,7 @@ export const UserCommunities = () => {
       return (
         <ScrollView horizontal style={{padding: 12}}>
           {channels.map(channel => (
-            <View style={{alignItems: 'center', width: 110, paddingRight: 10}} key={channel.id}>
+            <TouchableOpacity style={{alignItems: 'center', width: 110, paddingRight: 10}} key={channel.id}>
               <View style={[styles.avatarContainer]}>
                 <Avatar.Image 
                   source={{ uri: channel.data.image }}
@@ -57,7 +59,7 @@ export const UserCommunities = () => {
                 )}
               </View>
               <Text style={{fontSize: 12, textAlign: 'center'}} numberOfLines={2} ellipsizeMode="tail">{channel.data.name}</Text>
-            </View>
+            </TouchableOpacity>
           ))}
         </ScrollView>
       )
