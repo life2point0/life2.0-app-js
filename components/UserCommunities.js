@@ -26,14 +26,11 @@ export const UserCommunities = () => {
         } catch(error) {
           console.log('Channel Error', error)
         }
-
-        console.log('REACHED')
     };
 
     const initialize = async () => {
       await initChat();
       if (!client) return;
-      console.log('clinet', client)
       setChannels(await fetchChannels());
     }
 

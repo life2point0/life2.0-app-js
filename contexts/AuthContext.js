@@ -80,24 +80,17 @@ export const AuthProvider = ({ children }) => {
   }
 
   const initChat = async () => {
-    console.log('client?.userID', client?.userID)
-    console.log('client.wsConnection?.isHealthy', client.wsConnection?.isHealthy)
-    console.log('profile?.id', profile?.id)
-
     if ((client?.userID && client.wsConnection?.isHealthy) || !profile?.id) {
-      console.log('Reached init chat')
       return
     }
     try {
-      client.on('connection.changed', (event) => console.log('EVENT', event))
-      const response = await client.connectUser(
+      await client.connectUser(
         {
           id: profile?.id,
           name: `${profile?.firstName} ${profile?.lastName}`,
         },
         chatToken?.streamChat
       )
-      console.log('INIT chat success', response);
     } catch (e) {
       console.log('INIT chat fail', e);
     }
