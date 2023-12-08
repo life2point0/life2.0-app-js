@@ -52,7 +52,8 @@ const AppBar = ({ title, showBackButton, statusBarColor }) => {
             style={{ position: 'absolute', left: 0 }}
           />
         )}
-        <Appbar.Content style={{  flex: 1, alignItems: 'center' }} title={title || ''} />
+        <Appbar.Content mode='center-aligned' style={{ position: 'absolute', width: '100%' }} title={title || ''}/>
+
         { profile?.photos?.[0]?.url && <Appbar.Action
           animated={false}
           icon={() => (
@@ -64,6 +65,7 @@ const AppBar = ({ title, showBackButton, statusBarColor }) => {
           style={{ position: 'absolute', right: 0 }}
           />
           }
+
       </Appbar.Header>
       <Portal> 
         <Modal visible={isMenuVisible} transparent={true} onDismiss={toggleMenu} contentContainerStyle={styles.drawerContainer} animationType="slide">
