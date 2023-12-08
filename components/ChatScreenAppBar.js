@@ -18,7 +18,7 @@ const ChatScreenAppBar = ({ title, image }) => {
         }}
         style={{ position: 'absolute', left: 0 }}
       />
-      <Appbar.Content 
+      <Appbar.Content mode='center-aligned' style={{ position: 'absolute', alignItems: 'center', width: '100%' }}
         title={
           <View style={{flexDirection: 'row', alignItems: 'center', gap: 8}}>
             <Avatar.Image size={36} style={{backgroundColor: '#fff'}} source={image} />
