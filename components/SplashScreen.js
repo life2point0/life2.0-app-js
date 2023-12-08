@@ -1,5 +1,5 @@
 import { StatusBar, View } from "react-native";
-import SplashLogo from './assets/splash-logo.png';
+import SplashLogo from './assets/splash.png';
 import { Image } from 'react-native';
 
 const SplashScreen = () => {
