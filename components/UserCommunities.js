@@ -17,24 +17,31 @@ export const UserCommunities = () => {
             type: 'community'
         };
         const sort = { last_message_at: -1 };
-        
-        const channels = await client.queryChannels(filter, sort, {
+        try {
+          const channels = await client.queryChannels(filter, sort, {
             watch: true,
             state: true,
-        });
-        console.log(channels[0]?.countUnread())
-        return channels;
+          })
+          return channels
+        } catch(error) {
+          console.log('Channel Error', error)
+        }
+
+        console.log('REACHED')
     };
 
     const initialize = async () => {
       await initChat();
       if (!client) return;
+      console.log('clinet', client)
       setChannels(await fetchChannels());
     }
 
     useEffect(() => {
       if(profile?.id) {
-        initialize();
+        initialize()
+      } else {
+        setChannels([])
       }
     }, [client, client?.userID, client?.wsConnection?.isHealthy, profile]);
 
@@ -46,7 +53,7 @@ export const UserCommunities = () => {
     if(isAuthenticated) {
       return (
         <ScrollView horizontal style={{padding: 12}}>
-          {channels.map(channel => (
+          {channels?.map(channel => (
             <TouchableOpacity style={{alignItems: 'center', width: 110, paddingRight: 10}} key={channel.id} onPress={() => navigateToCommunityChat(channel)}>
               <View style={[styles.avatarContainer]}>
                 <Avatar.Image 
