@@ -14,8 +14,9 @@ const ChatScreenAppBar = ({ title, image }) => {
       <Appbar.Action
         icon="arrow-left"
         onPress={() => {
-          navigation.navigate('Chats')
+          navigation.goBack()
         }}
+        style={{ position: 'absolute', left: 0 }}
       />
       <Appbar.Content 
         title={

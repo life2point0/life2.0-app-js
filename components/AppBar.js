@@ -40,6 +40,7 @@ const AppBar = ({ title, showBackButton, statusBarColor }) => {
           <Appbar.Action
             icon={() => <Image source={menuIcon} style={theme.spacing.appBar.menuIcon} />}
             onPress={toggleMenu}
+            style={{ position: 'absolute', left: 0 }}
           />
         )}
         {showBackButton && (
@@ -48,6 +49,7 @@ const AppBar = ({ title, showBackButton, statusBarColor }) => {
             onPress={() => {
               navigation.navigate('Home')
             }}
+            style={{ position: 'absolute', left: 0 }}
           />
         )}
         <Appbar.Content style={{  flex: 1, alignItems: 'center' }} title={title || ''} />
@@ -59,6 +61,7 @@ const AppBar = ({ title, showBackButton, statusBarColor }) => {
           onPress={() => {
             navigation.navigate('Profile')
           }}
+          style={{ position: 'absolute', right: 0 }}
           />
           }
       </Appbar.Header>
