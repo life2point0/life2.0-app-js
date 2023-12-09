@@ -13,10 +13,9 @@ export const DataProvider = ({ children }) => {
   const [filteredCommunities, setfilteredCommunities] = useState([])
   const [filterQuery, setFilterQuery] = useState('')
 
-
   const getCommunities = async () => {
     try {
-        const res = (await axios.get(`${USER_SERVICE_BASE_URL}/communities?perPage=100`)).data
+        const res = (await axios.get(`${USER_SERVICE_BASE_URL}/communities?perPage=5`)).data
         setCommunities(res.data)
         setfilteredCommunities(res.data)
     } catch (e) {
