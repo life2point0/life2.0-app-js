@@ -8,7 +8,7 @@ import { ChannelList, useChatContext } from 'stream-chat-expo';
 export default function ChatScreen() {
   const { isAuthenticated, isProfileCreated, isImageUploaded, chatToken, profile } = useAuth();
   const navigation = useNavigation();
-  const { setActiveChannel } = useChatContext();
+  const { setActiveChannel, client } = useChatContext();
 
   useEffect(() => {
     return navigation.addListener('focus', () => {
@@ -25,7 +25,7 @@ export default function ChatScreen() {
     });
   }, []);
 
-  if (chatToken && isProfileCreated && isImageUploaded) {
+  if (isProfileCreated && isImageUploaded) {
     return (
       <>
         <AppBar title="Conversations" />
