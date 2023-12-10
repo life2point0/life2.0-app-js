@@ -43,7 +43,7 @@ const Select = ({ label, value, styles, multiple, options, onItemClick }) => {
             searchable={true}
             CloseIconComponent={() => (
                 <IconButton 
-                  icon="close" 
+                  icon="check" 
                   size={26} 
                   mode='contained'
                 />
