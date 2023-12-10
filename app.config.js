@@ -9,8 +9,8 @@ export default ({ config }) => {
   };
 
   const androidPackageNames = {
-    development: 'co.life2point0.android.dev',
-    sandbox: 'co.life2point0.android.sandbox',
+    development: 'co.life2point0.android',
+    sandbox: 'co.life2point0.android',
     production: 'co.life2point0.android',
   };
 
