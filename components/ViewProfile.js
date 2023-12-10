@@ -119,7 +119,7 @@ const ViewProfile = () => {
                   </View> 
                 </View>
                 <View style={{ gap: 10, borderColor: '#efefef', flexDirection: 'row', alignItems: 'center', paddingBottom: 8, borderBottomWidth: 1 }}>
-                  <Icon size={25} color='#676767' source="tools"/> 
+                  <Icon size={25} color='#676767' source="playlist-edit"/> 
                   <View style={{ flexDirection: 'column', justifyContent: 'center' }}> 
                       <Text style={theme.fonts.subtitle}>My Interests </Text> 
                       <Text style={theme.fonts.description}>
@@ -137,7 +137,7 @@ const ViewProfile = () => {
                   </View> 
                 </View>
                 <View style={{ gap: 10, alignItems: 'center', flexDirection: 'row'}}>
-                  <Icon size={25} color='#676767' source="account-switch-outline"/> 
+                  <Icon size={25} color='#676767' source="account-tie-voice"/> 
                   <View style={{ flexDirection: 'column', justifyContent: 'center' }}> 
                       <Text style={theme.fonts.subtitle}>Languages I Speak   </Text> 
                       <Text style={theme.fonts.description}>
