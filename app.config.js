@@ -1,16 +1,16 @@
 import 'dotenv/config';
 
-export default ({ config }) => {
+export default () => {
   // Define hashmaps for environment-specific configurations
   const iosBundleIdentifiers = {
-    development: 'co.life2point0.ios',
-    sandbox: 'co.life2point0.ios',
+    development: 'co.life2point0.ios.dev',
+    sandbox: 'co.life2point0.ios.sandbox',
     production: 'co.life2point0.ios',
   };
 
   const androidPackageNames = {
-    development: 'co.life2point0.android',
-    sandbox: 'co.life2point0.android',
+    development: 'co.life2point0.android.dev',
+    sandbox: 'co.life2point0.android.sandbox',
     production: 'co.life2point0.android',
   };
 
@@ -21,10 +21,9 @@ export default ({ config }) => {
   const bundleIdentifier = iosBundleIdentifiers[env];
   const packageId = androidPackageNames[env];
 
+  // Return the full configuration object
   return {
-    ...config,
     expo: {
-      ...config.expo,
       name: "Life 2.0",
       slug: "life2point0",
       version: "1.0.0",
@@ -38,12 +37,10 @@ export default ({ config }) => {
       },
       assetBundlePatterns: ["**/*"],
       ios: {
-        ...config.expo.ios,
         supportsTablet: true,
         bundleIdentifier,
       },
       android: {
-        ...config.expo.android,
         package: packageId,
         notification: {
           icon: "./components/assets/notifications-icon.png"
@@ -71,6 +68,6 @@ export default ({ config }) => {
           }
         ]
       ]
-    }
+    },
   };
 };
