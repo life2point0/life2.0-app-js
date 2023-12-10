@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, SafeAreaView, ScrollView, KeyboardAvoidingView, StatusBar } from 'react-native'
 import { ActivityIndicator, IconButton, useTheme } from 'react-native-paper'
-import { CORE_SERVICE_BASE_URL, USER_SERVICE_BASE_URL } from './constants'
+import { USER_SERVICE_BASE_URL } from './constants'
 import { useAuth } from '../contexts/AuthContext'
 import { useNavigation } from '@react-navigation/native'
 import { Form } from '../shared-components/form/Form'
-import { updateProfileFields, updateProfileSchema } from './constants/fields/updateProfileFields'
-import { updateProfileStyles } from './constants/styles/updateProfileStyles'
-import Button from '../shared-components/button/Button'
+import { updatePersonalDetailsFields } from './constants/fields/updatePersonalDetailsFields'
 
-export default UpdateProfile = () => {
+export default UpdatePersonalDetails = () => {
   
   const { authCall, profile, getProfile } = useAuth()
   const navigation = useNavigation()
@@ -19,48 +17,45 @@ export default UpdateProfile = () => {
   const [fields, setFields] = useState([])
   const [isProfileSubmitting, setProfileSubmitting] = useState(false)
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = (await authCall({
-          method: 'GET',
-          url: `${USER_SERVICE_BASE_URL}/occupations?perPage=100`
-        }))?.data
+  const fetchDataAndUpdateFields = async (url, fieldName) => {
+    try {
+      const response = (await authCall({
+        method: 'GET',
+        url: url
+      }))?.data
 
-        const profileFields = updateProfileFields
-        const occupationsField = profileFields.find(field => field.name === 'occupations')
-        if (occupationsField) {
-          occupationsField.options = response.data
+      setFields((prevFields) => {
+        const updatedFields = [...prevFields]
+        const fieldToUpdate = updatedFields.find((field) => field.name === fieldName)
+
+        if (fieldToUpdate) {
+          fieldToUpdate.options = response.data
         }
-        setFields(profileFields)
-      } catch (error) {
-        setErrorText(error.response?.data?.detail?.msg || 'Unknown Error')
-      }
+
+        return updatedFields
+      })
+    } catch (error) {
+      setErrorText(error.response?.data?.detail?.msg || 'Unknown Error')
     }
+  }
+
+  useEffect(() => {
+    setFields(updatePersonalDetailsFields)
+
+    const fetchData = async () => {
+      await fetchDataAndUpdateFields(`${USER_SERVICE_BASE_URL}/skills?perPage=100`, 'skills')
+      await fetchDataAndUpdateFields(`${USER_SERVICE_BASE_URL}/languages?perPage=100`, 'languages')
+    }
+
     fetchData()
-    if(profile?.description) {
-      updateProfileFields[0].hidden = false
-      updateProfileFields[1].hidden = false
-    } else {
-      updateProfileFields[0].hidden = true
-      updateProfileFields[1].hidden = true
-    }
   }, [])
 
-  const selectedOccupations = profile?.occupations?.map(occupation => occupation.id)
-  const preSelectedPastPlaces = profile?.pastPlaces?.map(location =>  ( {place_id: location.googlePlaceId, name: location.name}))
-  const preselectedPlaceOfOrigin = {place_id: profile?.placeOfOrigin?.googlePlaceId, name: profile?.placeOfOrigin?.name}
-  const preselectedCurrentPlace = {place_id: profile?.currentPlace?.googlePlaceId, name: profile?.currentPlace?.name}
+  const selectedSkills = profile?.skills?.map(skill => skill.id)
+  const selectedLanguages = profile?.languages?.map(language => language.id)
 
-  const updateProfileInitialValues = {
-    firstName: profile?.firstName || '',
-    lastName: profile?.lastName || '',
-    email: profile?.email || '',
-    placeOfOrigin: preselectedPlaceOfOrigin || '',
-    pastPlaces: preSelectedPastPlaces || [],
-    currentPlace: preselectedCurrentPlace || '',
-    description: profile?.description || '',
-    occupations: selectedOccupations || []
+  const UpdatePersonalDetailsInitialValues = {
+    skills: selectedSkills || [],
+    languages: selectedLanguages || []
   }
 
   const handleProfileSubmit = async (values) => {
@@ -72,7 +67,7 @@ export default UpdateProfile = () => {
         data: values
       })
       await getProfile()
-      navigation.replace('ProfileImageUpload')
+      navigation.navigate('Main', { screen: 'Home' })
     } catch (e) {
       setErrorText(e?.response?.data?.detail?.msg || 'Unknown Error' )
     } finally {
@@ -85,8 +80,7 @@ export default UpdateProfile = () => {
       <StatusBar backgroundColor='#fbfbfb' barStyle="dark-content" />
       <KeyboardAvoidingView behavior="height">
         <View style={theme.spacing.onboarding.headerContainer}>
-        { !profile?.description && <Text style={theme.fonts.title}>Complete Profile</Text> }
-        { profile?.description && <Text style={theme.fonts.title}>Update Profile</Text> }
+        { <Text style={theme.fonts.title}>Personal Details</Text> }
           <IconButton
             icon="arrow-left"
             style={theme.spacing.backButton}
@@ -107,15 +101,14 @@ export default UpdateProfile = () => {
         )}
 
       { !profile?.description && <Text style={theme.fonts.description}>
-          Welcome onboard {profile?.firstName}! {"\n"}
-          Please complete your profile.
+            These options will help us find the most relevant 
+            communities and people for you
         </Text> 
       }
 
-        { profile && fields.length ? (
+        { profile && fields?.length ? (
             <Form
-              initialValues={updateProfileInitialValues}
-              validationSchema={updateProfileSchema}
+              initialValues={UpdatePersonalDetailsInitialValues}
               fields={fields}
               onSubmit={handleProfileSubmit}
               isLoading={isProfileSubmitting}

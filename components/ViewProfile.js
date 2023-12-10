@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { SafeAreaView, ScrollView, Image, View, StatusBar } from 'react-native'
-import { Text, useTheme, IconButton } from 'react-native-paper'
+import { Text, useTheme, Icon, IconButton } from 'react-native-paper'
 import { useAuth } from '../contexts/AuthContext'
 import { useNavigation } from '@react-navigation/native'
 
@@ -59,7 +59,7 @@ const ViewProfile = () => {
            </View>
 
 
-            <ScrollView contentContainerStyle={{ gap: 10 }}>
+            <ScrollView contentContainerStyle={{ gap: 10, paddingBottom: 30 }}>
               { profile?.photos[0]?.url && <View style={{ flexDirection: 'column', justifyContent: 'center', gap: 10, padding: 20, backgroundColor: 'white' }}>
                 <Text style={theme.fonts.title}> Your Images  </Text>
                   <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ flexDirection: 'row', gap: 10, justifyContent: 'flex-start', alignItems: 'center' }}>
@@ -68,22 +68,22 @@ const ViewProfile = () => {
                 </View>
               }
               <View style={{ flexDirection: 'column', gap: 8, paddingHorizontal: 20, paddingVertical: 8, backgroundColor: 'white'  }}>
-                <View style={{ borderColor: '#efefef', flexDirection: 'row', paddingBottom: 8, borderBottomWidth: 1 }}>
-                  <IconButton icon="location-exit"/> 
+                <View style={{ gap: 10,  borderColor: '#efefef', flexDirection: 'row', alignItems: 'center', paddingBottom: 8, borderBottomWidth: 1 }}>
+                  <Icon size={25} color='#676767' source="location-exit"/> 
                   <View style={{ flexDirection: 'column', justifyContent: 'center' }}> 
                       <Text style={theme.fonts.subtitle}>Where Am I From  </Text> 
                       <Text style={theme.fonts.description }>{profile?.placeOfOrigin?.name || '-'} </Text>
                   </View> 
                 </View>
-                <View style={{ borderColor: '#efefef', flexDirection: 'row', paddingBottom: 8, borderBottomWidth: 1 }}>
-                  <IconButton icon="location-enter"/> 
+                <View style={{ gap: 10, borderColor: '#efefef', alignItems: 'center', flexDirection: 'row', paddingBottom: 8, borderBottomWidth: 1 }}>
+                  <Icon size={25} color='#676767' source="location-enter"/> 
                   <View style={{ flexDirection: 'column', justifyContent: 'center' }}> 
                       <Text style={theme.fonts.subtitle}>My New Home   </Text> 
                       <Text style={theme.fonts.description }>{profile?.currentPlace?.name || '-'}  </Text>
                   </View> 
                 </View>
-                <View style={{ borderColor: '#efefef', flexDirection: 'row', alignItems: 'center', paddingBottom: 8, borderBottomWidth: 1 }}>
-                  <IconButton icon="briefcase-outline"/> 
+                <View style={{ gap: 10, borderColor: '#efefef', flexDirection: 'row', alignItems: 'center', paddingBottom: 8, borderBottomWidth: 1 }}>
+                  <Icon size={25} color='#676767'source="briefcase-outline"/> 
                   <View style={{ flexDirection: 'column', justifyContent: 'center' }}> 
                       <Text style={theme.fonts.subtitle}>What I do   </Text> 
                       <Text style={theme.fonts.description}>
@@ -100,13 +100,49 @@ const ViewProfile = () => {
                       </Text>
                   </View> 
                 </View>
-                <View style={{ flexDirection: 'row' }}>
-                  <IconButton icon="map-marker-check-outline"/> 
+                <View style={{ gap: 10, borderColor: '#efefef', flexDirection: 'row', alignItems: 'center', paddingBottom: 8, borderBottomWidth: 1 }}>
+                  <Icon size={25} color='#676767' source="map-marker-check-outline"/> 
                   <View style={{ flexDirection: 'column', justifyContent: 'center' }}> 
                       <Text style={theme.fonts.subtitle}>Places I have lived in   </Text> 
                       <Text style={theme.fonts.description}>
                         {profile?.pastPlaces?.length > 0 ? (
                           profile.pastPlaces.map((place, index) => (
+                            <React.Fragment key={place?.name}>
+                              {index > 0 && ', '}
+                              {place?.name}
+                            </React.Fragment>
+                          ))
+                        ) : (
+                          '-'
+                        )}
+                      </Text>
+                  </View> 
+                </View>
+                <View style={{ gap: 10, borderColor: '#efefef', flexDirection: 'row', alignItems: 'center', paddingBottom: 8, borderBottomWidth: 1 }}>
+                  <Icon size={25} color='#676767' source="tools"/> 
+                  <View style={{ flexDirection: 'column', justifyContent: 'center' }}> 
+                      <Text style={theme.fonts.subtitle}>My Interests </Text> 
+                      <Text style={theme.fonts.description}>
+                        {profile?.skills?.length > 0 ? (
+                          profile.skills.map((place, index) => (
+                            <React.Fragment key={place?.name}>
+                              {index > 0 && ', '}
+                              {place?.name}
+                            </React.Fragment>
+                          ))
+                        ) : (
+                          '-'
+                        )}
+                      </Text>
+                  </View> 
+                </View>
+                <View style={{ gap: 10, alignItems: 'center', flexDirection: 'row'}}>
+                  <Icon size={25} color='#676767' source="account-switch-outline"/> 
+                  <View style={{ flexDirection: 'column', justifyContent: 'center' }}> 
+                      <Text style={theme.fonts.subtitle}>Languages I Speak   </Text> 
+                      <Text style={theme.fonts.description}>
+                        {profile?.languages?.length > 0 ? (
+                          profile.languages.map((place, index) => (
                             <React.Fragment key={place?.name}>
                               {index > 0 && ', '}
                               {place?.name}

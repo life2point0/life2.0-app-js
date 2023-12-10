@@ -6,6 +6,7 @@ import { TextField } from '../inputs/textField/TextField'
 import { ChipsArray } from '../inputs/chipsArray/ChipsArray'
 import { CheckBox } from '../inputs/checkbox/Checkbox'
 import Button from '../button/Button'
+import { Select } from '../inputs/dropdown/Select.js'
 
 const Form = ({ initialValues, validationSchema, fields, styles, onSubmit, submitButtonText, isLoading }) => {
 
@@ -109,6 +110,24 @@ const Form = ({ initialValues, validationSchema, fields, styles, onSubmit, submi
                       </Field>
                     </React.Fragment>
                   )
+
+                case 'select':
+                  return (
+                    <React.Fragment key={formField.name}>
+                      <Field name={formField.name} key={formField.name}>
+                        {({ field }) => (
+                          <Select
+                            styles={styles.select}
+                            label={formField.label}
+                            multiple={formField.multiple}
+                            options={formField.options || []}
+                            value={values[field.name] || null}
+                            onItemClick={(value) => setFieldValue(formField.name, value)}
+                          />
+                        )}
+                      </Field>
+                    </React.Fragment>
+                  )
               default:
                 return null
             }
@@ -159,6 +178,28 @@ const defaultStyles = StyleSheet.create({
           fontSize: 12,
           textAlign: 'right'
         }
+    },
+    select: {
+      container: {
+        marginTop: 20,
+        marginBottom: 5
+      },
+      label: {
+        fontWeight: '500'
+      },
+      textField: {
+        height: 50,
+        borderWidth: 1.4,
+        borderRadius: 28,
+        borderColor: 'lightgrey',
+        justifyContent: 'center'
+      },
+      dropdown: {
+          borderRadius: 10,
+          borderColor: 'lightgrey',
+          marginTop: 5,
+          maxWidth: '100%'
+      }
     },
     chip: {
         container: {
