@@ -24,7 +24,6 @@ const LocationSelect = ({ label, multiple, styles, preSelectedLocation, onLocati
   useEffect(() => {
     if(!!preSelectedLocation) {
       if(multiple && preSelectedLocation?.length) {
-        console.log('preSelectedLocation', preSelectedLocation)
         const updatedPlaceIds = preSelectedLocation?.map((place) => place.place_id)
         onLocationSelect(updatedPlaceIds)
         setSelectedPlaces(preSelectedLocation) 

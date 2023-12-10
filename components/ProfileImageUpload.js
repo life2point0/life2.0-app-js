@@ -12,7 +12,7 @@ import { manipulateAsync, SaveFormat } from 'expo-image-manipulator'
 export default ProfileImageUpload = () => {
   
   const { authCall, profile, getProfile } = useAuth()
-  const { navigate } = useNavigation()
+  const navigation = useNavigation()
   const theme = useTheme()
   const [errorText, setErrorText] = useState('')
   const [images, setImages] = useState([{}, {}, {}, {}, {}])
@@ -107,8 +107,8 @@ export default ProfileImageUpload = () => {
           url: `${USER_SERVICE_BASE_URL}/users/me`,
           data
         })
-        await getProfile()
-        navigate('Main', { screen: 'Home' })
+        console.log('Reached Nav')
+        navigation.replace('UpdatePersonalDetails')
       } catch (e) {
         setErrorText(e?.response?.data?.detail?.msg || 'Unknown Error' )
       } finally {
@@ -123,7 +123,7 @@ export default ProfileImageUpload = () => {
           <IconButton
             icon="arrow-left"
             style={theme.spacing.backButton}
-            onPress={() => navigate('Main', { screen: 'UpdateProfile' })}
+            onPress={() => navigation.navigate('Main', { screen: 'UpdateProfile' })}
           />
        </View>
         <View style={{ ...theme.spacing.onboarding.container }}>
@@ -159,7 +159,7 @@ export default ProfileImageUpload = () => {
           </View>
 
           <View style={{ width: '100%', flexDirection: 'column', gap: 10, position: 'absolute', bottom: 150 }} >
-              { !profile?.photos?.length && <Button mode="outlined" onPress={() => navigate('Main', { screen: 'Home' })}>
+              { !profile?.photos?.length && <Button mode="outlined" onPress={() => navigation.navigate('Main', { screen: 'Home' })}>
                   Complete Later
                 </Button>   
               }
