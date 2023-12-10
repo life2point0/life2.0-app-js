@@ -3,8 +3,8 @@ import 'dotenv/config';
 export default ({ config }) => {
   // Define hashmaps for environment-specific configurations
   const iosBundleIdentifiers = {
-    development: 'co.life2point0.ios.dev',
-    sandbox: 'co.life2point0.ios.sandbox',
+    development: 'co.life2point0.ios',
+    sandbox: 'co.life2point0.ios',
     production: 'co.life2point0.ios',
   };
 
