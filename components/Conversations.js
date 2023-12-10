@@ -12,12 +12,10 @@ import { View } from 'react-native';
 import ChatScreenAppBar from './ChatScreenAppBar';
 import defaultCommunityIcon from './assets/community.png'
 
-export default function Conversations({ route }) {
-  const { channel: channelFromParams } = route?.params || {};
+export default function Conversations() {
   const { isAuthenticated } = useAuth();
   const navigation = useNavigation();
-  const { channel: channelFromContext } = useChatContext();
-  const channel = channelFromParams || channelFromContext;
+  const { channel } = useChatContext();
 
   if (!isAuthenticated) {
     navigation.navigate('Signup');

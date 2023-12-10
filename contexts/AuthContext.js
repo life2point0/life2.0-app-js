@@ -2,7 +2,6 @@ import React, { createContext, useContext, useEffect, useState, useRef } from 'r
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { KEYCLOAK_REALM, KEYCLOAK_URL, USER_SERVICE_BASE_URL } from '../components/constants';
 import axios from 'axios';
-import qs from 'qs';
 import { useChatContext } from 'stream-chat-expo';
 import messaging from '@react-native-firebase/messaging';
 import * as Notifications from 'expo-notifications';
@@ -31,7 +30,7 @@ export const AuthProvider = ({ children }) => {
   const [refreshToken, setRefreshToken] = useState();
   const [accessToken, setAccessToken] = useState();
   const [profile, setProfile] = useState(null);
-  const { client } = useChatContext();
+  const { client, setActiveChannel } = useChatContext();
   const isProfileCreated = !!profile?.description;
   const isImageUploaded = !!profile?.photos.length;
   const [isFCMReady, setIsFCMReady] = useState(false);
@@ -157,13 +156,27 @@ export const AuthProvider = ({ children }) => {
         await requestNotificationPermission();
         await registerPushToken();
         setIsFCMReady(true);
-        messaging().onNotificationOpenedApp(remoteMessage => {
+        messaging().onNotificationOpenedApp(async (remoteMessage) => {
           console.log('Notification caused app to open from background state:', remoteMessage);
-          navigate('Conversations', { channel: remoteMessage?.data?.channel });
+          if (remoteMessage) {
+            setActiveChannel(await client.getChannelById(remoteMessage?.data?.channel_id))
+            navigate('Conversations');
+          }
         });
         messaging().setBackgroundMessageHandler(async remoteMessage => {
           console.log('Message handled in the background!', remoteMessage);
-          // handle your message here
+          if (remoteMessage) {
+            setActiveChannel(await client.getChannelById(remoteMessage?.data?.channel_id))
+            navigate('Conversations');
+          }
+        });
+
+        messaging().getInitialNotification().then(async remoteMessage => {
+          console.log('Notification caused app to open from killed state:', remoteMessage);
+          if (remoteMessage) {
+            setActiveChannel(await client.getChannelById(remoteMessage?.data?.channel_id))
+            navigate('Conversations');
+          }
         });
       };
       init();
