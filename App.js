@@ -96,8 +96,8 @@ const App = () => {
           <RenderIfConnected>
             <Chat client={chatClient}>
               <DataProvider> 
-                <AuthProvider>
-                  <NavigationContainer>
+                <NavigationContainer>
+                  <AuthProvider>
                     <Stack.Navigator screenOptions={{ headerShown: false }}>
                       <Stack.Screen name="Root" component={Root} />
                       <Stack.Screen name="Main" component={SharedTabs} options={{ headerShown: false }}/>
@@ -110,8 +110,8 @@ const App = () => {
                       <Stack.Screen name="Communities" component={Communities} />
                     </Stack.Navigator>
                     <Stack.Screen name="NavigationMenu" component={NavigationMenu} />
-                  </NavigationContainer>
-                </AuthProvider>
+                  </AuthProvider>
+                </NavigationContainer>
               </DataProvider>
             </Chat>
           </RenderIfConnected>
