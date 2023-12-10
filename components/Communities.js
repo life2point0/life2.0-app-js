@@ -145,7 +145,7 @@ const CommunityCard = ({ community, members, isSliider, styles }) => {
                   <Text style={theme.fonts.small}> Join the conversation </Text>
                   <AvatarGroup users={communityMemberAvatars} />
                 </View>
-                <Button compact labelStyle={styles.footerButton} onPress={() => handleNavigation(community.id)} mode="contained" loading={isNavigating} disabled={isNavigating}> Join Chat </Button>
+                <Button compact labelStyle={styles.footerButton} onPress={() => handleNavigation(community.id)} mode="contained" loading={isNavigating} disabled={isNavigating}> Join Community </Button>
             </View>
         </Card>
     )
