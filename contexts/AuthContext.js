@@ -15,7 +15,6 @@ export const AuthProvider = ({ children }) => {
   const [refreshToken, setRefreshToken] = useState();
   const [accessToken, setAccessToken] = useState();
   const [profile, setProfile] = useState(null);
-  const [chatToken, setChatToken] = useState();
   const { client } = useChatContext();
   const isProfileCreated = !!profile?.description;
   const isImageUploaded = !!profile?.photos.length;
@@ -64,24 +63,26 @@ export const AuthProvider = ({ children }) => {
   }
 
   const getChatToken = async () => {
-    if(chatToken) {
-      return chatToken
-    }
-    try {
-      const token = (await authCall({
-        method: 'GET',
-        url: `${USER_SERVICE_BASE_URL}/users/me/tokens`
-      }))?.data;
-      setChatToken(token);
-      return token;
-    } catch (e) {
-      console.log(e);
-    }
+    const token = (await authCall({
+      method: 'GET',
+      url: `${USER_SERVICE_BASE_URL}/users/me/tokens`
+    }))?.data;
+    return token.streamChat;
   }
 
   const initChat = async () => {
     if ((client?.userID && client.wsConnection?.isHealthy) || !profile?.id) {
       return
+    }
+    if (client?.wsConnection?.isConnecting) {
+      return new Promise((resolve, reject) => {
+        const { unsubscribe } = client.on('connection.changed', (event) => {
+          if (event.online) {
+            unsubscribe();
+            resolve();
+          }
+        })
+      })
     }
     try {
       await client.connectUser(
@@ -89,7 +90,7 @@ export const AuthProvider = ({ children }) => {
           id: profile?.id,
           name: `${profile?.firstName} ${profile?.lastName}`,
         },
-        chatToken?.streamChat
+        getChatToken
       )
     } catch (e) {
       console.log('INIT chat fail', e);
@@ -104,15 +105,10 @@ export const AuthProvider = ({ children }) => {
   
   useEffect(() => {
     if (isProfileCreated) {
-      getChatToken()
-    }
-  }, [profile, isProfileCreated])
-
-  useEffect(() => {
-    if (chatToken) {
+      console.log('initialized from AuthContext')
       initChat()
     }
-  }, [chatToken])
+  }, [profile, isProfileCreated])
 
   useEffect(() => {
     (async () => {
@@ -159,8 +155,11 @@ export const AuthProvider = ({ children }) => {
     }
 
     try {
-      await axios.delete(`${USER_SERVICE_BASE_URL}/sessions`, config )
-      client.disconnectUser()
+      await axios.delete(`${USER_SERVICE_BASE_URL}/sessions`, config)
+      if (client.wsConnection.isHealthy) {
+        await client.disconnectUser();
+        console.log('Disconnected', client.userID, client.wsConnection.isHealthy);
+      }
       setIsAuthenticated(false)
       setRefreshToken('')
       setAccessToken('')
@@ -187,7 +186,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ login, logout, refreshToken, isLoggedIn, isAuthenticated, authCall, isProfileCreated, isImageUploaded, getProfile, getChatToken, initChat, profile, chatToken }}>
+    <AuthContext.Provider value={{ login, logout, refreshToken, isLoggedIn, isAuthenticated, authCall, isProfileCreated, isImageUploaded, getProfile, getChatToken, initChat, profile }}>
       {children}
     </AuthContext.Provider>
   );

@@ -29,8 +29,6 @@ import * as SystemUI from 'expo-system-ui';
 import RenderIfConnected from './components/RenderIfConnected';
 import UpdatePersonalDetails from './components/UpdatePersonalDetails';
 
-SystemUI.setBackgroundColorAsync('#FFFFFF');
-
 
 
 const Stack = createNativeStackNavigator();
@@ -85,6 +83,13 @@ function SharedTabs() {
 }
 
 const App = () => {  
+
+  useEffect(() => {
+    SystemUI.setBackgroundColorAsync('#FFFFFF').catch((err) => {
+      console.log(err)
+    });
+  }, []);
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <OverlayProvider>

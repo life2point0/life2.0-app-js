@@ -29,7 +29,10 @@ export const UserCommunities = () => {
     };
 
     const initialize = async () => {
-      await initChat();
+      if (!client?.userID || !client?.wsConnection?.isHealthy) {
+        console.log('initialized from UserCommunities')
+        await initChat();
+      }
       if (!client) return;
       setChannels(await fetchChannels());
     }
@@ -40,7 +43,7 @@ export const UserCommunities = () => {
       } else {
         setChannels([])
       }
-    }, [client, client?.userID, client?.wsConnection?.isHealthy, profile]);
+    }, [profile]);
 
     const navigateToCommunityChat = (channel) => {
       setActiveChannel(channel);

@@ -19,6 +19,9 @@
       "bundleIdentifier": "co.life2point0.ios"
     },
     "android": {
+      "notification": {
+        "icon": "./components/assets/notifications-icon.png"
+      },
       "adaptiveIcon": {
         "foregroundImage": "./components/assets/app-icon.png",
         "backgroundColor": "#FFF2CB"
