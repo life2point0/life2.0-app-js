@@ -11,6 +11,8 @@ const LocationSelect = ({ label, multiple, styles, preSelectedLocation, onLocati
   const [selectedPlace, setSelectedPlace] = useState({})
   const [visible, setVisible] = useState(false)
   const googlePlacesAutocompleteRef = useRef(null)
+  const [activeAutocompleteIndex, setActiveAutocompleteIndex] = useState(null);
+
 
 
 
@@ -40,15 +42,49 @@ const LocationSelect = ({ label, multiple, styles, preSelectedLocation, onLocati
     setVisible(false)
   }
 
-  const handlePlaceSelection = (newPlace) => {
-    if (!selectedPlaces.some(place => place.place_id === newPlace.place_id)) {
-      const updatedPlaces = [...selectedPlaces, newPlace].filter((place) => Object.keys(place).length !== 0)
-      setSelectedPlaces(updatedPlaces)
-      const updatedPlaceIds = updatedPlaces.map((place) => place.place_id)
-      onLocationSelect(updatedPlaceIds)
+  // const handlePlaceSelection = (newPlace) => {
+  //   if (!selectedPlaces.some(place => place.place_id === newPlace.place_id)) {
+  //     const updatedPlaces = [...selectedPlaces, newPlace].filter((place) => Object.keys(place).length !== 0)
+  //     setSelectedPlaces(updatedPlaces)
+  //     const updatedPlaceIds = updatedPlaces.map((place) => place.place_id)
+  //     onLocationSelect(updatedPlaceIds)
+  //   }
+  //   setVisible(false)
+  // }
+
+  const handlePlaceSelection = (newPlace, index) => {
+
+    // Create a copy of the selected places array
+    const updatedPlaces = [...selectedPlaces];
+  
+    // Check if the place already exists in the array
+    const existingIndex = updatedPlaces.findIndex(place => place.place_id === newPlace.place_id);
+    console.log('index', index)
+    // If the index is valid and the place exists, update it
+    if (index >= 0 && index < updatedPlaces.length) {
+      updatedPlaces[index] = newPlace;
+    } else if (existingIndex === -1) {
+      // If the index is out of bounds and the place doesn't exist, push the new place to the array
+      updatedPlaces.push(newPlace);
     }
-    setVisible(false)
-  }
+  
+    // Filter out any places with an empty object
+    const filteredPlaces = updatedPlaces.filter((place) => Object.keys(place).length !== 0);
+  
+    // Update the state with the modified or new array of places
+    setSelectedPlaces(filteredPlaces);
+  
+    // Extract the place IDs from the updated array
+    const updatedPlaceIds = filteredPlaces.map((place) => place.place_id);
+  
+    // Call the onLocationSelect callback with the updated place IDs
+    onLocationSelect(updatedPlaceIds);
+  
+    // Hide the visibility
+    setVisible(false);
+  }    
+  
+
   
 
   const addMorePlace = () => {
@@ -57,7 +93,7 @@ const LocationSelect = ({ label, multiple, styles, preSelectedLocation, onLocati
 
   const containerStyle = { backgroundColor: 'white', flex: 1 }
 
-  const renderGooglePlacesAutocomplete = (preSelectedPlaceId) => {
+  const renderGooglePlacesAutocomplete = () => {
 
     return (
       <GooglePlacesAutocomplete
@@ -74,9 +110,9 @@ const LocationSelect = ({ label, multiple, styles, preSelectedLocation, onLocati
         query={{ key: KEYS.googleApiKey, type: '(cities)' }}
         onPress={(data) => {
           const place = { name: data.description, place_id: data.place_id }
-          multiple ? handlePlaceSelection(place) : handleSinglePlaceSelection(place)
+          multiple ? handlePlaceSelection(place, activeAutocompleteIndex) : handleSinglePlaceSelection(place)
         }}
-        // predefinedPlaces={ [{ place_id: preSelectedPlaceId }]}
+        // predefinedPlaces={ [{ place_id: selectedPlaces[activeAutocompleteIndex] }]}
         // onFail={(error) => console.log('MAP ERROR', error)}
         // onNotFound={() => console.log('MAP', 'no results')}
         renderLeftButton={() => (
@@ -98,23 +134,26 @@ const LocationSelect = ({ label, multiple, styles, preSelectedLocation, onLocati
     <View style={styles.container}>
       {label && <Text style={styles.label}>{label}</Text>}
       {multiple ? (
-        selectedPlaces.map((place, index) => (
+        selectedPlaces.map(({}, index) => (
           <React.Fragment key={index}>
             <TextInput
               value={selectedPlaces[index]?.name}
               style={{ ...styles.textField, marginBottom: 8 }}
               placeholder='Select'
-              onFocus={() => setVisible(true)}
+              onFocus={() => { 
+                setActiveAutocompleteIndex(index)
+                setVisible(true)
+              }}
             />
-            <Portal>
-              <Modal visible={visible} onDismiss={() => setVisible(false)} contentContainerStyle={containerStyle}>
-                <ScrollView keyboardShouldPersistTaps='always'>
-                  <View style={styles.container}>
-                    {renderGooglePlacesAutocomplete(place?.place_id || undefined)}
-                  </View>
-                </ScrollView>
-              </Modal>
-            </Portal>
+          <Portal>
+            <Modal visible={visible} onDismiss={() => setVisible(false)} contentContainerStyle={containerStyle}>
+              <ScrollView keyboardShouldPersistTaps='always'>
+                <View style={styles.container}>
+                  {renderGooglePlacesAutocomplete()}
+                </View>
+              </ScrollView>
+            </Modal>
+          </Portal>
           </React.Fragment>
         ))
       ) : (

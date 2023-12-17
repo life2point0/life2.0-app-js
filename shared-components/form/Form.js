@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, ScrollView, StyleSheet } from 'react-native'
+import { Text, View, StyleSheet } from 'react-native'
 import { Formik, Field } from 'formik'
 import { LocationSelect } from '../inputs/LocationSelect/Location.js'
 import { TextField } from '../inputs/textField/TextField'
@@ -20,7 +20,7 @@ const Form = ({ initialValues, validationSchema, fields, styles, onSubmit, submi
     >
       {({ values, errors, touched, handleChange, handleSubmit, setFieldValue, setFieldTouched }) => (
         <>
-        <ScrollView keyboardShouldPersistTaps='always' contentContainerStyle={styles.container}> 
+        <View style={styles.container}> 
           {fields.map((formField) => {
             switch (formField.type) {
               case 'input': 
@@ -132,7 +132,7 @@ const Form = ({ initialValues, validationSchema, fields, styles, onSubmit, submi
                 return null
             }
           })}
-        </ScrollView>
+        </View>
         <Button style={styles.submitButton} mode="contained" onPress={handleSubmit} loading={isLoading} disabled={isLoading}>
             {submitButtonText}
         </Button>
@@ -274,8 +274,8 @@ const defaultStyles = StyleSheet.create({
       color: 'red',
     },
     submitButton: {
-      marginTop: 20,
       width: '100%',
+      marginTop: 20,
       marginBottom: 50
     }
 })

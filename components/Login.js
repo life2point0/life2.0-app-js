@@ -46,7 +46,7 @@ const Login =  () => {
             onPress={() => navigation.navigate('Main', { screen: 'Home' })}
           />
         </View>
-        <ScrollView contentContainerStyle={theme.spacing.onboarding.container}>
+        <ScrollView contentContainerStyle={{...theme.spacing.onboarding.container, minHeight: 'auto'}}>
             
           <Text style={{ ...theme.fonts.description, ...theme.spacing.onboarding.textContainer }}>
             Log In if you already have a Life 2.0 profile, or else Register and build your profile

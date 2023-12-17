@@ -125,13 +125,12 @@ const spacing = {
     },
     onboarding: {
         container: {
-            paddingHorizontal: 20,
-            paddingVertical: 20,
+            padding: 20,
             alignItems: 'center',
-            minHeight: '100%',
-            overflowY: 'auto',
             position: 'relative',
-            gap: 20
+            gap: 20,
+            minHeight: '100%',
+            flexGrow: 1
         },
         headerContainer: {
             width: '100%',
