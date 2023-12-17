@@ -36,30 +36,31 @@ const ViewProfile = () => {
       <>
           <SafeAreaView style={{flex: 1 }}>
           <StatusBar backgroundColor='#fbfbfb' barStyle="dark-content" />
-          <View>
-            { <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 30 }}>
-                { profile?.photos[0]?.url ? 
-                <Image style={{ borderRadius: 100, borderWidth: 5, borderColor: '#fff' }} source={{ uri: profile?.photos[0].url, width: 200, height: 200  }} /> :
-                <IconButton iconColor='#ccc' size={100} style={{ size: 200, width: 200, height: 200, borderRadius: 100, borderWidth: 5, borderColor: '#fff' }} icon='account-outline'></IconButton>                 }
-              </View>  
-            }
+            <ScrollView contentContainerStyle={{ width: '100%', gap: 10, paddingBottom: 30, borderWidth: 1, borderColor: 'transparent' }}>
+              
+            <View>
+              { <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 30 }}>
+                  { profile?.photos[0]?.url ? 
+                  <Image style={{ borderRadius: 100, borderWidth: 5, borderColor: '#fff' }} source={{ uri: profile?.photos[0].url, width: 200, height: 200  }} /> :
+                  <IconButton iconColor='#ccc' size={100} style={{ size: 200, width: 200, height: 200, borderRadius: 100, borderWidth: 5, borderColor: '#fff' }} icon='account-outline'></IconButton>                 }
+                </View>  
+              }
 
-              <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: 5, padding: 20 }}>
-                  <Text style={theme.fonts.title}> {profile?.firstName || '-' } { profile?.lastName || '-' }  </Text>
-                  <Text style={{...theme.fonts.description,  textAlign: 'center'}}> Joined { formattedJoinedDate }  </Text>
-                  <Text style={{...theme.fonts.description,  textAlign: 'center'}}> { profile?.description }  </Text>
-              </View>
-
-
-              <IconButton
-                icon="arrow-left"
-                style={theme.spacing.backButton}
-                onPress={() => navigation.goBack()}
-              />
-           </View>
+                <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: 5, padding: 20 }}>
+                    <Text style={theme.fonts.title}> {profile?.firstName || '-' } { profile?.lastName || '-' }  </Text>
+                    <Text style={{...theme.fonts.description,  textAlign: 'center'}}> Joined { formattedJoinedDate }  </Text>
+                    <Text style={{...theme.fonts.description,  textAlign: 'center'}}> { profile?.description }  </Text>
+                </View>
 
 
-            <ScrollView contentContainerStyle={{ gap: 10, paddingBottom: 30 }}>
+                <IconButton
+                  icon="arrow-left"
+                  style={theme.spacing.backButton}
+                  onPress={() => navigation.goBack()}
+                />
+             </View>
+
+              
               { profile?.photos[0]?.url && <View style={{ flexDirection: 'column', justifyContent: 'center', gap: 10, padding: 20, backgroundColor: 'white' }}>
                 <Text style={theme.fonts.title}> Your Images  </Text>
                   <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ flexDirection: 'row', gap: 10, justifyContent: 'flex-start', alignItems: 'center' }}>
@@ -104,7 +105,7 @@ const ViewProfile = () => {
                   <Icon size={25} color='#676767' source="map-marker-check-outline"/> 
                   <View style={{ flexDirection: 'column', justifyContent: 'center' }}> 
                       <Text style={theme.fonts.subtitle}>Places I have lived in   </Text> 
-                      <Text style={theme.fonts.description}>
+                      <Text style={{ ...theme.fonts.description}}>
                         {profile?.pastPlaces?.length > 0 ? (
                           profile.pastPlaces.map((place, index) => (
                             <React.Fragment key={place?.name}>
