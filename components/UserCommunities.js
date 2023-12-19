@@ -30,7 +30,6 @@ export const UserCommunities = () => {
 
     const initialize = async () => {
       if (!client?.userID || !client?.wsConnection?.isHealthy) {
-        console.log('initialized from UserCommunities')
         await initChat();
       }
       if (!client) return;

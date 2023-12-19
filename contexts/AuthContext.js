@@ -105,7 +105,6 @@ export const AuthProvider = ({ children }) => {
   
   useEffect(() => {
     if (isProfileCreated) {
-      console.log('initialized from AuthContext')
       initChat()
     }
   }, [profile, isProfileCreated])
@@ -113,7 +112,6 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     (async () => {
       const storedRefreshToken = await AsyncStorage.getItem('refreshToken');
-      console.log('storedRefreshToken', storedRefreshToken)
       if (storedRefreshToken) {
         setIsAuthenticated(true)
         setRefreshToken(storedRefreshToken);

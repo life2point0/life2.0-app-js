@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Text, View, StyleSheet } from 'react-native'
 import { Formik, Field } from 'formik'
 import { LocationSelect } from '../inputs/LocationSelect/Location.js'
@@ -11,6 +11,24 @@ import { Select } from '../inputs/dropdown/Select.js'
 const Form = ({ initialValues, validationSchema, fields, styles, onSubmit, submitButtonText, isLoading }) => {
 
   styles = styles || defaultStyles
+
+  // const fieldRefs = useRef({});
+
+  // useEffect(() => {
+  //   fields.forEach((field) => {
+  //     fieldRefs.current[field.name] = React.createRef();
+  //   })
+  // }, [fields])
+
+
+  // const focusNextField = (fieldName) => {
+  //   const fieldIndex = fields.findIndex((formField) => formField.name === fieldName);
+  //   if (fieldIndex < fields.length - 1) {
+  //     const nextFieldName = fields[fieldIndex + 1].name;
+  //     fieldRefs.current[nextFieldName].current?.focus()
+  //   }
+  // }
+
 
   return (
     <Formik
@@ -29,6 +47,7 @@ const Form = ({ initialValues, validationSchema, fields, styles, onSubmit, submi
                     <Field name={formField.name}>
                       {({ field }) => (
                         <TextField
+                          // ref={fieldRefs[formField.name]}
                           label={formField.label || null}
                           multiline={formField.multiline || null}
                           value={field.value || null}
@@ -41,6 +60,7 @@ const Form = ({ initialValues, validationSchema, fields, styles, onSubmit, submi
                             handleChange(formField.name)(text)
                             formField.maxCharCount ? formField.charCount = text.length : null
                           }}
+                          // onSubmitEditing={() => focusNextField(formField.name)}
                         />
                       )}
                     </Field>
@@ -63,6 +83,7 @@ const Form = ({ initialValues, validationSchema, fields, styles, onSubmit, submi
                     <Field name={formField.name}>
                       {({ field }) => (
                         <LocationSelect
+                          // ref={fieldRefs[formField.name]}
                           label={formField.label}
                           multiple={formField.multiple}
                           styles={styles.location}
@@ -72,6 +93,7 @@ const Form = ({ initialValues, validationSchema, fields, styles, onSubmit, submi
                               setFieldTouched(formField.name)
                             }, 0)
                             setFieldValue(formField.name, selectedLocation)
+                            // focusNextField(formField.name)
                           }}
                         />
                       )}
