@@ -1,6 +1,6 @@
 import { View, TextInput, Text } from "react-native"
 
-const TextField = ({label, value, variant, multiline, placeholder, styles, hidden,onSubmitEditing, onChange}) => {
+const TextField = ({label, value, variant, refId, multiline, placeholder, styles, hidden,onSubmitEditing, onChange}) => {
 
     let isPasswordField = false
 
@@ -20,12 +20,14 @@ const TextField = ({label, value, variant, multiline, placeholder, styles, hidde
             <TextInput
                 style={multiline ? styles.textarea : styles.textField}
                 value={value}
+                ref={refId}
                 multiline={multiline}
                 placeholder={placeholder}
                 onChangeText={onChange}
                 inputMode={variant || 'text'}
                 secureTextEntry={isPasswordField}
                 onSubmitEditing={onSubmitEditing}
+                blurOnSubmit={false}
                 returnKeyType="next"
             />
         </View>

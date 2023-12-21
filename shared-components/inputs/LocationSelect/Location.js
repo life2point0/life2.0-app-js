@@ -6,15 +6,12 @@ import { IconButton, Modal, Portal } from 'react-native-paper'
 import { TextInput } from "react-native"
 import Button from '../../button/Button'
 
-const LocationSelect = ({ label, multiple, styles, preSelectedLocation, onLocationSelect }) => {
+const LocationSelect = ({ label, multiple, refId, styles, preSelectedLocation, onLocationSelect }) => {
   const [selectedPlaces, setSelectedPlaces] = useState([{}])
   const [selectedPlace, setSelectedPlace] = useState({})
   const [visible, setVisible] = useState(false)
   const googlePlacesAutocompleteRef = useRef(null)
   const [activeAutocompleteIndex, setActiveAutocompleteIndex] = useState(null);
-
-
-
 
   useEffect(() => {
     if (visible && googlePlacesAutocompleteRef.current) {
@@ -42,50 +39,21 @@ const LocationSelect = ({ label, multiple, styles, preSelectedLocation, onLocati
     setVisible(false)
   }
 
-  // const handlePlaceSelection = (newPlace) => {
-  //   if (!selectedPlaces.some(place => place.place_id === newPlace.place_id)) {
-  //     const updatedPlaces = [...selectedPlaces, newPlace].filter((place) => Object.keys(place).length !== 0)
-  //     setSelectedPlaces(updatedPlaces)
-  //     const updatedPlaceIds = updatedPlaces.map((place) => place.place_id)
-  //     onLocationSelect(updatedPlaceIds)
-  //   }
-  //   setVisible(false)
-  // }
-
   const handlePlaceSelection = (newPlace, index) => {
-
-    // Create a copy of the selected places array
     const updatedPlaces = [...selectedPlaces];
-  
-    // Check if the place already exists in the array
     const existingIndex = updatedPlaces.findIndex(place => place.place_id === newPlace.place_id);
     console.log('index', index)
-    // If the index is valid and the place exists, update it
     if (index >= 0 && index < updatedPlaces.length) {
       updatedPlaces[index] = newPlace;
     } else if (existingIndex === -1) {
-      // If the index is out of bounds and the place doesn't exist, push the new place to the array
       updatedPlaces.push(newPlace);
     }
-  
-    // Filter out any places with an empty object
     const filteredPlaces = updatedPlaces.filter((place) => Object.keys(place).length !== 0);
-  
-    // Update the state with the modified or new array of places
     setSelectedPlaces(filteredPlaces);
-  
-    // Extract the place IDs from the updated array
     const updatedPlaceIds = filteredPlaces.map((place) => place.place_id);
-  
-    // Call the onLocationSelect callback with the updated place IDs
     onLocationSelect(updatedPlaceIds);
-  
-    // Hide the visibility
     setVisible(false);
   }    
-  
-
-  
 
   const addMorePlace = () => {
     setSelectedPlaces([...selectedPlaces, {}])
@@ -161,6 +129,7 @@ const LocationSelect = ({ label, multiple, styles, preSelectedLocation, onLocati
           <TextInput
             value={selectedPlace?.name}
             style={styles.textField}
+            ref={refId}
             onFocus={() => setVisible(true)}
             placeholder='Select'
           />
