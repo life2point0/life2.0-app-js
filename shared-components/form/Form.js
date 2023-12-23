@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useRef } from 'react'
 import { Text, View, StyleSheet } from 'react-native'
 import { Formik, Field } from 'formik'
 import { LocationSelect } from '../inputs/LocationSelect/Location.js'

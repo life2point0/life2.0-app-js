@@ -1,9 +1,3 @@
-// import { Button } from 'react-native-paper';
-
-// export const PrimaryButton: typeof Button = (props) => (
-//     <Button {...props} textColor="#FFC003" mode="contained" />
-// );
-
 import { View, Text, TouchableOpacity } from 'react-native';
 import React from 'react';
 

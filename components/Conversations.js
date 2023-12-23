@@ -5,8 +5,7 @@ import {
   Channel, 
   useChatContext,
   MessageList,
-  MessageInput,
-  SendButton
+  MessageInput
 } from 'stream-chat-expo';
 import { View } from 'react-native';
 import ChatScreenAppBar from './ChatScreenAppBar';

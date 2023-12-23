@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, SafeAreaView, ScrollView, KeyboardAvoidingView, StatusBar } from 'react-native'
+import { View, Text, SafeAreaView, KeyboardAvoidingView, StatusBar } from 'react-native'
 import { ActivityIndicator, IconButton, useTheme } from 'react-native-paper'
 import { USER_SERVICE_BASE_URL } from './constants'
 import { useAuth } from '../contexts/AuthContext'

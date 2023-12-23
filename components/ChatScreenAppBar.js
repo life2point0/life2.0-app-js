@@ -1,7 +1,6 @@
 import React from 'react';
 import { Appbar, Avatar, Text, useTheme } from 'react-native-paper';
-import logo from './assets/logo.png';
-import { Image, StatusBar, View } from 'react-native';
+import { StatusBar, View } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 
