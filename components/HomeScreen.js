@@ -57,7 +57,7 @@ const HomeScreen = () => {
             </TouchableOpacity>
           </View>
           <View style={theme.spacing.home.section}> 
-            <Communities isSliider={true}/>
+            <Communities isHome={true}/>
           </View>
         </View>
         {/* <View style={styles.subHeader}>

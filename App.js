@@ -96,8 +96,8 @@ const App = () => {
         <PaperProvider theme={theme}>
           <RenderIfConnected>
             <Chat client={chatClient}>
-              <DataProvider> 
                 <AuthProvider>
+                  <DataProvider> 
                   <NavigationContainer>
                     <Stack.Navigator screenOptions={{ headerShown: false }}>
                       <Stack.Screen name="Root" component={Root} />
@@ -112,8 +112,8 @@ const App = () => {
                     </Stack.Navigator>
                     <Stack.Screen name="NavigationMenu" component={NavigationMenu} />
                   </NavigationContainer>
+                  </DataProvider>
                 </AuthProvider>
-              </DataProvider>
             </Chat>
           </RenderIfConnected>
         </PaperProvider>

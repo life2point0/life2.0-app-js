@@ -14,13 +14,13 @@ import AppBar from './AppBar'
 import * as _ from 'lodash';
 
 
-const Communities = ({isSliider, route}) => {
+const Communities = ({isHome, route}) => {
   const { isTextInputFocused } = route?.params || {}
   const theme = useTheme();
   const [isLoading, setLoading] = useState(false);
-  const { communities, filteredCommunities, filterCommunities, filterQuery } = useData();
+  const { focusedCommunities, filteredCommunities, filterCommunities, filterQuery } = useData();
   const [searchQueryText, setSearchQueryText ] = useState();
-  const communityList = isSliider ? communities : filteredCommunities
+  const communityList = isHome ? focusedCommunities : filteredCommunities
 
   const getFilteredCommunities = async () => {
     setLoading(true);
@@ -41,10 +41,10 @@ const Communities = ({isSliider, route}) => {
 
   return (
     <> 
-    { !isSliider && <AppBar title="Communities" showBackButton /> }
+    { !isHome && <AppBar title="Communities" showBackButton /> }
       <SafeAreaView style={{ flex: 1, marginBottom: 30 }}>
-        <View style={!isSliider ? theme.spacing.communities.screen.container : null}>
-        { !isSliider &&  <View style={theme.spacing.communities.screen.section}>
+        <View style={!isHome ? theme.spacing.communities.screen.container : null}>
+        { !isHome &&  <View style={theme.spacing.communities.screen.section}>
           <TextInput
             style={theme.components.inputs.textField}
             placeholder="Search communities"
@@ -89,7 +89,7 @@ const Communities = ({isSliider, route}) => {
 }
 
 
-const CommunityCard = ({ community, members, isSliider, styles }) => {
+const CommunityCard = ({ community, members, isHome, styles }) => {
     const navigation = useNavigation()
     const { client, setActiveChannel } = useChatContext()
     const { authCall, isProfileCreated, profile } = useAuth()
@@ -133,7 +133,7 @@ const CommunityCard = ({ community, members, isSliider, styles }) => {
     }))
     
     return (
-        <Card mode="contained" style={{...styles.container, width: isSliider ? 275 : '100%' }} >
+        <Card mode="contained" style={{...styles.container, width: isHome ? 275 : '100%' }} >
             <Text ellipsizeMode='tail' numberOfLines={1} style={{...theme.fonts.subtitle, paddingHorizontal: 8}}> {community.name} </Text>
             <View style={styles.content}>
                 <Avatar.Image source={icon} style={styles.avatar} />
