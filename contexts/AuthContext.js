@@ -38,15 +38,57 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
-  const authCall = (config) => { // Write axios interceptor instead
-    return axios({
+  const authCall = async (config) => {
+    try {
+      return axios({
       ...config, 
       headers: {
         ...config.headers,
         'Authorization': `Bearer ${accessToken}`
       }
-    })
+      })
+    } catch(error) {
+        if (error.response && error.response.status === 401) {
+          try {
+            const newAccessToken = await getNewToken(refreshToken);
+            const retryConfig = {
+              ...config,
+              headers: {
+                ...config.headers,
+                'Authorization': `Bearer ${newAccessToken}`,
+              },
+            };
+            return await axios(retryConfig);
+          } catch (refreshError) {
+            logout();
+            throw refreshError;
+          }
+        }
+        throw error;
+      }
   }
+
+  axios.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+      if (error.response && error.response.status === 401) {
+        // Token expired, try to refresh
+        try {
+          const newAccessToken = await getNewToken(refreshToken);
+          // Retry the original request with the new token
+          const originalRequest = error.config;
+          originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
+          return await axios(originalRequest);
+        } catch (refreshError) {
+          // Refresh failed, logout
+          logout();
+          throw refreshError;
+        }
+      }
+      throw error;
+    }
+  )
+
 
   const getProfile = async () => {
     try {

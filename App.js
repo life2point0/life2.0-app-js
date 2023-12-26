@@ -109,6 +109,7 @@ const App = () => {
                       <Stack.Screen name="UpdatePersonalDetails" component={UpdatePersonalDetails} />
                       <Stack.Screen name="Conversations" component={Conversations} />
                       <Stack.Screen name="Communities" component={Communities} />
+                      <Stack.Screen name="ViewProfile" component={ViewProfile} />
                     </Stack.Navigator>
                     <Stack.Screen name="NavigationMenu" component={NavigationMenu} />
                   </NavigationContainer>
