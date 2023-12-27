@@ -83,7 +83,7 @@ const LocationSelect = ({ label, multiple, refId, styles, preSelectedLocation, o
         textInputProps={{
           autoFocus: true,
           selectTextOnFocus: true,
-          defaultValue: selectedPlaces[activeAutocompleteIndex]?.name
+          defaultValue: selectedPlaces[activeAutocompleteIndex]?.name || ''
         }}
         styles={styles.dropdown}
         query={{ key: KEYS.googleApiKey, type: '(cities)' }}
