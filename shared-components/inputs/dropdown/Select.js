@@ -28,6 +28,8 @@ const Select = ({ label, value, styles, multiple, options, onItemClick }) => {
             items={mappedOptions}
             showArrowIcon={true}
             style={styles.dropdown}
+            mode='BADGE'
+            showTickIcon={true}
             listMode='MODAL'
             searchTextInputStyle={styles.textField}
             searchContainerStyle={{ borderColor: 'lightgrey' }}
