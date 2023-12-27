@@ -42,7 +42,6 @@ const LocationSelect = ({ label, multiple, refId, styles, preSelectedLocation, o
   const handlePlaceSelection = (newPlace, index) => {
     const updatedPlaces = [...selectedPlaces];
     const existingIndex = updatedPlaces.findIndex(place => place.place_id === newPlace.place_id);
-    console.log('index', index)
     if (index >= 0 && index < updatedPlaces.length) {
       updatedPlaces[index] = newPlace;
     } else if (existingIndex === -1) {
@@ -59,10 +58,21 @@ const LocationSelect = ({ label, multiple, refId, styles, preSelectedLocation, o
     setSelectedPlaces([...selectedPlaces, {}])
   }
 
+  const deleteLocation = (index) => {
+    const updatedPlaces = [...selectedPlaces];
+    if (index >= 0 && index < updatedPlaces.length) { 
+      updatedPlaces.splice(index, 1)
+      setSelectedPlaces(updatedPlaces)
+      const updatedPlaceIds = updatedPlaces.map((place) => place.place_id);
+      onLocationSelect(updatedPlaceIds);
+    } else {
+      console.error("Invalid index provided for deletion.")
+    }
+  }
+
   const containerStyle = { backgroundColor: 'white', flex: 1 }
 
   const renderGooglePlacesAutocomplete = () => {
-
     return (
       <GooglePlacesAutocomplete
         placeholder='Search here'
@@ -72,7 +82,8 @@ const LocationSelect = ({ label, multiple, refId, styles, preSelectedLocation, o
         fetchDetails={true}
         textInputProps={{
           autoFocus: true,
-          selectTextOnFocus: true
+          selectTextOnFocus: true,
+          defaultValue: selectedPlaces[activeAutocompleteIndex]?.name
         }}
         styles={styles.dropdown}
         query={{ key: KEYS.googleApiKey, type: '(cities)' }}
@@ -80,9 +91,6 @@ const LocationSelect = ({ label, multiple, refId, styles, preSelectedLocation, o
           const place = { name: data.description, place_id: data.place_id }
           multiple ? handlePlaceSelection(place, activeAutocompleteIndex) : handleSinglePlaceSelection(place)
         }}
-        // predefinedPlaces={ [{ place_id: selectedPlaces[activeAutocompleteIndex] }]}
-        // onFail={(error) => console.log('MAP ERROR', error)}
-        // onNotFound={() => console.log('MAP', 'no results')}
         renderLeftButton={() => (
           <IconButton 
             icon="arrow-left" 
@@ -103,16 +111,17 @@ const LocationSelect = ({ label, multiple, refId, styles, preSelectedLocation, o
       {label && <Text style={styles.label}>{label}</Text>}
       {multiple ? (
         selectedPlaces.map(({}, index) => (
-          <React.Fragment key={index}>
+          <View key={index} style={{ flexDirection: 'row' }}>
             <TextInput
               value={selectedPlaces[index]?.name}
-              style={{ ...styles.textField, marginBottom: 8 }}
+              style={{ ...styles.textField, marginBottom: 8, width: '90%' }}
               placeholder='Select'
               onFocus={() => { 
                 setActiveAutocompleteIndex(index)
                 setVisible(true)
               }}
             />
+            <IconButton onPress={() => deleteLocation(index)} icon="delete-outline" iconColor='black' size={20} />
           <Portal>
             <Modal visible={visible} onDismiss={() => setVisible(false)} contentContainerStyle={containerStyle}>
               <ScrollView keyboardShouldPersistTaps='always'>
@@ -122,7 +131,7 @@ const LocationSelect = ({ label, multiple, refId, styles, preSelectedLocation, o
               </ScrollView>
             </Modal>
           </Portal>
-          </React.Fragment>
+          </View>
         ))
       ) : (
         <React.Fragment key={label}>
