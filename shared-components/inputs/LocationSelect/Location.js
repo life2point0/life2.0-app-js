@@ -75,7 +75,7 @@ const LocationSelect = ({ label, multiple, refId, styles, preSelectedLocation, o
   const renderGooglePlacesAutocomplete = () => {
     return (
       <GooglePlacesAutocomplete
-        placeholder='Search here'
+        placeholder={selectedPlaces[activeAutocompleteIndex]?.name || 'Search here'}
         disableScroll={true}
         isRowScrollable={false}
         listViewDisplayed={false}
