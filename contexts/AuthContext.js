@@ -18,6 +18,7 @@ export const AuthProvider = ({ children }) => {
   const { client } = useChatContext();
   const isProfileCreated = !!profile?.description;
   const isImageUploaded = !!profile?.photos.length;
+  const isNewUser = !!profile?.skills;
 
   const getNewToken = async (refreshToken) => {
   
@@ -226,7 +227,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ login, logout, refreshToken, isLoggedIn, isAuthenticated, authCall, isProfileCreated, isImageUploaded, getProfile, getChatToken, initChat, profile }}>
+    <AuthContext.Provider value={{ login, logout, refreshToken, isLoggedIn, isAuthenticated, authCall, isProfileCreated, isImageUploaded, isNewUser, getProfile, getChatToken, initChat, profile }}>
       {children}
     </AuthContext.Provider>
   );

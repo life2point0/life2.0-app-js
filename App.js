@@ -28,6 +28,7 @@ import ViewProfile from './components/ViewProfile';
 import * as SystemUI from 'expo-system-ui';
 import RenderIfConnected from './components/RenderIfConnected';
 import UpdatePersonalDetails from './components/UpdatePersonalDetails';
+import NotificationsScreen from './components/Notifications';
 
 
 
@@ -70,7 +71,7 @@ function SharedTabs() {
       />
       <Tab.Screen 
         name="Notifications" 
-        component={ComingSoonScreen} 
+        component={NotificationsScreen} 
         options={getTabOptions('bell-outline')}
       />
       <Tab.Screen 

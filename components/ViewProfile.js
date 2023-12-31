@@ -11,7 +11,7 @@ const ViewProfile = ({ route }) => {
   
   const navigation = useNavigation()
   const theme = useTheme()
-  const { profile, isAuthenticated, authCall, initChat } = useAuth()
+  const { profile, isAuthenticated, authCall } = useAuth()
   const { client, setActiveChannel } = useChatContext()
 
   const { userData } = route?.params || {}

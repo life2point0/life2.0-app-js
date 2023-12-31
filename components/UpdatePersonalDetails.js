@@ -9,7 +9,7 @@ import { updatePersonalDetailsFields } from './constants/fields/updatePersonalDe
 
 export default UpdatePersonalDetails = () => {
   
-  const { authCall, profile, getProfile } = useAuth()
+  const { authCall, profile, getProfile, isNewUser } = useAuth()
   const navigation = useNavigation()
   const theme = useTheme()
 
@@ -63,7 +63,7 @@ export default UpdatePersonalDetails = () => {
       setProfileSubmitting(true)
       await authCall({
         method: 'PATCH',
-        url: `${USER_SERVICE_BASE_URL}/users/me`,
+        url: `${USER_SERVICE_BASE_URL}/users/me?${isNewUser ? 'notificationType=NEW_USER_JOINED' : ''}`,
         data: values
       })
       await getProfile()
