@@ -35,6 +35,7 @@ export default function Conversations() {
           method: 'GET',
           url: `${USER_SERVICE_BASE_URL}/users/${userId}`
         }))?.data;
+        navigation.replace('Main', { screen: 'Home' })
         navigation.navigate('ViewProfile',  { userData: userInfo })
       } catch (e) {
         console.log(e)
