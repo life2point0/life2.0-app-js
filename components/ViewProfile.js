@@ -71,7 +71,7 @@ const ViewProfile = ({ route }) => {
     const newChannel = client.channel('messaging', channel.id)
     await newChannel.watch()
     await setActiveChannel(newChannel)
-    navigation.navigate('Conversations')
+    navigation.navigate('Conversations',  { userData })
   }
 
   const renderImage = (photo, index) => (

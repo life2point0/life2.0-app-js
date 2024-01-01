@@ -32,11 +32,12 @@ export default function NotificationsScreen() {
   }, [])
 
   const handleNavigation = async (actionType, userId) => {
+    const userInfo = await ViewProfile(userId)
     if(actionType === 'VIEW_PROFILE') {
-      ViewProfile(userId)
+      navigation.navigate('ViewProfile',  { userData: userInfo })
     }
     if(actionType === 'SEND_MESSAGE') {
-      connectUser(userId)
+      connectUser(userInfo)
     }
   }
 
@@ -46,23 +47,24 @@ export default function NotificationsScreen() {
         method: 'GET',
         url: `${USER_SERVICE_BASE_URL}/users/${userId}`
       }))?.data;
-      navigation.navigate('ViewProfile',  { userData: userInfo })
+      return userInfo
     } catch (e) {
       console.log(e)
     }
   }
 
-  const connectUser = async (userId) => {
+  const connectUser = async (userInfo) => {
+    console.log('userInfo', userInfo.id)
     try {
       const res = await authCall({
         method: 'POST',
         url: `${USER_SERVICE_BASE_URL}/users/me/connections`,
-        data: {userId}
+        data: {userId: userInfo.id}
       })
       const channels = await fetchChannels()
       const channel = channels?.find(channel => channel.id === res.data.channelId);
       if(channel) {
-        navigateToCommunityChat(channel)
+        navigateToCommunityChat(channel, userInfo)
       }
    } catch (e) {
       console.log(e)
@@ -85,11 +87,11 @@ export default function NotificationsScreen() {
     }
 };
 
-  const navigateToCommunityChat = async (channel) => {
+  const navigateToCommunityChat = async (channel, userInfo) => {
     const newChannel = client.channel('messaging', channel.id)
     await newChannel.watch()
     await setActiveChannel(newChannel)
-    navigation.navigate('Conversations')
+    navigation.navigate('Conversations', { userData: userInfo} )
   }
 
 

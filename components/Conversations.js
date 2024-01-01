@@ -13,14 +13,22 @@ import ChatScreenAppBar from './ChatScreenAppBar';
 import defaultCommunityIcon from './assets/community.png'
 import { USER_SERVICE_BASE_URL } from './constants';
 
-export default function Conversations() {
+export default function Conversations({ route }) {
   const { isAuthenticated, authCall, profile } = useAuth();
   const navigation = useNavigation();
   const { channel } = useChatContext();
 
+  const { userData } = route?.params || {}
+
   if (!isAuthenticated) {
     navigation.navigate('Signup');
   }
+
+  const title = channel?.data?.name || `${userData?.firstName || ''} ${userData?.lastName || ''}` || ''
+  const image = channel?.data?.image || userData?.photos[0]?.url || null
+
+
+  console.log('userData', userData?.photos[0].url)
 
   const MessageComponent = (props) => {
 
@@ -63,7 +71,7 @@ export default function Conversations() {
 
   return (
     <>
-      <ChatScreenAppBar title={channel?.data?.name} image={channel?.data?.image ? {uri: channel?.data?.image} : defaultCommunityIcon} />
+      <ChatScreenAppBar title={title} image={image ? {uri: image} : defaultCommunityIcon} />
       <View style={{flex: 1}}>
         <Channel channel={channel} hasCommands={false} >
           <MessageList Message={MessageComponent}/> 
