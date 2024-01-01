@@ -7,11 +7,13 @@ import { Image, SafeAreaView, ScrollView, Text, View } from 'react-native';
 import Button from '../shared-components/button/Button';
 import { useTheme } from 'react-native-paper';
 import { useChatContext } from 'stream-chat-expo';
+import { useData } from '../contexts/DataContext';
 
 export default function NotificationsScreen() {
   const { isAuthenticated, isProfileCreated, authCall } = useAuth()
+  const { notifications } = useData()
+
   const { client, setActiveChannel } = useChatContext()
-  const [ notifications, setNotifications ] = useState([])
   const navigation = useNavigation();
   const theme = useTheme()
 
@@ -27,39 +29,9 @@ export default function NotificationsScreen() {
         navigation.navigate('UpdateProfile');
         return;
       }
-      getNotifications()
-  }, []);
-
-  const getNotifications = async () => {
-    try {
-        const notifications = (await authCall({
-          method: 'GET',
-          url: `${USER_SERVICE_BASE_URL}/users/me/notifications`
-        }))?.data;
-        setNotifications(notifications.data)
-        await confirmNotificationCheck()
-
-      } catch (e) {
-        console.log(e)
-      }
-  }
-
-  const confirmNotificationCheck = async () => {
-    try {
-        const notifications = (await authCall({
-          method: 'PUT',
-          url: `${USER_SERVICE_BASE_URL}/users/me/notifications/read_status`
-        }))?.data;
-        setNotifications(notifications.data)
-        await confirmNotificationCheck()
-      } catch (e) {
-        console.log(e)
-      }
-  }
+  }, [])
 
   const handleNavigation = async (actionType, userId) => {
-    console.log('TYPE', actionType)
-    console.log('userId', userId)
     if(actionType === 'VIEW_PROFILE') {
       ViewProfile(userId)
     }
@@ -101,7 +73,7 @@ export default function NotificationsScreen() {
     const filter = {
         members: { $in: [client.userID] }
     };
-    const sort = { last_message_at: -1 };
+    const sort = { last_message_at: -1 }
     try {
       const channels = await client.queryChannels(filter, sort, {
         watch: true,

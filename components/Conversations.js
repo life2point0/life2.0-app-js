@@ -12,7 +12,6 @@ import { View, Image, TouchableOpacity } from 'react-native';
 import ChatScreenAppBar from './ChatScreenAppBar';
 import defaultCommunityIcon from './assets/community.png'
 import { USER_SERVICE_BASE_URL } from './constants';
-import SplashLogo from './assets/splash-logo.png';
 
 export default function Conversations() {
   const { isAuthenticated, authCall, profile } = useAuth();
@@ -27,7 +26,6 @@ export default function Conversations() {
 
     const isMyMessage = props.message.user.id === profile.id
     const shouldShowAvatar = props.message.groupStyles[0] === 'bottom' || props.message.groupStyles[0] === 'single'
-    // console.log('Message', props.message.groupStyles[0] === 'bottom')
     const handleAvatarClick = async (userId) => {
       console.log('Avatar clicked', userId)
       try {

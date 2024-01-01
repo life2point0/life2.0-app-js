@@ -72,18 +72,14 @@ export const AuthProvider = ({ children }) => {
   axios.interceptors.response.use(
     (response) => response,
     async (error) => {
-      if (error.response && error.response.status === 401) {
-        // Token expired, try to refresh
-        try {
+      if (error.response && error.response.status === 401 && refreshToken) {        try {
           const newAccessToken = await getNewToken(refreshToken);
-          // Retry the original request with the new token
           const originalRequest = error.config;
           originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
           return await axios(originalRequest);
         } catch (refreshError) {
-          // Refresh failed, logout
-          logout();
-          throw refreshError;
+          logout()
+          throw refreshError
         }
       }
       throw error;
@@ -156,10 +152,10 @@ export const AuthProvider = ({ children }) => {
     (async () => {
       const storedRefreshToken = await AsyncStorage.getItem('refreshToken');
       if (storedRefreshToken) {
-        setIsAuthenticated(true)
         setRefreshToken(storedRefreshToken);
         try {
           await getNewToken(storedRefreshToken);
+          setIsAuthenticated(true)
         } catch (e) {
           setIsAuthenticated(false)
           AsyncStorage.removeItem('refreshToken')
@@ -197,9 +193,9 @@ export const AuthProvider = ({ children }) => {
 
     try {
       await axios.delete(`${USER_SERVICE_BASE_URL}/sessions`, config)
-      if (client.wsConnection.isHealthy) {
+      if (client?.wsConnection?.isHealthy) {
         await client.disconnectUser();
-        console.log('Disconnected', client.userID, client.wsConnection.isHealthy);
+        console.log('Disconnected', client.userID, client.wsConnection?.isHealthy);
       }
       setIsAuthenticated(false)
       setRefreshToken('')
@@ -219,7 +215,7 @@ export const AuthProvider = ({ children }) => {
     const storedRefreshToken = await AsyncStorage.getItem('refreshToken');
     if (storedRefreshToken) {
       setRefreshToken(storedRefreshToken);
-      if (await getNewToken()) {
+      if (await getNewToken(storedRefreshToken)) {
         return true;
       }
     }

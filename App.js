@@ -15,13 +15,10 @@ import Signup from './components/Signup';
 import ChatScreen from './components/ChatScreen';
 import Conversations from './components/Conversations';
 import { StreamChat } from 'stream-chat';
-import {
-  Chat,
-  OverlayProvider
-} from 'stream-chat-expo';
+import {Chat, OverlayProvider } from 'stream-chat-expo';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Communities from './components/Communities';
-import { DataProvider } from './contexts/DataContext';
+import { DataProvider, useData } from './contexts/DataContext';
 import ProfileImageUpload from './components/ProfileImageUpload';
 import { NavigationMenu } from './components/AppBar';
 import ViewProfile from './components/ViewProfile';
@@ -29,6 +26,7 @@ import * as SystemUI from 'expo-system-ui';
 import RenderIfConnected from './components/RenderIfConnected';
 import UpdatePersonalDetails from './components/UpdatePersonalDetails';
 import NotificationsScreen from './components/Notifications';
+import { Text, View } from 'react-native';
 
 
 
@@ -37,7 +35,7 @@ const Tab = createBottomTabNavigator();
 const chatClient = StreamChat.getInstance('ys9k7stx4245');
 
 
-const getTabOptions = (iconName) => {
+const getTabOptions = (iconName, unreadNotificationCount=0) => {
   return {
     tabBarActiveTintColor: 'black',
     tabBarInactiveTintColor: 'gray',
@@ -50,13 +48,20 @@ const getTabOptions = (iconName) => {
       fontWeight: 'normal',
     },
     tabBarIcon: ({ focused, color, size }) => (
-      <IconButton icon={iconName} iconColor={focused ? 'black': 'grey'} size={focused ? 28 : 24} />
+      <View>
+        <IconButton icon={iconName} iconColor={focused ? 'black': 'grey'} size={focused ? 28 : 24} />
+        { unreadNotificationCount > 0 &&
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center',  width: 20, height: 20, position: 'absolute', zIndex: 999, top: 8, right: 8,  backgroundColor: 'red', borderRadius: 20 }}>
+            <Text style={{ color: 'white' }}> { unreadNotificationCount || ''} </Text> 
+          </View>  
+          }
+      </View>
     ),
     headerShown: false
   };
 };
 
-function SharedTabs() {
+function SharedTabs(unreadNotificationCount) {
   return (
     <Tab.Navigator>
       <Tab.Screen 
@@ -72,7 +77,7 @@ function SharedTabs() {
       <Tab.Screen 
         name="Notifications" 
         component={NotificationsScreen} 
-        options={getTabOptions('bell-outline')}
+        options={getTabOptions('bell-outline', unreadNotificationCount)}
       />
       <Tab.Screen 
         name="Profile" 
@@ -97,12 +102,12 @@ const App = () => {
         <PaperProvider theme={theme}>
           <RenderIfConnected>
             <Chat client={chatClient}>
-                <AuthProvider>
-                  <DataProvider> 
+              <AuthProvider>
+                <DataProvider> 
                   <NavigationContainer>
                     <Stack.Navigator screenOptions={{ headerShown: false }}>
                       <Stack.Screen name="Root" component={Root} />
-                      <Stack.Screen name="Main" component={SharedTabs} options={{ headerShown: false }}/>
+                      <Stack.Screen name="Main" component={MainScreen} options={{ headerShown: false }}/>
                       <Stack.Screen name="Login" component={Login} />
                       <Stack.Screen name="Signup" component={Signup} />
                       <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
@@ -114,8 +119,8 @@ const App = () => {
                     </Stack.Navigator>
                     <Stack.Screen name="NavigationMenu" component={NavigationMenu} />
                   </NavigationContainer>
-                  </DataProvider>
-                </AuthProvider>
+                </DataProvider>
+              </AuthProvider>
             </Chat>
           </RenderIfConnected>
         </PaperProvider>
@@ -123,5 +128,12 @@ const App = () => {
     </GestureHandlerRootView>
   );
 };
+
+const MainScreen = () => {
+  const { unreadNotificationsCount } = useData()
+  return (
+    SharedTabs(unreadNotificationsCount)
+  )
+}
 
 export default App;

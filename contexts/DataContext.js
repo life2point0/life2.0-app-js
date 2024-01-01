@@ -12,14 +12,18 @@ const DataContext = createContext()
 export const DataProvider = ({ children }) => {
   const [focusedCommunities, setFocusedCommunities] = useState([])
   const [filteredCommunities, setFilteredCommunities] = useState([])
+  const [notifications, setNotifications ] = useState([])
+  const [unreadNotificationsCount, setUnreadNotificationsCount ] = useState(0)
   const [filterQuery, setFilterQuery] = useState('')
-  const { isAuthenticated, authCall} = useAuth([])
+  const { isAuthenticated, authCall} = useAuth()
 
   const getCommunities = async () => {
     try {
         const res = (await axios.get(`${USER_SERVICE_BASE_URL}/communities?perPage=5`)).data
         setFilteredCommunities(res.data)
-        if(!isAuthenticated) {
+        if(isAuthenticated) {
+          await getFocusedCommunities()
+        } else {
           setFocusedCommunities(res.data)
         }
     } catch (e) {
@@ -50,13 +54,46 @@ export const DataProvider = ({ children }) => {
     }
   }
 
+  const getNotifications = async () => {
+      try {
+        const response = await authCall({
+          method: 'GET',
+          url: `${USER_SERVICE_BASE_URL}/users/me/notifications`
+        })
+
+        const notificationsData = response.data
+        const unreadNotifications = notificationsData?.data?.filter(notification => !notification.isRead)
+        const unreadNotificationsCount = unreadNotifications?.length;
+        setNotifications(notificationsData.data)
+        setUnreadNotificationsCount(unreadNotificationsCount)
+        await confirmNotificationCheck()
+      } catch (e) {
+        setNotifications([])
+      }
+    }
+
+  const confirmNotificationCheck = async () => {
+    try {
+        await authCall({
+          method: 'PUT',
+          url: `${USER_SERVICE_BASE_URL}/users/me/notifications/read-status`,
+          data: {}
+        })
+      } catch (e) {
+        console.log(e)
+      }
+  }
+
   useEffect(() => {
     getCommunities()
-    getFocusedCommunities()
+    if(isAuthenticated) {
+      getNotifications()
+    }
   }, [isAuthenticated])
+  
 
   return (
-    <DataContext.Provider value={{ focusedCommunities, filterCommunities, filteredCommunities, filterQuery }}>
+    <DataContext.Provider value={{ focusedCommunities, filterCommunities, filteredCommunities, filterQuery, notifications, unreadNotificationsCount }}>
       {children}
     </DataContext.Provider>
   )
