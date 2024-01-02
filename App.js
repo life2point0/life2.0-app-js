@@ -31,7 +31,7 @@ import { Text, View } from 'react-native';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
-const chatClient = StreamChat.getInstance('ys9k7stx4245');
+const chatClient = StreamChat.getInstance('qbyjzjrwpnpm');
 
 
 const getTabOptions = (iconName, unreadNotificationCount=0) => {
@@ -100,27 +100,27 @@ const App = () => {
       <OverlayProvider>
         <PaperProvider theme={theme}>
           <RenderIfConnected>
-            <Chat client={chatClient}>
-              <AuthProvider>
-                <DataProvider> 
-                  <NavigationContainer>
-                    <Stack.Navigator screenOptions={{ headerShown: false }}>
-                      <Stack.Screen name="Root" component={Root} />
-                      <Stack.Screen name="Main" component={MainScreen} options={{ headerShown: false }}/>
-                      <Stack.Screen name="Login" component={Login} />
-                      <Stack.Screen name="Signup" component={Signup} />
-                      <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
-                      <Stack.Screen name="ProfileImageUpload" component={ProfileImageUpload} />
-                      <Stack.Screen name="UpdatePersonalDetails" component={UpdatePersonalDetails} />
-                      <Stack.Screen name="Conversations" component={Conversations} />
-                      <Stack.Screen name="Communities" component={Communities} />
-                      <Stack.Screen name="ViewProfile" component={ViewProfile} />
-                    </Stack.Navigator>
-                    <Stack.Screen name="NavigationMenu" component={NavigationMenu} />
-                  </NavigationContainer>
-                </DataProvider>
-              </AuthProvider>
-            </Chat>
+            <NavigationContainer>
+              <Chat client={chatClient}>
+                <AuthProvider>
+                  <DataProvider> 
+                      <Stack.Navigator screenOptions={{ headerShown: false }}>
+                        <Stack.Screen name="Root" component={Root} />
+                        <Stack.Screen name="Main" component={MainScreen} options={{ headerShown: false }}/>
+                        <Stack.Screen name="Login" component={Login} />
+                        <Stack.Screen name="Signup" component={Signup} />
+                        <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
+                        <Stack.Screen name="ProfileImageUpload" component={ProfileImageUpload} />
+                        <Stack.Screen name="UpdatePersonalDetails" component={UpdatePersonalDetails} />
+                        <Stack.Screen name="Conversations" component={Conversations} />
+                        <Stack.Screen name="Communities" component={Communities} />
+                        <Stack.Screen name="ViewProfile" component={ViewProfile} />
+                      </Stack.Navigator>
+                      <Stack.Screen name="NavigationMenu" component={NavigationMenu} />
+                  </DataProvider>
+                </AuthProvider>
+              </Chat>
+            </NavigationContainer>
           </RenderIfConnected>
         </PaperProvider>
       </OverlayProvider>

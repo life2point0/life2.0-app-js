@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, SafeAreaView, ScrollView, KeyboardAvoidingView, StatusBar } from 'react-native'
 import { ActivityIndicator, IconButton, useTheme } from 'react-native-paper'
-import { CORE_SERVICE_BASE_URL, USER_SERVICE_BASE_URL } from './constants'
+import { USER_SERVICE_BASE_URL } from './constants'
 import { useAuth } from '../contexts/AuthContext'
 import { useNavigation } from '@react-navigation/native'
 import { Form } from '../shared-components/form/Form'

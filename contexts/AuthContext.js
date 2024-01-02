@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState, useRef } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { KEYCLOAK_REALM, KEYCLOAK_URL, USER_SERVICE_BASE_URL } from '../components/constants';
+import { USER_SERVICE_BASE_URL } from '../components/constants';
 import axios from 'axios';
 import { useChatContext } from 'stream-chat-expo';
 import messaging from '@react-native-firebase/messaging';
@@ -12,7 +12,6 @@ import { useNavigation } from '@react-navigation/core';
 
 
 const AuthContext = createContext();
-const TOKEN_URL = `${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}/protocol/openid-connect/token`;
 
 const firebaseConfig = {
   apiKey: 'AIzaSyCAnfVRlSxFAPczK4oygJhDH_AwKCKJVjk', 
