@@ -26,17 +26,22 @@ export default function Conversations({ route }) {
   }, [otherMember])
 
   const getMembers = async () => {
-    const members = await (await channel.queryMembers({})).members
-    const connectedUser = members.find((member) => member.user_id !== profile.id)
-    if (connectedUser) {
-      const connectedUserData = {
-        name: connectedUser.user?.name, 
-        image: connectedUser.user?.image
+    try {
+      const members = (await channel.queryMembers({})).members
+      const connectedUser = members.find((member) => member.user_id !== profile.id)
+      if (connectedUser) {
+        const connectedUserData = {
+          name: connectedUser.user?.name, 
+          image: connectedUser.user?.image
+        }
+        setOtherMember(connectedUserData)
       }
-      setOtherMember(connectedUserData)
+    } catch(error) {
+      console.log('Setting other memeber failed')
     }
+
   }
-  
+
   if (!isAuthenticated) {
     navigation.navigate('Signup');
   }
