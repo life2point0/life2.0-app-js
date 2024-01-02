@@ -159,22 +159,28 @@ export const AuthProvider = ({ children }) => {
         messaging().onNotificationOpenedApp(async (remoteMessage) => {
           console.log('Notification caused app to open from background state:', remoteMessage);
           if (remoteMessage) {
-            setActiveChannel(await client.getChannelById(remoteMessage?.data?.channel_id))
+            const newChannel = client.channel(remoteMessage?.data?.channel_type, remoteMessage?.data?.channel_id)
+            await newChannel.watch()
+            setActiveChannel(newChannel)
             navigate('Conversations');
           }
         });
         messaging().setBackgroundMessageHandler(async remoteMessage => {
-          console.log('Message handled in the background!', remoteMessage);
-          if (remoteMessage) {
-            setActiveChannel(await client.getChannelById(remoteMessage?.data?.channel_id))
-            navigate('Conversations');
-          }
+          console.log('Notification caused app to open from background state:', remoteMessage);
+          // if (remoteMessage) {
+          //   const newChannel = client.channel(remoteMessage?.data?.channel_type, remoteMessage?.data?.channel_id)
+          //   await newChannel.watch()
+          //   setActiveChannel(newChannel)
+          //   navigate('Conversations');
+          // }
         });
 
         messaging().getInitialNotification().then(async remoteMessage => {
           console.log('Notification caused app to open from killed state:', remoteMessage);
           if (remoteMessage) {
-            setActiveChannel(await client.getChannelById(remoteMessage?.data?.channel_id))
+            const newChannel = client.channel(remoteMessage?.data?.channel_type, remoteMessage?.data?.channel_id)
+            await newChannel.watch()
+            setActiveChannel(newChannel)
             navigate('Conversations');
           }
         });
