@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigation } from '@react-navigation/native';
 import { 
@@ -17,25 +17,39 @@ export default function Conversations({ route }) {
   const { isAuthenticated, authCall, profile } = useAuth();
   const navigation = useNavigation();
   const { channel } = useChatContext();
+  const [otherMember, setOtherMember] = useState(null)
 
-  const { userData } = route?.params || {}
+  useEffect(() => {
+    if (channel.type === 'messaging') {
+      getMembers()
+    }
+  }, [otherMember])
 
+  const getMembers = async () => {
+    const members = await (await channel.queryMembers({})).members
+    const connectedUser = members.find((member) => member.user_id !== profile.id)
+    if (connectedUser) {
+      const connectedUserData = {
+        name: connectedUser.user?.name, 
+        image: connectedUser.user?.image
+      }
+      setOtherMember(connectedUserData)
+    }
+  }
+  
   if (!isAuthenticated) {
     navigation.navigate('Signup');
   }
 
-  const title = channel?.data?.name || `${userData?.firstName || ''} ${userData?.lastName || ''}` || ''
-  const image = channel?.data?.image || userData?.photos[0]?.url || null
+  const title = channel?.data?.name || otherMember?.name || ''
+  const image = channel?.data?.image ||  otherMember?.image || null
 
-
-  console.log('userData', userData?.photos[0].url)
 
   const MessageComponent = (props) => {
 
     const isMyMessage = props.message.user.id === profile.id
     const shouldShowAvatar = props.message.groupStyles[0] === 'bottom' || props.message.groupStyles[0] === 'single'
     const handleAvatarClick = async (userId) => {
-      console.log('Avatar clicked', userId)
       try {
         const userInfo = (await authCall({
           method: 'GET',

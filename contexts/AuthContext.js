@@ -28,7 +28,6 @@ export const AuthProvider = ({ children }) => {
 
     try {
       const response = await axios.post(`${USER_SERVICE_BASE_URL}/sessions/token`, data);
-      // console.log('accessToken', response.data);
       const { accessToken } = response.data;
       setAccessToken(accessToken);
       setIsAuthenticated(true)

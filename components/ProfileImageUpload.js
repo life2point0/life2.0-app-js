@@ -107,7 +107,6 @@ export default ProfileImageUpload = () => {
           url: `${USER_SERVICE_BASE_URL}/users/me`,
           data
         })
-        console.log('Reached Nav')
         navigation.replace('UpdatePersonalDetails')
       } catch (e) {
         setErrorText(e?.response?.data?.detail?.msg || 'Unknown Error' )
