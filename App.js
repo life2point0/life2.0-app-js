@@ -10,7 +10,6 @@ import Login from './components/Login';
 import UpdateProfile from './components/UpdateProfile';
 import HomeScreen from './components/HomeScreen';
 import { IconButton } from 'react-native-paper';
-import ComingSoonScreen from './components/ComingSoonScreen';
 import Signup from './components/Signup';
 import ChatScreen from './components/ChatScreen';
 import Conversations from './components/Conversations';

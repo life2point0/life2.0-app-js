@@ -15,7 +15,7 @@ const HomeScreen = () => {
 
   return (
     <ScrollView style={theme.colors.background} stickyHeaderIndices={[0]}>
-      <AppBar title={<Image source={logo} style={theme.spacing.logo} />}/>
+      <AppBar title={<Image source={logo} style={theme.spacing.logo} statusBarColor="#FFF2CB" />}/>
       <UserCommunities />
       <View style={theme.spacing.home.container}>
        
