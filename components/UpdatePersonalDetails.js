@@ -6,10 +6,12 @@ import { useAuth } from '../contexts/AuthContext'
 import { useNavigation } from '@react-navigation/native'
 import { Form } from '../shared-components/form/Form'
 import { updatePersonalDetailsFields } from './constants/fields/updatePersonalDetailsFields'
+import { useData } from '../contexts/DataContext'
 
 export default UpdatePersonalDetails = () => {
   
   const { authCall, profile, getProfile, isNewUser } = useAuth()
+  const { getFocusedCommunities } = useData()
   const navigation = useNavigation()
   const theme = useTheme()
 
@@ -67,6 +69,7 @@ export default UpdatePersonalDetails = () => {
         data: values
       })
       await getProfile()
+      await getFocusedCommunities()
       navigation.navigate('Main', { screen: 'Home' })
     } catch (e) {
       setErrorText(e?.response?.data?.detail?.msg || 'Unknown Error' )
@@ -87,7 +90,7 @@ export default UpdatePersonalDetails = () => {
             onPress={() => navigation.goBack()}
           />
        </View>
-      <View style={theme.spacing.onboarding.container}>
+      <ScrollView contentContainerStyle={theme.spacing.onboarding.container}>
       
       {errorText && (
           <View style={{alignItems: 'center', justifyContent: 'center', flexDirection: 'row'}}>
@@ -120,7 +123,7 @@ export default UpdatePersonalDetails = () => {
           )
         }
 
-      </View>
+      </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
   )

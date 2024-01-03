@@ -93,7 +93,7 @@ export const DataProvider = ({ children }) => {
   
 
   return (
-    <DataContext.Provider value={{ focusedCommunities, filterCommunities, filteredCommunities, filterQuery, notifications, unreadNotificationsCount }}>
+    <DataContext.Provider value={{ focusedCommunities, filterCommunities,getFocusedCommunities, filteredCommunities, filterQuery, notifications, unreadNotificationsCount }}>
       {children}
     </DataContext.Provider>
   )
