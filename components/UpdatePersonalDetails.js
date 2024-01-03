@@ -87,7 +87,7 @@ export default UpdatePersonalDetails = () => {
             onPress={() => navigation.goBack()}
           />
        </View>
-      <View style={theme.spacing.onboarding.container}>
+      <ScrollView style={theme.spacing.onboarding.container}>
       
       {errorText && (
           <View style={{alignItems: 'center', justifyContent: 'center', flexDirection: 'row'}}>
@@ -120,7 +120,7 @@ export default UpdatePersonalDetails = () => {
           )
         }
 
-      </View>
+      </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
   )
