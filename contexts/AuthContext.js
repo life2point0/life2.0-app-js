@@ -179,7 +179,7 @@ export const AuthProvider = ({ children }) => {
     }
     unsubscribeTokenRefreshListenerRef.current?.();
     const token = await messaging().getToken();
-    await client.addDevice(token, 'firebase', profile?.id, 'life2point0-android');
+    await client.addDevice(token, 'firebase', profile?.id, 'firebase');
 
     unsubscribeTokenRefreshListenerRef.current = messaging().onTokenRefresh(async newToken => {
       await client.addDevice(newToken, 'firebase');
