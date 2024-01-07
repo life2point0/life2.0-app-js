@@ -29,11 +29,11 @@ const updateProfileFields = [
       name: 'placeOfOrigin',
       label: 'Where am I from',
       type: 'location',
-      placeholder: 'Select where you are from'
+      placeholder: 'Place where I grew up'
     },
     {
       name: 'pastPlaces',
-      label: 'Places I have lived in',
+      label: 'Other cities I have lived in',
       type: 'location',
       multiple: true,
       placeholder: 'Select where you have been'
@@ -41,19 +41,19 @@ const updateProfileFields = [
     {
       name: 'currentPlace',
       label: 'Where am I now',
-      placeholder: 'Select where you are now',
+      placeholder: 'Place I call my new home',
       type: 'location'
     },
     {
       name: 'occupations',
-      label: 'What I do for a living?',
+      label: 'My current profession',
       type: 'chip',
       options: []
     },
     {
       name: 'description',
       label: 'Bio',
-      placeholder: 'Anything about you',
+      placeholder: 'My life so far...',
       type: 'input',
       multiline: true,
       maxCharCount: 600,
