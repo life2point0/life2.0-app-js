@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigation } from '@react-navigation/native';
 import AppBar from './AppBar';
@@ -31,13 +31,21 @@ export default function NotificationsScreen() {
       }
   }, [])
 
-  const handleNavigation = async (actionType, userId) => {
-    const userInfo = await ViewProfile(userId)
-    if(actionType === 'VIEW_PROFILE') {
-      navigation.navigate('ViewProfile',  { userData: userInfo })
-    }
-    if(actionType === 'SEND_MESSAGE') {
-      connectUser(userId)
+  const handleNavigation = async (actionType, userId, index, mainIndex) => {
+    notifications[mainIndex].actions[index].isLoading = true
+    try { 
+      if(actionType === 'VIEW_PROFILE') {
+        const userInfo = await ViewProfile(userId)
+        navigation.navigate('ViewProfile',  { userData: userInfo })
+      }
+      if(actionType === 'SEND_MESSAGE') {
+        const channel = await connectUser(userId)
+        navigateToCommunityChat(channel)
+      }
+    } catch {
+      console.log('failed to navigate')
+    } finally {
+      notifications[mainIndex].actions[index].isLoading = false
     }
   }
 
@@ -63,7 +71,7 @@ export default function NotificationsScreen() {
       const channels = await fetchChannels()
       const channel = channels?.find(channel => channel.id === res.data.channelId);
       if(channel) {
-        navigateToCommunityChat(channel)
+        return channel
       }
    } catch (e) {
       console.log(e)
@@ -99,16 +107,16 @@ export default function NotificationsScreen() {
       <>
         <AppBar title="Notifications" />
         <SafeAreaView>
-          <ScrollView style={{ padding: 20, flexDirection:'column', gap: 10 }}>
-              { notifications?.map((notification, index) => (
-                  <View key={`${index}Notification`} style={{ display: 'flex', flexDirection: 'row', gap: 10, borderBottomWidth: 1, borderColor: 'lightgrey', paddingBottom: 10  }}>
+          <ScrollView style={{ paddingHorizontal: 20, marginBottom: 80, flexDirection:'column' }}>
+              { notifications?.map((notification, mainIndex) => (
+                  <View key={`${mainIndex}Notification`} style={{ display: 'flex', flexDirection: 'row', gap: 10, borderBottomWidth: 1, borderColor: 'lightgrey', paddingVertical: 10  }}>
                     <Image style={{ borderRadius: 100, borderWidth: 1, borderColor: '#fff' }} source={{ uri: notification.icon, width: 50, height: 50 }} />
                     <View style={{ flexDirection: 'column', gap: 8 }}>
                       <Text style={theme.fonts.subtitle}>{notification?.title} </Text>
                       <Text lineBreakMode='head' style={{...theme.fonts.description, maxWidth: '90%' }}>{notification.body || '-'} </Text>
                       <View style={{ flexDirection: 'row', gap: 10 }}>
                         {notification.actions?.map((action, index) => (
-                          <Button key={`${index}actionType`} compact onPress={() => handleNavigation(action.actionType, action.actionData?.userId)} mode="contained"> {action.actionData?.actionLabel} </Button>
+                          <Button loading={action.isLoading} key={`${index}actionType`} compact onPress={() => handleNavigation(action.actionType, action.actionData?.userId, index, mainIndex)} mode="contained"> {action.actionData?.actionLabel} </Button>
                         ))}
                       </View>
                     </View>

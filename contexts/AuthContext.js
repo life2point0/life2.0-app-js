@@ -8,9 +8,6 @@ import * as Notifications from 'expo-notifications';
 import firebase from '@react-native-firebase/app';
 import { useNavigation } from '@react-navigation/core';
 
-
-
-
 const AuthContext = createContext();
 
 const firebaseConfig = {
@@ -32,7 +29,7 @@ export const AuthProvider = ({ children }) => {
   const { client, setActiveChannel } = useChatContext();
   const isProfileCreated = !!profile?.description;
   const isImageUploaded = !!profile?.photos.length;
-  const isNewUser = !!profile?.skills;
+  const isNewUser = !profile?.skills;
   const [isFCMReady, setIsFCMReady] = useState(false);
   const unsubscribeTokenRefreshListenerRef = useRef();
   const { navigate } = useNavigation();
@@ -172,6 +169,18 @@ export const AuthProvider = ({ children }) => {
     }
   }, [accessToken])
 
+  const ViewProfile = async (userId) => {
+    try {
+      const userInfo = (await authCall({
+        method: 'GET',
+        url: `${USER_SERVICE_BASE_URL}/users/${userId}`
+      }))?.data;
+      return userInfo
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   const registerPushToken = async () => {
     if (firebase.apps.length === 0) {
       await firebase.initializeApp(firebaseConfig)
@@ -185,44 +194,50 @@ export const AuthProvider = ({ children }) => {
       await client.addDevice(newToken, 'firebase');
     });
   };
+
+  handleNotification = async (remoteMessage) => {
+    if(remoteMessage.data?.notificationType && remoteMessage.data?.notificationType === 'NEW_USER_JOINED') {
+      const userInfo = await ViewProfile(remoteMessage.data?.userId)
+      navigate('ViewProfile',  { userData: userInfo })
+    } else if (remoteMessage) {
+      const newChannel = client.channel(remoteMessage?.data?.channel_type, remoteMessage?.data?.channel_id)
+      await newChannel.watch()
+      setActiveChannel(newChannel)
+      navigate('Conversations');
+    } else {
+      console.log('Notification handling failed')
+    }
+  }
   
   useEffect(() => {
     if (isProfileCreated) {
       const init = async () => {
         await initChat()
-        await requestNotificationPermission();
-        await registerPushToken();
-        setIsFCMReady(true);
+        await requestNotificationPermission()
+        await registerPushToken()
+        setIsFCMReady(true)
         messaging().onNotificationOpenedApp(async (remoteMessage) => {
           console.log('Notification caused app to open from background state:', remoteMessage);
-          if (remoteMessage) {
-            const newChannel = client.channel(remoteMessage?.data?.channel_type, remoteMessage?.data?.channel_id)
-            await newChannel.watch()
-            setActiveChannel(newChannel)
-            navigate('Conversations');
+          if(remoteMessage) {
+            handleNotification(remoteMessage)
+          } else {
+            console.log('No Notification data found')
           }
         });
         messaging().setBackgroundMessageHandler(async remoteMessage => {
-          console.log('Notification caused app to open from background state:', remoteMessage);
-          // if (remoteMessage) {
-          //   const newChannel = client.channel(remoteMessage?.data?.channel_type, remoteMessage?.data?.channel_id)
-          //   await newChannel.watch()
-          //   setActiveChannel(newChannel)
-          //   navigate('Conversations');
-          // }
-        });
+          console.log('Notification received:', remoteMessage)
+        })
 
         messaging().getInitialNotification().then(async remoteMessage => {
           console.log('Notification caused app to open from killed state:', remoteMessage);
-          if (remoteMessage) {
-            const newChannel = client.channel(remoteMessage?.data?.channel_type, remoteMessage?.data?.channel_id)
-            await newChannel.watch()
-            setActiveChannel(newChannel)
-            navigate('Conversations');
+          if(remoteMessage) {
+            handleNotification(remoteMessage)
+          } else {
+            console.log('No Notification data found')
           }
-        });
-      };
-      init();
+        })
+      }
+      init()
     }
     return async () => {
       unsubscribeTokenRefreshListenerRef.current?.();

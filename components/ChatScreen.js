@@ -11,6 +11,7 @@ export default function ChatScreen() {
   const { setActiveChannel, client } = useChatContext();
 
   useEffect(() => {
+
     return navigation.addListener('focus', () => {
       if (!isAuthenticated) {
         navigation.replace('Main', { screen: 'Home' })
@@ -25,7 +26,7 @@ export default function ChatScreen() {
     });
   }, []);
 
-  if (isProfileCreated && isImageUploaded) {
+  if (isProfileCreated) {
     return (
       <>
         <AppBar title="Conversations" />

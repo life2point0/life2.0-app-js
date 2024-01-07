@@ -6,7 +6,8 @@ const colors = {
     secondaryContainer: '#ffffff',
     secondary: '#FFC003',
     onSecondary: '#000000',
-    background: '#fbfbfb'
+    background: '#fbfbfb',
+    tertiaryColor: '#ffda7e'
 }
 
 export { colors }

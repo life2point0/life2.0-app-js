@@ -79,6 +79,7 @@ export const DataProvider = ({ children }) => {
           url: `${USER_SERVICE_BASE_URL}/users/me/notifications/read-status`,
           data: {}
         })
+        setUnreadNotificationsCount(0)
       } catch (e) {
         console.log(e)
       }

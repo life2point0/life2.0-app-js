@@ -13,12 +13,16 @@ const ViewProfile = ({ route }) => {
   const theme = useTheme()
   const { profile, isAuthenticated, authCall } = useAuth()
   const { client, setActiveChannel } = useChatContext()
+  const [isLoading, setIsLoading] = useState(false)
 
   const { userData } = route?.params || {}
+  
   const userInfo = userData || profile
 
-  const formattedJoinedDate = joinedDate?.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
   const joinedDate = new Date(profile?.joinedAt)
+  const formattedJoinedDate = joinedDate?.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+
+  const buttonText = userData?.isConnection ? 'Message' : 'Connect' 
 
 
   useEffect(() => {
@@ -35,6 +39,7 @@ const ViewProfile = ({ route }) => {
   }, [isAuthenticated, userInfo])
 
   const connectUser = async () => {
+    setIsLoading(true)
     try {
       const res = await authCall({
         method: 'POST',
@@ -48,6 +53,8 @@ const ViewProfile = ({ route }) => {
       }
    } catch (e) {
       console.log(e)
+   } finally {
+    setIsLoading(false)
    }
   }
 
@@ -84,125 +91,117 @@ const ViewProfile = ({ route }) => {
     return (
       <>
           <SafeAreaView style={{flex: 1 }}>
-          <StatusBar backgroundColor='#fbfbfb' barStyle="dark-content" />
-            <ScrollView contentContainerStyle={{ width: '100%', gap: 10, paddingBottom: 30, borderWidth: 1, borderColor: 'transparent' }}>
-              
-            <View>
-              { <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 30 }}>
+          <StatusBar backgroundColor={theme.colors.primaryContainer} barStyle="dark-content" />
+            <ScrollView contentContainerStyle={{ width: '100%', paddingBottom: 30 }}>
+            <IconButton
+                    icon="arrow-left"
+                    style={{...theme.spacing.backButton, zIndex: 999 }}
+                    onPress={() => navigation.goBack()}
+            />
+            <View style={{ backgroundColor: theme.colors.primaryContainer, height: 150, position: 'relative', width: '100%' }}>
+                <View style={{ alignItems: 'center', marginTop: 100 }}>
                   { userInfo?.photos[0]?.url ? 
-                  <Image style={{ borderRadius: 100, borderWidth: 5, borderColor: '#fff' }} source={{ uri: userInfo?.photos[0].url, width: 200, height: 200  }} /> :
-                  <IconButton iconColor='#ccc' size={100} style={{ size: 200, width: 200, height: 200, borderRadius: 100, borderWidth: 5, borderColor: '#fff' }} icon='account-outline'></IconButton>                 }
-                </View>  
-              }
-
-                <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: 5, padding: 20 }}>
-                    <Text style={theme.fonts.title}> {userInfo?.firstName || '-' } { userInfo?.lastName || '-' } </Text> 
+                  <Image style={{ borderRadius: 100, borderWidth: 4, borderColor: '#fff' }} source={{ uri: userInfo?.photos[0].url, width: 100, height: 100  }} /> :
+                  <IconButton iconColor='#ccc' size={100} style={{ size: 200, width: 100, height: 100, borderRadius: 100, borderWidth: 5, borderColor: '#fff' }} icon='account-outline'></IconButton>                 
+                  }
+                  <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: 5, padding: 5 }}>
+                    <Text style={{ ...theme.fonts.subtitle, fontWeight: 700 }}> {userInfo?.firstName || '-' } { userInfo?.lastName || '-' } </Text> 
                     <Text style={{...theme.fonts.description,  textAlign: 'center'}}> Joined { formattedJoinedDate }  </Text>
-                    <Text style={{...theme.fonts.description,  textAlign: 'center'}}> { userInfo?.description }  </Text>
-                    { userData && <Button onPress={connectUser} mode="outlined" textColor="#676767" style={{ marginTop: 5, borderColor: '#ccc' }} labelStyle={{ lineHeight: 15 }} icon={userData?.isConnection ? 'message-outline' : 'account-plus-outline'} compact> {userData?.isConnection ? 'Message' : 'Connect' } </Button> }
-                </View>
-
-
-                <IconButton
-                  icon="arrow-left"
-                  style={theme.spacing.backButton}
-                  onPress={() => navigation.goBack()}
-                />
+                    { 
+                    userData && <Button loading={isLoading} onPress={connectUser} mode="outlined" textColor="#676767" style={{ marginTop: 5, borderColor: '#ccc' }} labelStyle={{ lineHeight: 15 }} icon={userData?.isConnection ? 'message-outline' : 'account-plus-outline'} compact> {buttonText}  </Button> 
+                    }
+                  </View>
+                </View>  
              </View>
 
-              
-              { userInfo?.photos[0]?.url && <View style={{ flexDirection: 'column', justifyContent: 'center', gap: 10, padding: 20, backgroundColor: 'white' }}>
-                <Text style={theme.fonts.title}> Your Images  </Text>
-                  <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ flexDirection: 'row', gap: 10, justifyContent: 'flex-start', alignItems: 'center' }}>
-                    {userInfo?.photos?.map((photo, index) => renderImage(photo, index))}
-                  </ScrollView>
-                </View>
-              }
-              <View style={{ flexDirection: 'column', gap: 8, paddingHorizontal: 20, paddingVertical: 8, backgroundColor: 'white'  }}>
-                <View style={{ gap: 10,  borderColor: '#efefef', flexDirection: 'row', alignItems: 'center', paddingBottom: 8, borderBottomWidth: 1 }}>
-                  <Icon size={25} color='#676767' source="location-exit"/> 
-                  <View style={{ flexDirection: 'column', justifyContent: 'center' }}> 
-                      <Text style={theme.fonts.subtitle}>Where Am I From  </Text> 
-                      <Text style={theme.fonts.description }>{userInfo?.placeOfOrigin?.name || '-'} </Text>
+              <View style={{ flexDirection: 'column', gap: 20, marginTop: userData ? 160 : 120, paddingHorizontal: 20, paddingVertical: 8 }}>
+                <View style={{ gap: 10,  borderColor: '#efefef', flexDirection: 'row', alignItems: 'center', paddingBottom: 8 }}>
+                  <View style={{ flexDirection: 'column', justifyContent: 'center', gap: 8 }}> 
+                        <Text style={{ ...theme.fonts.subtitle, fontWeight: 700 }}> About me  </Text> 
+                        <View style={{ flexDirection: 'row', justifyContent: 'flex-start', gap: 10 }}>
+                          <Text style={{...theme.fonts.description,  textAlign: 'center'}}> { userInfo?.description }  </Text>
+                        </View>               
                   </View> 
                 </View>
-                <View style={{ gap: 10, borderColor: '#efefef', alignItems: 'center', flexDirection: 'row', paddingBottom: 8, borderBottomWidth: 1 }}>
-                  <Icon size={25} color='#676767' source="location-enter"/> 
-                  <View style={{ flexDirection: 'column', justifyContent: 'center' }}> 
-                      <Text style={theme.fonts.subtitle}>My New Home   </Text> 
-                      <Text style={theme.fonts.description }>{userInfo?.currentPlace?.name || '-'}  </Text>
+                { userInfo?.photos[0]?.url && <View style={{ flexDirection: 'column', justifyContent: 'center', gap: 10}}>
+                  <Text style={{ ...theme.fonts.subtitle, fontWeight: 700 }}> Your Images  </Text>
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ flexDirection: 'row', gap: 10, justifyContent: 'flex-start', alignItems: 'center' }}>
+                      {userInfo?.photos?.map((photo, index) => renderImage(photo, index))}
+                    </ScrollView>
+                  </View>
+                }
+                
+                <View style={{ gap: 10, borderColor: '#efefef', alignItems: 'center', flexDirection: 'row', paddingBottom: 8 }}>
+                  <View style={{ flexDirection: 'column', justifyContent: 'center', gap: 8 }}> 
+                      <Text style={{ ...theme.fonts.subtitle, fontWeight: 700 }}>Place I call my new home </Text>  
+                      <View style={{ flexDirection: 'row', justifyContent: 'flex-start', gap: 10 }}>
+                        <Text style={{ backgroundColor: userInfo?.currentPlace?.name ? theme.colors.tertiaryColor : 'white', padding: 8, width: 'auto', borderRadius: 8 }}> {userInfo?.currentPlace?.name || '-'} </Text>       
+                      </View>                
                   </View> 
                 </View>
-                <View style={{ gap: 10, borderColor: '#efefef', flexDirection: 'row', alignItems: 'center', paddingBottom: 8, borderBottomWidth: 1 }}>
-                  <Icon size={25} color='#676767'source="briefcase-outline"/> 
-                  <View style={{ flexDirection: 'column', justifyContent: 'center' }}> 
-                      <Text style={theme.fonts.subtitle}>What I do   </Text> 
-                      <Text style={theme.fonts.description}>
+
+                <View style={{ gap: 10,  borderColor: '#efefef', flexDirection: 'row', alignItems: 'center', paddingBottom: 8 }}>
+                  <View style={{ flexDirection: 'column', justifyContent: 'center', gap: 8 }}> 
+                      <Text style={{ ...theme.fonts.subtitle, fontWeight: 700 }}> Place where I grew up  </Text> 
+                      <View style={{ flexDirection: 'row', justifyContent: 'flex-start', gap: 10, flexWrap: 'wrap'  }}>
+                        <Text style={{ backgroundColor: userInfo?.placeOfOrigin?.name ? theme.colors.tertiaryColor : 'transparent', padding: 8, width: 'auto', borderRadius: 8 }}> {userInfo?.placeOfOrigin?.name || '-'} </Text>        
+                      </View>               
+                  </View> 
+                </View>
+                <View style={{ gap: 10, borderColor: '#efefef', flexDirection: 'row', alignItems: 'center', paddingBottom: 8 }}>
+                  <View style={{ flexDirection: 'column', justifyContent: 'center', gap: 8 }}> 
+                      <Text  style={{ ...theme.fonts.subtitle, fontWeight: 700 }}>My current profession   </Text> 
+                        <View style={{ flexDirection: 'row', justifyContent: 'flex-start', gap: 10, flexWrap: 'wrap' }}>
                         {userInfo?.occupations?.length > 0 ? (
-                          userInfo.occupations.map((place, index) => (
-                            <React.Fragment key={place?.name}>
-                              {index > 0 && ', '}
-                              {place?.name}
-                            </React.Fragment>
+                          userInfo.occupations.map((place) => (
+                            <Text key={place?.name} style={{ backgroundColor: theme.colors.tertiaryColor, padding: 8, width: 'auto', borderRadius: 8 }}> { place?.name } </Text>                       
                           ))
                         ) : (
-                          '-'
+                          <Text> - </Text>
                         )}
-                      </Text>
+                        </View>
                   </View> 
                 </View>
-                <View style={{ gap: 10, borderColor: '#efefef', flexDirection: 'row', alignItems: 'center', paddingBottom: 8, borderBottomWidth: 1 }}>
-                  <Icon size={25} color='#676767' source="map-marker-check-outline"/> 
-                  <View style={{ flexDirection: 'column', justifyContent: 'center' }}> 
-                      <Text style={theme.fonts.subtitle}>Places I have lived in   </Text> 
-                      <Text style={{ ...theme.fonts.description}}>
-                        {userInfo?.pastPlaces?.length > 0 ? (
-                          userInfo.pastPlaces.map((place, index) => (
-                            <React.Fragment key={place?.name}>
-                              {index > 0 && ', '}
-                              {place?.name}
-                            </React.Fragment>
-                          ))
-                        ) : (
-                          '-'
-                        )}
-                      </Text>
+                <View style={{ gap: 10, borderColor: '#efefef', flexDirection: 'row', alignItems: 'center', paddingBottom: 8 }}>
+                  <View style={{ flexDirection: 'column', justifyContent: 'center', gap: 8 }}> 
+                      <Text style={{ ...theme.fonts.subtitle, fontWeight: 700 }}> Other Cities I have lived in   </Text> 
+                      <View style={{ flexDirection: 'row', justifyContent: 'flex-start', gap: 10, flexWrap: 'wrap' }}> 
+                          {userInfo?.pastPlaces?.length > 0 ? (
+                            userInfo.pastPlaces.map((place) => (
+                              <Text key={place?.name} style={{ backgroundColor: theme.colors.tertiaryColor, padding: 8, width: 'auto', borderRadius: 8 }}> { place?.name } </Text>                       
+                            ))
+                          ) : (
+                            <Text> - </Text>
+                          )}
+                        </View>
                   </View> 
                 </View>
-                <View style={{ gap: 10, borderColor: '#efefef', flexDirection: 'row', alignItems: 'center', paddingBottom: 8, borderBottomWidth: 1 }}>
-                  <Icon size={25} color='#676767' source="playlist-edit"/> 
-                  <View style={{ flexDirection: 'column', justifyContent: 'center' }}> 
-                      <Text style={theme.fonts.subtitle}>My Interests </Text> 
-                      <Text style={theme.fonts.description}>
+                <View style={{ gap: 10, borderColor: '#efefef', flexDirection: 'row', alignItems: 'center', paddingBottom: 8 }}>
+                  <View style={{ flexDirection: 'column', justifyContent: 'center', gap: 8 }}> 
+                      <Text style={{ ...theme.fonts.subtitle, fontWeight: 700 }}>My Hobbies and Interests </Text> 
+                      <View style={{ flexDirection: 'row', justifyContent: 'flex-start', gap: 10, flexWrap: 'wrap' }}>
                         {userInfo?.skills?.length > 0 ? (
-                          userInfo.skills.map((place, index) => (
-                            <React.Fragment key={place?.name}>
-                              {index > 0 && ', '}
-                              {place?.name}
-                            </React.Fragment>
+                          userInfo.skills.map((place) => (
+                            <Text key={place?.name} style={{ backgroundColor: theme.colors.tertiaryColor, padding: 8, width: 'auto', borderRadius: 8 }}> { place?.name } </Text>
                           ))
                         ) : (
-                          '-'
+                          <Text> - </Text>
                         )}
-                      </Text>
+                      </View>
                   </View> 
                 </View>
                 <View style={{ gap: 10, alignItems: 'center', flexDirection: 'row'}}>
-                  <Icon size={25} color='#676767' source="account-tie-voice"/> 
-                  <View style={{ flexDirection: 'column', justifyContent: 'center' }}> 
-                      <Text style={theme.fonts.subtitle}>Languages I Speak   </Text> 
-                      <Text style={theme.fonts.description}>
+                  <View style={{ flexDirection: 'column', justifyContent: 'center', gap: 8 }}> 
+                      <Text style={{ ...theme.fonts.subtitle, fontWeight: 700 }}>Languages I Speak   </Text> 
+                      <View style={{ flexDirection: 'row', justifyContent: 'flex-start', gap: 10, flexWrap: 'wrap' }}>
                         {userInfo?.languages?.length > 0 ? (
-                          userInfo.languages.map((place, index) => (
-                            <React.Fragment key={place?.name}>
-                              {index > 0 && ', '}
-                              {place?.name}
-                            </React.Fragment>
+                          userInfo.languages.map((place) => (
+                            <Text key={place?.name} style={{ backgroundColor: theme.colors.tertiaryColor, padding: 8, width: 'auto', borderRadius: 8 }}> { place?.name } </Text>
                           ))
                         ) : (
-                          '-'
+                          <Text> - </Text>
                         )}
-                      </Text>
+                      </View>
                   </View> 
                 </View>
               </View>
