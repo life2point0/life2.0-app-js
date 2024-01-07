@@ -52,8 +52,8 @@ const updateProfileFields = [
     },
     {
       name: 'description',
-      label: 'Bio',
-      placeholder: 'My life so far...',
+      label: 'My life so far...',
+      placeholder: 'Talk about who you are, why did you move to this city, what do you do, and if there is something this community can do for you',
       type: 'input',
       multiline: true,
       maxCharCount: 600,
